@@ -2,8 +2,8 @@ import sys
 from functools import update_wrapper
 
 from django.conf import settings
-from sopn_publish_date import StatementPublishDate, Country
-from datetime import datetime
+from uk_election_timetables.election_ids import from_election_id
+from uk_election_timetables.calendars import Country
 
 import requests
 
@@ -103,26 +103,10 @@ def expected_sopn_publish_date(slug, territory):
         "NIR": Country.NORTHERN_IRELAND,
     }
 
-    if not expected_sopn_publish_date.lookup:
-        expected_sopn_publish_date.lookup = StatementPublishDate()
-
     if slug.startswith("local") and territory not in country:
         return None
 
     try:
-        if slug.startswith("local") and territory is not None:
-
-            date_of_poll = datetime.strptime(
-                slug.split(".")[-1], "%Y-%m-%d"
-            ).date()
-
-            return expected_sopn_publish_date.lookup.local(
-                date_of_poll, country=country[territory]
-            )
-        else:
-            return expected_sopn_publish_date.lookup.for_id(slug)
+        return from_election_id(slug, country[territory]).sopn_publish_date
     except BaseException:
         return None
-
-
-expected_sopn_publish_date.lookup = None
