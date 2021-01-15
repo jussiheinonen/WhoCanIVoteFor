@@ -49,8 +49,56 @@ class Election(models.Model):
     def __str__(self):
         return self.name
 
+    @property
     def in_past(self):
+        """
+        Returns a boolean for whether the election date is in the past
+        """
         return self.election_date < datetime.date.today()
+
+    @property
+    def is_city_of_london(self):
+        """
+        Returns boolean for if the election is within City of London district.
+        The city often has different rules to other UK elections so it's useful
+        to know when we need to special case. For further details:
+        https://www.cityoflondon.gov.uk/about-us/voting-elections/elections/ward-elections
+        https://democracyclub.org.uk/blog/2017/03/22/eight-weird-things-about-tomorrows-city-london-elections/
+        """
+        return "local.city-of-london" in self.slug
+
+    @property
+    def polls_close(self):
+        """
+        Return a time object for the time the polls close.
+        Polls close earlier in City of London, for more info:
+        https://www.cityoflondon.gov.uk/about-us/voting-elections/elections/ward-elections
+        https://democracyclub.org.uk/blog/2017/03/22/eight-weird-things-about-tomorrows-city-london-elections/
+        """
+        if self.is_city_of_london:
+            return datetime.time(20, 0)
+
+        return datetime.time(22, 0)
+
+    @property
+    def polls_open(self):
+        """
+        Return a time object for the time polls open.
+        Polls open later in City of London, for more info:
+        https://www.cityoflondon.gov.uk/about-us/voting-elections/elections/ward-elections
+        https://democracyclub.org.uk/blog/2017/03/22/eight-weird-things-about-tomorrows-city-london-elections/
+        """
+        if self.is_city_of_london:
+            return datetime.time(8, 0)
+
+        return datetime.time(7, 0)
+
+    @property
+    def is_election_day(self):
+        """
+        Return boolean for whether it is election day
+        """
+        return self.election_date == datetime.date.today()
 
     def friendly_day(self):
         delta = self.election_date - datetime.date.today()
@@ -272,7 +320,7 @@ class PostElection(models.Model):
                     url, title
                 )
         if not message:
-            if self.election.in_past():
+            if self.election.in_past:
                 message = "(The poll for this election was cancelled)"
             else:
                 message = "<strong>(The poll for this election has been cancelled)</strong>"

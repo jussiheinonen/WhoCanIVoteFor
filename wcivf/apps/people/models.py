@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.db import models
 from django.utils.text import slugify
 from django.utils.timezone import now
+from django.utils.functional import cached_property
 from elections.models import Election, Post
 from parties.models import Party
 
@@ -150,6 +151,24 @@ class Person(models.Model):
                     for x in self.facebookadvert_set.all()
                 ]
             )
+        )
+
+    @cached_property
+    def current_or_future_candidacies(self):
+        """
+        Returns a QuerySet of related PersonPost objects in the future
+        """
+        return self.personpost_set.current_or_future().select_related(
+            "party", "post", "election", "post_election"
+        )
+
+    @cached_property
+    def past_not_current_candidacies(self):
+        """
+        Return a QuerySet of related PersonPost objects in the past and not current
+        """
+        return self.personpost_set.past_not_current().select_related(
+            "party", "post", "election", "post_election"
         )
 
 

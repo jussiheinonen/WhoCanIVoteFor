@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models import Count
 from django.utils.dateparse import parse_datetime
+from django.utils.timezone import now
 
 VALUE_TYPES_TO_IMPORT = [
     "twitter_username",
@@ -39,6 +40,31 @@ class PersonPostQuerySet(models.QuerySet):
             .order_by("-election__election_date", "post__label")
         )
 
+    def current_or_future(self):
+        """
+        Return objects where election is marked as current or election is in the future
+        """
+        return self.filter(
+            models.Q(election__election_date__gte=now())
+            | models.Q(election__current=True)
+        )
+
+    def past_not_current(self):
+        """
+        Return objects where related election is not marked as current, in the past, and was not cancelled
+        """
+        return self.filter(
+            election__current=False,
+            post_election__cancelled=False,
+            election__election_date__lt=now(),
+        )
+
+    def current(self):
+        """
+        Return objects where related election is marked as current
+        """
+        return self.filter(election__current=True)
+
 
 class PersonPostManager(models.Manager):
     def get_queryset(self):
@@ -52,6 +78,15 @@ class PersonPostManager(models.Manager):
 
     def counts_by_post(self):
         return self.get_queryset().counts_by_post()
+
+    def current_or_future(self):
+        return self.get_queryset().current_or_future()
+
+    def past_not_current(self):
+        return self.get_queryset().past_not_current()
+
+    def current(self):
+        return self.get_queryset().current()
 
 
 class PersonManager(models.Manager):
