@@ -48,7 +48,7 @@ class ResultsListView(TemplateView):
                     "post_election__post",
                 )
                 .prefetch_related(
-                    "person_posts__post__area_name",
+                    "person_posts__post__label",
                     "person_posts__person",
                     "person_posts__party",
                 )

@@ -28,9 +28,7 @@ class Command(BaseCommand):
         )
 
     def get_postelections(self, query, election):
-        return PostElection.objects.filter(
-            election=election, post__area_name=query
-        )
+        return PostElection.objects.filter(election=election, post__label=query)
 
     def get_constituency(self, constituency, election):
         matches = {

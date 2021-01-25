@@ -46,7 +46,7 @@
           {% for person_post in result.person_posts.all %}
             <td data-order="{{ result.rank_order }}">
             {{ result.declaration_time|time:"H:i" }}:
-            <a href="{{ result.post_election.get_absolute_url }}">{{ person_post.post.area_name }}</a>
+            <a href="{{ result.post_election.get_absolute_url }}">{{ person_post.post.label }}</a>
             </td>
             <td>
                 {% if person_post.person.photo_url %}
@@ -57,7 +57,7 @@
           {% empty %}
             <td data-order="{{ result.rank_order }}">
             Expected {{ result.expected_declaration_time|time:"H:i" }}:
-            <a href="{{ result.post_election.get_absolute_url }}">{{ result.post_election.post.area_name }}</a>
+            <a href="{{ result.post_election.get_absolute_url }}">{{ result.post_election.post.label }}</a>
             </td>
             <td>
             </td>
