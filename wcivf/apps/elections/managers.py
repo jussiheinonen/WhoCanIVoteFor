@@ -77,11 +77,8 @@ class PostManager(models.Manager):
             ynr_id=post_dict["id"],
             defaults={
                 "label": post_dict["label"],
-                "role": post_dict["role"],
                 "group": post_dict["group"],
                 "organization": post_dict["organization"]["name"],
-                "area_name": post_dict["label"],
-                "area_id": post_dict["id"],
             },
         )
 

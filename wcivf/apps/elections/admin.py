@@ -8,8 +8,8 @@ class ElectionAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("area_name", "role")
-    list_filter = ("organization", "role")
+    list_display = ("label",)
+    list_filter = ("organization",)
 
 
 admin.site.register(Election, ElectionAdmin)
