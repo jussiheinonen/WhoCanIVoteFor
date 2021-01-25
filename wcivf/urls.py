@@ -21,7 +21,6 @@ urlpatterns = (
         url(r"^admin/", admin.site.urls),
         url(r"^", include("core.urls")),
         url(r"^elections/", include("elections.urls")),
-        url(r"^results/", include("results.urls")),
         url(r"^parties/", include("parties.urls")),
         url(r"^person/", include("people.urls")),
         url(r"^feedback/", include("feedback.urls")),

@@ -54,7 +54,6 @@ INSTALLED_APPS = (
     "rest_framework",
     "robots",
     "api",
-    "results",
     "pledges",
     "news_mentions",
 )
