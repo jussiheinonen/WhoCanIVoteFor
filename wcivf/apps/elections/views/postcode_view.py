@@ -33,14 +33,26 @@ class PostcodeView(
 
     template_name = "elections/postcode_view.html"
     pk_url_kwarg = "postcode"
+    ballots = None
+    postcode = None
+
+    def get_ballots(self):
+        """
+        Returns a QuerySet of PostElection objects. Calls postcode_to_ballots
+        and updates the self.ballots attribute the first time it is called.
+        """
+        if self.ballots is None:
+            self.ballots = self.postcode_to_ballots(postcode=self.postcode)
+
+        return self.ballots
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         self.postcode = clean_postcode(kwargs["postcode"])
-        context["postcode"] = self.postcode
-        self.log_postcode(context["postcode"])
-        context["postelections"] = self.postcode_to_ballots(context["postcode"])
+        self.log_postcode(self.postcode)
 
+        context["postcode"] = self.postcode
+        context["postelections"] = self.get_ballots()
         context["voter_id_required"] = [
             (pe, pe.election.metadata.get("2019-05-02-id-pilot"))
             for pe in context["postelections"]
@@ -54,8 +66,42 @@ class PostcodeView(
         context["polling_station"] = self.get_polling_station_info(
             context["postcode"]
         )
+        context["ballots_today"] = self.get_todays_ballots()
+        context[
+            "multiple_city_of_london_elections_today"
+        ] = self.multiple_city_of_london_elections_today()
 
         return context
+
+    def get_todays_ballots(self):
+        """
+        Return a list of ballots filtered by whether they are today
+        """
+        return [
+            ballot for ballot in self.ballots if ballot.election.is_election_day
+        ]
+
+    def multiple_city_of_london_elections_today(self):
+        """
+        Checks if there are multiple elections taking place today in the City
+        of London. This is used to determine if it is safe to display polling
+        station open/close times in the template. As if there are multiple then
+        it is unclear what time the polls would be open. See this issue for
+        more info https://github.com/DemocracyClub/WhoCanIVoteFor/issues/441
+        """
+        ballots = self.get_todays_ballots()
+
+        # if only one ballot can return early
+        if len(ballots) <= 1:
+            return False
+
+        if not any(
+            [ballot for ballot in ballots if ballot.election.is_city_of_london]
+        ):
+            return False
+
+        # get unique elections and return whether more than 1
+        return len({ballot.election.slug for ballot in ballots}) > 1
 
 
 class PostcodeiCalView(
