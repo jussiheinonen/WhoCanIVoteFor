@@ -42,7 +42,7 @@ class YNRElectionImporter:
                 election_type=slug.split(".")[0],
                 defaults={
                     "election_date": ballot_dict["election"]["election_date"],
-                    "name": ballot_dict["election"]["name"],
+                    "name": ballot_dict["election"]["name"].strip(),
                     "current": ballot_dict["election"]["current"],
                     "election_weight": election_weight,
                 },
@@ -91,11 +91,10 @@ class YNRPostImporter:
         self.post_cache = {}
 
     def update_or_create_from_ballot_dict(self, ballot_dict):
-        created = False
         # fall back to slug here as some temp ballots don't have an ID set
-        post_id = ballot_dict["post"].get("id", ballot_dict["post"]["slug"])
-        if not post_id in self.post_cache:
-            post, created = Post.objects.update_or_create(
+        post_id = ballot_dict["post"]["id"] or ballot_dict["post"]["slug"]
+        if post_id not in self.post_cache:
+            post, _ = Post.objects.update_or_create(
                 ynr_id=post_id,
                 defaults={"label": ballot_dict["post"]["label"]},
             )
@@ -240,6 +239,7 @@ class YNRBallotImporter:
         self.set_voting_system(ballot)
         self.set_metadata(ballot)
         self.set_organisation_type(ballot)
+        self.set_division_type(ballot)
         ballot.save()
 
     def set_territory(self, ballot):
@@ -287,6 +287,23 @@ class YNRBallotImporter:
                 "organisation_type"
             ]
             ballot.post.save()
+
+    def set_division_type(self, ballot):
+        """
+        Attempts to set the division_type field from EveryElection
+        """
+        if ballot.post.division_type and not self.force_update:
+            return
+
+        ee_data = self.ee_helper.get_data(ballot.ballot_paper_id)
+
+        if not ee_data or not ee_data["division"]:
+            return
+
+        ballot.post.division_type = ee_data["division"].get("division_type")
+        # ensures the division_type is valid, or will raise a ValidationError
+        ballot.post.full_clean()
+        ballot.post.save()
 
     def run_post_ballot_import_tasks(self):
         self.attach_cancelled_ballot_info()
