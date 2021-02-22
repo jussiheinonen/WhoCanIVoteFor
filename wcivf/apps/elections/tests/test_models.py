@@ -2,14 +2,22 @@ import datetime
 import pytest
 
 from elections.models import Election, Post
-from elections.tests.factories import PostElectionFactory, PostFactory
-from django.test import TestCase
+from elections.tests.factories import (
+    ElectionFactoryLazySlug,
+    ElectionWithPostFactory,
+    PostElectionFactory,
+    PostFactory,
+)
 
 
-class TestElectionModel(TestCase):
-    def setUp(self):
-        self.election = Election(slug="not.city-of-london")
-        self.city_of_london_election = Election(slug="local.city-of-london")
+class TestElectionModel:
+    @pytest.fixture
+    def election(self):
+        return Election(slug="not.city-of-london")
+
+    @pytest.fixture
+    def city_of_london_election(self):
+        return Election(slug="local.city-of-london")
 
     def test_in_past(self):
         yesterday = datetime.date.today() - datetime.timedelta(days=1)
@@ -17,17 +25,17 @@ class TestElectionModel(TestCase):
 
         assert election.in_past is True
 
-    def test_is_city_of_london(self):
-        assert self.election.is_city_of_london is False
-        assert self.city_of_london_election.is_city_of_london is True
+    def test_is_city_of_london(self, election, city_of_london_election):
+        assert election.is_city_of_london is False
+        assert city_of_london_election.is_city_of_london is True
 
-    def test_polls_close(self):
-        assert self.election.polls_close == datetime.time(22, 00)
-        assert self.city_of_london_election.polls_close == datetime.time(20, 0)
+    def test_polls_close(self, election, city_of_london_election):
+        assert election.polls_close == datetime.time(22, 00)
+        assert city_of_london_election.polls_close == datetime.time(20, 0)
 
-    def test_polls_open(self):
-        assert self.election.polls_open == datetime.time(7, 00)
-        assert self.city_of_london_election.polls_open == datetime.time(8, 0)
+    def test_polls_open(self, election, city_of_london_election):
+        assert election.polls_open == datetime.time(7, 00)
+        assert city_of_london_election.polls_open == datetime.time(8, 0)
 
     @pytest.mark.freeze_time("2021-05-06")
     def test_is_election_day(self):
@@ -39,8 +47,9 @@ class TestElectionModel(TestCase):
         assert future.is_election_day is False
         assert past.is_election_day is False
 
-    def test_name_without_brackets(self):
-        names = [
+    @pytest.mark.parametrize(
+        "name,expected",
+        [
             (
                 "London Assembly Elections (Additional)",
                 "London Assembly Elections",
@@ -62,18 +71,41 @@ class TestElectionModel(TestCase):
                 "Scottish Parliament elections (Regions)",
                 "Scottish Parliament elections",
             ),
-        ]
-        for name in names:
-            with self.subTest(name=name):
-                self.election.any_non_by_elections = True
-                self.election.name = name[0]
-                self.assertEqual(self.election.name_without_brackets, name[1])
+        ],
+    )
+    def test_name_without_brackets(self, name, expected):
+        election = Election(name=name, any_non_by_elections=True)
+        assert election.name_without_brackets == expected
 
-    def test_name_without_brackets_by_election(self):
-        self.election.any_non_by_elections = False
-        self.election.name = "Scottish Parliament (Constituencies)"
+    def test_name_without_brackets_by_election(self, election):
+        election.any_non_by_elections = False
+        election.name = "Scottish Parliament (Constituencies)"
         expected = "Scottish Parliament by-election"
-        self.assertEqual(self.election.name_without_brackets, expected)
+        assert election.name_without_brackets == expected
+
+    @pytest.mark.django_db
+    @pytest.mark.parametrize(
+        "suffix, expected",
+        [
+            ("constituency", "constituencies"),
+            ("parish", "parishes"),
+            ("ward", "wards"),
+            ("division", "divisions"),
+            ("area", "areas"),
+            ("region", "regions"),
+            ("", "posts"),
+        ],
+    )
+    def test_pluralized_division_suffix(self, mocker, suffix, expected):
+        election = ElectionWithPostFactory()
+        mocker.patch.object(
+            Post,
+            "division_suffix",
+            new_callable=mocker.PropertyMock,
+            return_value=suffix,
+        )
+
+        assert election.pluralized_division_name == expected
 
 
 class TestPostModel:
@@ -120,10 +152,26 @@ class TestPostElectionModel:
 
     def test_friendly_name_mayoral(self, post_election):
         post_election.ballot_paper_id = "mayor.of.london"
+        post_election.post.label = "Greater London Authority"
         assert (
             post_election.friendly_name
-            == post_election.election.nice_election_name
+            == "Greater London Authority mayoral election"
         )
+
+    @pytest.mark.parametrize(
+        "label, expected",
+        [
+            (
+                "Avon and Somerset Constabulary",
+                "Avon and Somerset Constabulary Police force area",
+            ),
+            ("North Yorkshire Police", "North Yorkshire Police force area"),
+        ],
+    )
+    def test_friendly_name_pcc(self, post_election, label, expected):
+        post_election.ballot_paper_id = "pcc.election"
+        post_election.post.label = label
+        assert post_election.friendly_name == expected
 
     def test_friendly_name(self, post_election):
         assert post_election.friendly_name == post_election.post.full_label
@@ -138,13 +186,61 @@ class TestPostElectionModel:
         post_election.ballot_paper_id = ballot_paper_id
         assert post_election.is_london_assembly_additional == expected
 
-    def test_friendly_name_london_assembly_additonal(self, post_election):
-        post_election.ballot_paper_id = "gla.a.2021-05-06"
-        assert post_election.friendly_name == "Additional members"
-
     @pytest.mark.parametrize(
         "org_type,expected", [("pcc.ballot", True), ("not.pcc", False)]
     )
     def test_is_pcc(self, org_type, expected):
         post = PostElectionFactory.build(ballot_paper_id=org_type)
         assert post.is_pcc == expected
+
+    @pytest.mark.django_db
+    @pytest.mark.freeze_time("2021-5-1")
+    def test_next_ballot(self):
+        post = PostFactory()
+        oldest = PostElectionFactory(
+            post=post,
+            election=ElectionFactoryLazySlug(
+                election_date="2019-5-6", current=False, election_type="local"
+            ),
+        )
+        old = PostElectionFactory(
+            post=post,
+            election=ElectionFactoryLazySlug(
+                election_date="2020-5-6", current=False, election_type="local"
+            ),
+        )
+        future = PostElectionFactory(
+            post=post,
+            election=ElectionFactoryLazySlug(
+                election_date="2021-5-6", current=True, election_type="local"
+            ),
+        )
+
+        assert oldest.next_ballot == future
+        assert old.next_ballot == future
+        assert future.next_ballot is None
+
+    @pytest.mark.django_db
+    @pytest.mark.freeze_time("2021-5-1")
+    def test_next_ballot_different_election_type(self):
+        post = PostFactory()
+        local = PostElectionFactory(
+            post=post,
+            election=ElectionFactoryLazySlug(
+                election_date="2019-5-6", current=False, election_type="local"
+            ),
+        )
+        mayoral = PostElectionFactory(
+            post=post,
+            election=ElectionFactoryLazySlug(
+                election_date="2020-5-6", current=False, election_type="mayor"
+            ),
+        )
+        next_local = PostElectionFactory(
+            post=post,
+            election=ElectionFactoryLazySlug(
+                election_date="2021-5-6", current=True, election_type="local"
+            ),
+        )
+        assert local.next_ballot == next_local
+        assert mayoral.next_ballot is None

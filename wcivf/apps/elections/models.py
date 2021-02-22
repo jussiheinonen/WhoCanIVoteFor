@@ -1,4 +1,5 @@
 import datetime
+from django.utils.functional import cached_property
 import pytz
 import re
 
@@ -199,6 +200,23 @@ class Election(models.Model):
             settings.YNR_BASE, self.slug, settings.YNR_UTM_QUERY_STRING
         )
 
+    @cached_property
+    def pluralized_division_name(self):
+        """
+        Returns a string for the pluarlized divison name for the posts in the
+        election
+        """
+        pluralise = {
+            "parish": "parishes",
+            "constituency": "constituencies",
+        }
+        suffix = self.post_set.first().division_suffix
+
+        if not suffix:
+            return "posts"
+
+        return pluralise.get(suffix, f"{suffix}s")
+
 
 class Post(models.Model):
     """
@@ -270,7 +288,7 @@ class Post(models.Model):
     @property
     def division_description(self):
         """
-        Return a string to describe the division
+        Return a string to describe the division.
         """
         mapping = {
             choice[0]: choice[1] for choice in self.DIVISION_TYPE_CHOICES
@@ -345,16 +363,15 @@ class PostElection(models.Model):
     def friendly_name(self):
         """
         Helper property used in templates to build a 'friendly' name using
-        details from associated Post object, with exceptions for GLA, mayoral
-        elections and pcc elections
+        details from associated Post object, with exceptions for mayoral and
+        Police and Crime Commissioner elections
         """
-        if self.is_mayoral or self.is_pcc:
-            return self.election.nice_election_name
+        if self.is_mayoral:
+            return f"{self.post.full_label} mayoral election"
 
-        # edge case - as this is for a single region we display this below the
-        # election name
-        if self.is_london_assembly_additional:
-            return "Additional members"
+        if self.is_pcc:
+            label = self.post.full_label.replace(" Police", "")
+            return f"{label} Police force area"
 
         return self.post.full_label
 
@@ -415,6 +432,24 @@ class PostElection(models.Model):
         ):
             return True
         return False
+
+    @cached_property
+    def next_ballot(self):
+        """
+        Return the next ballot for the related post. Return None if this is
+        the current election to avoid making an unnecessary db query.
+        """
+        if self.election.current:
+            return None
+
+        try:
+            return self.post.postelection_set.filter(
+                election__election_date__gt=self.election.election_date,
+                election__election_date__gte=datetime.date.today(),
+                election__election_type=self.election.election_type,
+            ).latest("election__election_date")
+        except PostElection.DoesNotExist:
+            return None
 
 
 class VotingSystem(models.Model):

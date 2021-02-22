@@ -2,14 +2,16 @@ import pytest
 from django.shortcuts import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
-from elections.models import PostElection, Post
+from elections.models import Post
 from elections.tests.factories import (
     ElectionFactory,
+    ElectionFactoryLazySlug,
+    ElectionWithPostFactory,
     PostElectionFactory,
     PostFactory,
 )
 from people.tests.factories import PersonFactory, PersonPostFactory
-from pytest_django.asserts import assertContains
+from pytest_django.asserts import assertContains, assertNotContains
 
 
 @override_settings(
@@ -18,18 +20,10 @@ from pytest_django.asserts import assertContains
 )
 class ElectionViewTests(TestCase):
     def setUp(self):
-        self.election = ElectionFactory(
+        self.election = ElectionWithPostFactory(
             name="City of London Corporation local election",
             election_date="2017-03-23",
             slug="local.city-of-london.2017-03-23",
-        )
-        self.post = PostFactory(
-            ynr_id="LBW:E05009288", label="Aldersgate", elections=self.election
-        )
-        PostElection.objects.get_or_create(
-            election=self.election,
-            post=self.post,
-            ballot_paper_id="local.city-of-london.aldersgate.2017-03-23",
         )
 
     def test_election_list_view(self):
@@ -73,6 +67,25 @@ class ElectionViewTests(TestCase):
                 )
                 self.assertContains(response, election[0].nice_election_name)
                 self.assertContains(response, election[1])
+
+    def test_division_name_displayed(self):
+        """
+        For each Post.DIVISION_TYPE, creates an elections, gets a response for
+        from the ElectionDetail view, and checks that the response contains the
+        correct value for division name .e.g Ward
+        """
+        Post.DIVISION_TYPE_CHOICES.append(("", ""))
+        for division_type in Post.DIVISION_TYPE_CHOICES:
+            election = ElectionWithPostFactory(
+                ballot__post__division_type=division_type[0]
+            )
+            with self.subTest(election=election):
+                response = self.client.get(
+                    election.get_absolute_url(), follow=True
+                )
+                self.assertContains(
+                    response, election.pluralized_division_name.title()
+                )
 
 
 class ElectionPostViewTests(TestCase):
@@ -163,3 +176,105 @@ class TestPostViewName:
         assertContains(response, "by-election")
         assertContains(response, post_election.friendly_name)
         assertContains(response, post_election.post.label)
+
+
+class TestPostViewNextElection:
+    @pytest.mark.django_db
+    @pytest.mark.freeze_time("2021-5-1")
+    def test_next_election_displayed(self, client):
+        post = PostFactory()
+        past = PostElectionFactory(
+            post=post,
+            election=ElectionFactoryLazySlug(
+                election_date="2019-5-2",
+                current=False,
+            ),
+        )
+        # create a future election expected to be displayed
+        PostElectionFactory(
+            post=post,
+            election=ElectionFactoryLazySlug(
+                election_date="2021-5-6",
+                current=True,
+            ),
+        )
+
+        response = client.get(past.get_absolute_url(), follow=True)
+        assertContains(response, "<h3>Next election</h3>")
+        assertContains(
+            response,
+            "due to take place <strong>on Thursday 6 May 2021</strong>.",
+        )
+
+    @pytest.mark.django_db
+    @pytest.mark.freeze_time("2021-5-1")
+    def test_next_election_not_displayed(self, client):
+        post = PostFactory()
+        past = PostElectionFactory(
+            post=post,
+            election=ElectionFactoryLazySlug(
+                election_date="2019-5-2",
+                current=False,
+            ),
+        )
+        response = client.get(past.get_absolute_url(), follow=True)
+        assertNotContains(response, "<h3>Next election</h3>")
+
+    @pytest.mark.django_db
+    @pytest.mark.freeze_time("2021-5-7")
+    def test_next_election_not_displayed_in_past(self, client):
+        post = PostFactory()
+        past = PostElectionFactory(
+            post=post,
+            election=ElectionFactoryLazySlug(
+                election_date="2019-5-2",
+                current=False,
+            ),
+        )
+        # create an election that just passed
+        PostElectionFactory(
+            post=post,
+            election=ElectionFactoryLazySlug(
+                election_date="2021-5-6",
+                current=True,
+            ),
+        )
+        response = client.get(past.get_absolute_url(), follow=True)
+        assertNotContains(response, "<h3>Next election</h3>")
+
+    @pytest.mark.django_db
+    @pytest.mark.freeze_time("2021-5-1")
+    def test_next_election_not_displayed_for_current_election(self, client):
+        post = PostFactory()
+        current = PostElectionFactory(
+            post=post,
+            election=ElectionFactoryLazySlug(
+                election_date="2021-5-6",
+                current=True,
+            ),
+        )
+        response = client.get(current.get_absolute_url(), follow=True)
+        assertNotContains(response, "<h3>Next election</h3>")
+
+    @pytest.mark.django_db
+    @pytest.mark.freeze_time("2021-5-6")
+    def test_next_election_is_today(self, client):
+        post = PostFactory()
+        past = PostElectionFactory(
+            post=post,
+            election=ElectionFactoryLazySlug(
+                election_date="2019-5-2",
+                current=False,
+            ),
+        )
+        # create an election taking place today
+        PostElectionFactory(
+            post=post,
+            election=ElectionFactoryLazySlug(
+                election_date="2021-5-6",
+                current=True,
+            ),
+        )
+        response = client.get(past.get_absolute_url(), follow=True)
+        assertContains(response, "<h3>Next election</h3>")
+        assertContains(response, "<strong>being held today</strong>.")
