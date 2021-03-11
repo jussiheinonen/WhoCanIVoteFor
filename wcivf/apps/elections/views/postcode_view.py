@@ -71,6 +71,7 @@ class PostcodeView(
         context[
             "multiple_city_of_london_elections_today"
         ] = self.multiple_city_of_london_elections_today()
+        context["referendums"] = list(self.get_referendums())
 
         return context
 
@@ -81,6 +82,21 @@ class PostcodeView(
         return [
             ballot for ballot in self.ballots if ballot.election.is_election_day
         ]
+
+    def get_referendums(self):
+        """
+        Yield all referendums associated with the ballots for this postcode.
+        After 6th May return an empty list to avoid displaying unwanted
+        information
+        """
+        if (
+            timezone.datetime.today().date()
+            > timezone.datetime(2021, 5, 6).date()
+        ):
+            return []
+
+        for ballot in self.ballots:
+            yield from ballot.referendums.all()
 
     def multiple_city_of_london_elections_today(self):
         """
