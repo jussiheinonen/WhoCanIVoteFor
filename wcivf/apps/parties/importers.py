@@ -4,7 +4,7 @@ from collections import namedtuple
 from core.mixins import ReadFromUrlMixin, ReadFromFileMixin
 from core.helpers import twitter_username
 from elections.models import PostElection, Election
-from parties.models import LocalParty, Party
+from parties.models import LocalParty, Manifesto, Party
 
 
 LocalElection = namedtuple("LocalElection", ["date", "csv_files"])
@@ -73,6 +73,14 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         this does not exist, it may be that the ID is for an Election object, so
         we return all ballots for that election ID.
         """
+        special_cases = ["senedd", "sp", "gla"]
+        election_type = election_id.split(".")[0]
+        if election_type in special_cases:
+            return PostElection.objects.filter(
+                ballot_paper_id__startswith=f"{election_type}.",
+                election__election_date=self.election.date,
+            )
+
         ballots = PostElection.objects.filter(ballot_paper_id=election_id)
 
         if not ballots:
@@ -98,22 +106,25 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         PostElection objects, and craetes a LocalParty for each of the ballots.
         """
         twitter = twitter_username(url=row["Twitter"] or "")
+        name = self.get_name(row=row)
         for post_election in ballots:
-            local_party, created = LocalParty.objects.update_or_create(
+            country = self.get_country(
+                election_type=post_election.election.election_type
+            )
+            LocalParty.objects.update_or_create(
                 parent=party,
                 post_election=post_election,
                 defaults={
-                    "name": self.get_name(row=row),
+                    "name": name,
                     "twitter": twitter,
                     "facebook_page": row["Facebook"],
                     "homepage": row["Website"],
                     "email": row["Email"],
+                    "is_local": country == "Local",
                 },
             )
 
-            self.write(
-                f"{local_party.name} was {'created' if created else 'updated'}"
-            )
+        self.write(f"Imported Local Party objects for {name}")
 
     def get_name(self, row):
         """
@@ -150,7 +161,7 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
                 continue
 
             ballots = self.get_ballots(
-                election_id=row["election_id"],
+                election_id=row["election_id"].strip(),
                 parties=parties,
             )
             if not ballots:
@@ -159,3 +170,36 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
 
             for party in parties:
                 self.add_local_party(row, party, ballots)
+                self.add_manifesto(row, party, ballots[0].election)
+
+    def get_country(self, election_type):
+        country_mapping = {
+            "local": "Local",
+            "senedd": "Wales",
+            "sp": "Scotland",
+        }
+        return country_mapping.get(election_type, "UK")
+
+    def add_manifesto(self, row, party, election):
+        manifesto_web = row["Manifesto Website URL"].strip()
+        manifesto_pdf = row["Manifesto PDF URL"].strip()
+        if not any([manifesto_web, manifesto_pdf]):
+            return self.write("No links to create Manifesto, skipping")
+
+        country = self.get_country(election_type=election.election_type)
+        language = row.get("Manifesto Language", "English").strip()
+        easy_read_url = row.get("Manifesto Easy Read PDF", "").strip()
+        if any([manifesto_web, manifesto_pdf]):
+            manifesto_obj, created = Manifesto.objects.update_or_create(
+                election=election,
+                party=party,
+                country=country,
+                language=language,
+                defaults={
+                    "web_url": manifesto_web,
+                    "pdf_url": manifesto_pdf,
+                    "easy_read_url": easy_read_url,
+                },
+            )
+            manifesto_obj.save()
+            self.write(f"{'Created' if created else 'Updated'} {manifesto_obj}")
