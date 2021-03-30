@@ -29,34 +29,6 @@
       information published by the candidate elsewhere.</p>
     {% endif %}
 
-    <!-- manifestos -->
-    {% if object.manifestos %}
-    {% with object.personpost.party as party %}
-
-    {% if party.emblem %}
-    <a href="{{ s.0.web_url }}"><img src="{{ party.emblem.url }}" alt="{{ party.name}} emblem"
-        class="manifesto_image"></a>
-    <a href="{{ object.manifestos.0.web_url }}"><img src="{{ party.emblem.url }}" alt="{{ party.name}} emblem"
-        class="manifesto_image"></a>
-    <a href="{{ object.manifestos.0.web_url }}"><img src="{{ party.emblem.url }}" alt="{{ party.name}} emblem"
-        class="manifesto_image"></a>
-    {% endif %}
-    <h4>Party manifesto</h4>
-    <h4>Party manifesto</h4>
-    <h4>Party manifesto</h4>
-    <p>
-      {{ object.name }} {{ object.personpost.election.in_past|yesno:"was,is" }} the {{ party.party_name }}
-      candidate.
-      Find out more about their policies in the {{ party.party_name }} manifesto.
-    </p>
-    <ul>
-      {% for manifesto in object.manifestos %}
-      {% include "parties/single_manifesto.html" %}
-      {% endfor %}
-    </ul>
-    {% endwith %}
-    {% endif %}
-
     <!-- leaflets -->
     {% if object.leaflet_set.exists %}
     <h4>
@@ -78,19 +50,6 @@
         object.name }}</a>
       <a class="link-button" href="https://electionleaflets.org/leaflets/add/front/">Upload a leaflet</a>
     </p>
-    {% endif %}
-
-    <!-- pledges -->
-    {% if object.pledges.exists %}
-    <h4>Candidate pledges</h4>
-    <p>Hope Not Hate, a London-based charity, canvassed local residents and community organisations to establish
-      the
-      following questions to the candidates in this ward.
-    </p>
-    {% for pledge in object.pledges.all %}
-    <h4>{{ pledge.question }}</h4>
-    <blockquote>{{ pledge.answer|markdown }}</blockquote>
-    {% endfor %}
     {% endif %}
 
     <!-- TWFY  -->
