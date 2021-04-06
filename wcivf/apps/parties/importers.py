@@ -119,7 +119,7 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
                     "twitter": twitter,
                     "facebook_page": row["Facebook"],
                     "homepage": row["Website"],
-                    "email": row["Email"],
+                    "email": row.get("Email"),
                     "is_local": country == "Local",
                 },
             )
