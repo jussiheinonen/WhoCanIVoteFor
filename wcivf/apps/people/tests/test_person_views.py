@@ -1,4 +1,6 @@
 from unittest.mock import MagicMock
+from django.utils.html import strip_tags
+from freezegun import freeze_time
 
 import pytest
 from django.test import TestCase
@@ -10,8 +12,13 @@ from elections.tests.factories import (
     PostFactory,
 )
 from parties.tests.factories import LocalPartyFactory, PartyFactory
-from people.tests.factories import PersonFactory, PersonPostFactory
+from people.tests.factories import (
+    PersonFactory,
+    PersonPostFactory,
+    PersonPostWithPartyFactory,
+)
 from people.views import PersonView
+from people.tests.helpers import create_person
 
 
 @override_settings(
@@ -155,9 +162,10 @@ class PersonViewTests(TestCase):
             person=self.person, election=election, party=party
         )
         response = self.client.get(self.person_url, follow=True)
+
         self.assertContains(
             response,
-            f"{self.person.name} is a {party.party_name} candidate in {person_post.post.label} in the {election.name}.",
+            f"{self.person.name} is a {party.party_name} candidate in {person_post.post.label} constituency in the {election.name}.",
         )
 
     def test_no_previous_elections(self):
@@ -370,3 +378,211 @@ class TestPersonViewUnitTests:
     def test_get_template_names(self, view_obj, object, expected):
         view_obj.object = object
         assert view_obj.get_template_names() == [expected]
+
+
+@freeze_time("2021-04-15")
+class TestPersonIntro(TestCase):
+    def setUp(self):
+        self.current_candidate = create_person(current=True)
+        self.current_deceased = create_person(current=True, deceased=True)
+        self.past_candidate = create_person(current=False)
+        self.past_deceased = create_person(current=False, deceased=False)
+        self.independent_candidate = create_person(
+            current=True, party_name="Independent"
+        )
+        self.independent_candidate_past = create_person(
+            current=False, party_name="Independent"
+        )
+        self.speaker = create_person(
+            current=True,
+            party_name="Speaker seeking re-election",
+            election_name="UK General Election",
+        )
+        self.speaker_past = create_person(
+            current=False,
+            party_name="Speaker seeking re-election",
+            election_name="UK General Election",
+        )
+        parl_election = ElectionFactory(
+            current=True,
+            election_date="2023-05-11",
+            name="UK General Election 2023",
+            slug="parl.2023",
+        )
+        self.parliamentary_candidate = PersonPostWithPartyFactory(
+            person__name="Joe Bloggs",
+            election=parl_election,
+            post_election__election=parl_election,
+            post__label="Hallam",
+            post__ynr_id="hallam",
+        )
+        mayoral_election = ElectionFactory(
+            current=True,
+            election_date="2021-05-06",
+            name="Mayor of Bristol",
+            slug="mayor.bristol.2021-05-06",
+        )
+        self.mayoral_candidate = PersonPostWithPartyFactory(
+            person__name="Joe Bloggs",
+            election=mayoral_election,
+            post_election__election=mayoral_election,
+            post_election__ballot_paper_id="mayor.bristol.2021-05-06",
+            post__ynr_id="mayor-of-bristol",
+        )
+        self.candidate_with_votes_unelected = create_person(
+            current=False, votes_cast=10000, elected=False
+        )
+        self.candidate_with_votes_elected = create_person(
+            current=False, votes_cast=10000, elected=True
+        )
+        self.pcc_candidate = create_person(
+            election_type="pcc",
+            election_name="Police and Crime Commissioner for South Yorkshire",
+        )
+        self.list_candidate = create_person(
+            election_type="gla.a",
+            list_election=True,
+            list_position=1,
+            election_name="London Assembly elections (additional)",
+        )
+
+    def test_intro_in_view(self):
+        candidacies = [
+            (
+                self.current_candidate,
+                "Joe Bloggs is a Test Party candidate in Ecclesall in the Sheffield local election.",
+            ),
+            (
+                self.current_deceased,
+                "Joe Bloggs was a Test Party candidate in Ecclesall in the Sheffield local election.",
+            ),
+            (
+                self.past_candidate,
+                "Joe Bloggs was a Test Party candidate in Ecclesall in the Sheffield local election.",
+            ),
+            (
+                self.past_deceased,
+                "Joe Bloggs was a Test Party candidate in Ecclesall in the Sheffield local election.",
+            ),
+            (
+                self.independent_candidate,
+                "Joe Bloggs is an independent candidate in Ecclesall in the Sheffield local election.",
+            ),
+            (
+                self.independent_candidate_past,
+                "Joe Bloggs was an independent candidate in Ecclesall in the Sheffield local election.",
+            ),
+            (
+                self.speaker,
+                "Joe Bloggs is the Speaker seeking re-election in Ecclesall constituency in the UK General Election",
+            ),
+            (
+                self.speaker_past,
+                "Joe Bloggs was the Speaker seeking re-election in Ecclesall constituency in the UK General Election",
+            ),
+            (
+                self.parliamentary_candidate,
+                "Joe Bloggs is a Test Party candidate in Hallam constituency in the UK General Election 2023.",
+            ),
+            (
+                self.mayoral_candidate,
+                "Joe Bloggs is the Test Party candidate for Mayor of Bristol.",
+            ),
+            (
+                self.candidate_with_votes_unelected,
+                "They received 10,000 votes.",
+            ),
+            (
+                self.candidate_with_votes_elected,
+                "They were elected with 10,000 votes.",
+            ),
+            (
+                self.pcc_candidate,
+                "Joe Bloggs is the Test Party candidate for Police and Crime Commissioner for South Yorkshire.",
+            ),
+            (
+                self.list_candidate,
+                "Joe Bloggs is the 1st place candidate for the Test Party in the London Assembly elections (additional).",
+            ),
+        ]
+        for candidacy in candidacies:
+            with self.subTest(msg=candidacy[1]):
+                person = candidacy[0].person
+                expected = candidacy[1]
+                response = self.client.get(person.get_absolute_url())
+
+                self.assertContains(response, expected)
+
+    def test_intro_method(self):
+        """
+        Test the exact string returned by the into method
+        """
+        candidacies = [
+            (
+                self.current_candidate,
+                "Joe Bloggs is a Test Party candidate in Ecclesall in the Sheffield local election.",
+            ),
+            (
+                self.current_deceased,
+                "Joe Bloggs was a Test Party candidate in Ecclesall in the Sheffield local election.",
+            ),
+            (
+                self.past_candidate,
+                "Joe Bloggs was a Test Party candidate in Ecclesall in the Sheffield local election.",
+            ),
+            (
+                self.past_deceased,
+                "Joe Bloggs was a Test Party candidate in Ecclesall in the Sheffield local election.",
+            ),
+            (
+                self.independent_candidate,
+                "Joe Bloggs is an independent candidate in Ecclesall in the Sheffield local election.",
+            ),
+            (
+                self.independent_candidate_past,
+                "Joe Bloggs was an independent candidate in Ecclesall in the Sheffield local election.",
+            ),
+            (
+                self.speaker,
+                "Joe Bloggs is the Speaker seeking re-election in Ecclesall constituency in the UK General Election.",
+            ),
+            (
+                self.speaker_past,
+                "Joe Bloggs was the Speaker seeking re-election in Ecclesall constituency in the UK General Election.",
+            ),
+            (
+                self.parliamentary_candidate,
+                "Joe Bloggs is a Test Party candidate in Hallam constituency in the UK General Election 2023.",
+            ),
+            (
+                self.mayoral_candidate,
+                "Joe Bloggs is the Test Party candidate for Mayor of Bristol.",
+            ),
+            (
+                self.candidate_with_votes_unelected,
+                "Joe Bloggs was a Test Party candidate in Ecclesall in the Sheffield local election. They received 10,000 votes.",
+            ),
+            (
+                self.candidate_with_votes_elected,
+                "Joe Bloggs was a Test Party candidate in Ecclesall in the Sheffield local election. They were elected with 10,000 votes.",
+            ),
+            (
+                self.pcc_candidate,
+                "Joe Bloggs is the Test Party candidate for Police and Crime Commissioner for South Yorkshire.",
+            ),
+            (
+                self.list_candidate,
+                "Joe Bloggs is the 1st place candidate for the Test Party in the London Assembly elections (additional).",
+            ),
+        ]
+
+        for candidacy in candidacies:
+            with self.subTest(msg=candidacy[1]):
+                person = candidacy[0].person
+                expected = candidacy[1]
+                intro = strip_tags(person.intro)
+                intro = intro.replace("\n", "")
+                intro = intro.strip()
+                intro = " ".join(intro.split())
+                self.assertEqual(intro, expected)
+                self.assertEqual(person.text_intro, expected)
