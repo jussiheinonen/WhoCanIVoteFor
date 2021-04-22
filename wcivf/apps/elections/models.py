@@ -1,5 +1,7 @@
 import datetime
 import re
+
+from django.db.models import Count
 from django.utils import timezone
 
 import pytz
@@ -219,6 +221,24 @@ class Election(models.Model):
             return "posts"
 
         return pluralise.get(suffix, f"{suffix}s")
+
+    def parties(self):
+        parties_with_counts = {
+            d["personpost__party__party_id"]: {
+                "count": d["personpost__party__count"]
+            }
+            for d in self.postelection_set.values("personpost__party__party_id")
+            .annotate(Count("personpost__party"))
+            .order_by("-personpost__party")
+        }
+        from parties.models import Party
+
+        party_model_qs = Party.objects.filter(
+            party_id__in=parties_with_counts.keys()
+        )
+        for party in party_model_qs:
+            parties_with_counts[party.party_id]["party"] = party
+        return parties_with_counts
 
 
 class Post(models.Model):

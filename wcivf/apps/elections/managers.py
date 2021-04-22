@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from django.utils import timezone
 from .helpers import EEHelper
 
@@ -60,6 +60,17 @@ class ElectionQuerySet(models.QuerySet):
     def election_id_to_type(self, election_id):
         parts = election_id.split(".")
         return parts[0]
+
+    def parties(self):
+        """
+        Return a list of party models that are standing in this election
+        """
+
+        return (
+            self.values("postelection__personpost__party")
+            .annotate(count=Count("postelection__personpost__party"))
+            .order_by("-postelection__personpost__party")
+        )
 
 
 class PostManager(models.Manager):
