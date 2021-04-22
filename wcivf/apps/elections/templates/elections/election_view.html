@@ -56,12 +56,14 @@
           <tr>
             <th>Name</th>
             <th>Candidates</th>
+            <th>Seats</th>
           </tr>
           {% for postelection in object.postelection_set.all %}
             <tr>
               <td><a href="{{ postelection.get_absolute_url }}">{{ postelection.post.label }}</a>
                 {{ postelection.short_cancelled_message_html }}</td>
               <td>{{ postelection.personpost_set.count }}</td>
+              <td>{{ postelection.winner_count }}</td>
 
             </tr>
           {% endfor %}

@@ -1,9 +1,10 @@
+from dateutil.parser import parse
 from django.views.generic import TemplateView, DetailView, RedirectView
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
 
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Count, Sum, Subquery, IntegerField
 from django.apps import apps
 
 
@@ -11,7 +12,7 @@ from elections.views.mixins import (
     NewSlugsRedirectMixin,
     PostelectionsToPeopleMixin,
 )
-from elections.models import PostElection
+from elections.models import PostElection, Election
 from parties.models import LocalParty, Party
 from people.models import PersonPost
 
@@ -30,6 +31,80 @@ class ElectionsView(TemplateView):
         context[
             "current_or_future_elections"
         ] = all_elections.current_or_future()
+
+        return context
+
+
+class ElectionTypeForDateView(TemplateView):
+    template_name = "elections/election_type_for_date.html"
+
+    supported_types = {
+        "local": "Local",
+        "parl": "UK Parliament",
+        "nia": "Northern Ireland Assembly",
+        "senedd": "Senedd Cymru",
+        "sp": "Scottish Parliament",
+        "gla": "Greater London Assembly",
+        "pcc": "Police and Crime Commissioner",
+        "mayor": "Mayoral",
+    }
+
+    def get(self, request, *args, **kwargs):
+        self.election_type, self.election_date = self.kwargs.get(
+            "election"
+        ).split(".")
+        if self.election_type not in self.supported_types.keys():
+            raise Http404()
+        return super().get(request, *args, **kwargs)
+
+    def get_template_names(self):
+        return [
+            f"elections/{self.election_type}_election_type_for_date.html",
+            "elections/generic_election_type_for_date.html",
+        ]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["election_type"] = self.supported_types[self.election_type]
+        context["election_date"] = parse(self.election_date)
+
+        base_elections_qs = Election.objects.filter(
+            election_date=self.election_date, election_type=self.election_type
+        ).order_by("name")
+
+        aggregate_qs = base_elections_qs.order_by("postelection")
+        context["total_candidates"] = aggregate_qs.all().aggregate(
+            total_candidates=Count("postelection__personpost", distinct=True)
+        )["total_candidates"]
+
+        context["total_seats"] = aggregate_qs.all().aggregate(
+            total_seats=Sum("postelection__winner_count")
+        )["total_seats"]
+
+        context["total_parties"] = aggregate_qs.all().aggregate(
+            total_parties=Count(
+                "postelection__personpost__party", distinct=True
+            ),
+        )["total_parties"]
+
+        context["total_ballots"] = aggregate_qs.all().aggregate(
+            total_ballots=Count("postelection__ballot_paper_id", distinct=True),
+        )["total_ballots"]
+
+        context["elections"] = base_elections_qs.annotate(
+            parties_count=Count(
+                "postelection__personpost__party", distinct=True
+            ),
+            candidates_count=Count("postelection__personpost", distinct=True),
+            ballots=Count("postelection", distinct=True),
+        ).annotate(
+            seats_total=Subquery(
+                base_elections_qs.order_by("postelection")
+                .annotate(sum_value=Sum("postelection__winner_count"))
+                .values("sum_value"),
+                output_field=IntegerField(),
+            )
+        )
 
         return context
 

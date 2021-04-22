@@ -9,6 +9,7 @@ from .views import (
     PostcodeiCalView,
     RedirectPostView,
     PartyListVew,
+    ElectionTypeForDateView,
 )
 from .helpers import ElectionIDSwitcher
 
@@ -29,7 +30,11 @@ urlpatterns = [
         PartyListVew.as_view(),
         name="party_list_view",
     ),
-    #
+    url(
+        r"^(?P<election>[a-z]+\.\d{4}-\d{2}-\d{2})/$",
+        ElectionTypeForDateView.as_view(),
+        name="election_type_for_date_view",
+    ),
     url(
         "^(?P<election>[a-z\-]+\.[^/]+)(?:/(?P<ignored_slug>[^/]+))?/$",
         ElectionIDSwitcher(election_view=ElectionView, ballot_view=PostView),
