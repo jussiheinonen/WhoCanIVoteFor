@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Sum
 from django.utils import timezone
 from .helpers import EEHelper
 
@@ -96,3 +97,8 @@ class PostManager(models.Manager):
             )
 
         return (post, created)
+
+
+class PostElectionQueryset(models.QuerySet):
+    def seats_total(self):
+        return self.aggregate(sum=Sum("winner_count"))["sum"]

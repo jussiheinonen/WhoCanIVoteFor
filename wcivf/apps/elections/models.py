@@ -335,6 +335,8 @@ class PostElection(models.Model):
     wikipedia_url = models.CharField(blank=True, null=True, max_length=800)
     wikipedia_bio = models.TextField(null=True)
 
+    objects = PostElectionQueryset.as_manager()
+
     @property
     def expected_sopn_date(self):
         try:
