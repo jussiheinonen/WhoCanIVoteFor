@@ -22,8 +22,6 @@ class ElectionQuerySet(models.QuerySet):
         """
         return self.filter(current=False, election_date__lt=timezone.now())
 
-
-class ElectionManager(models.Manager.from_queryset(ElectionQuerySet)):
     def get_explainer(self, election):
         ee = EEHelper()
         ee_data = ee.get_data(election["id"])
@@ -61,12 +59,6 @@ class ElectionManager(models.Manager.from_queryset(ElectionQuerySet)):
     def election_id_to_type(self, election_id):
         parts = election_id.split(".")
         return parts[0]
-
-    def past(self):
-        """
-        Allows past method on QuerySet object to be called directly from the manager
-        """
-        return self.get_queryset().past()
 
 
 class PostManager(models.Manager):

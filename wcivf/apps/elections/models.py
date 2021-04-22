@@ -14,7 +14,7 @@ from django.utils.html import mark_safe
 from django.utils.text import slugify
 
 from .helpers import get_election_timetable
-from .managers import ElectionManager
+from .managers import PostElectionQueryset, ElectionQuerySet
 
 LOCAL_TZ = pytz.timezone("Europe/London")
 
@@ -46,7 +46,7 @@ class Election(models.Model):
     metadata = JSONField(null=True)
     any_non_by_elections = models.BooleanField(default=False)
 
-    objects = ElectionManager()
+    objects = ElectionQuerySet.as_manager()
 
     class Meta:
         ordering = ["election_date"]
