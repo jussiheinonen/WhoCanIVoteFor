@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load markdown_deux_tags %}
 {% block content %}
-<div class="card">
+<div class="ds-card">
+  <div class="ds-card-body">
 {% markdown %}
 ## Running in a UK election? Update your candidate profile!
 
@@ -29,4 +30,5 @@ Please be aware that we retain all information published on the Statement of Per
 As always, Democracy Club is on call to help with any issues. Send us a message or give us some feedback! [Get in touch.](https://democracyclub.org.uk/contact/)
 {% endmarkdown %}
   </div>
+</div>
 {% endblock %}

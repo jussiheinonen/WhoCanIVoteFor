@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load markdown_deux_tags %}
-{% load breadcrumb_tags %}
 {% load humanize %}
 
 {% block page_title %}{% include "people/includes/_person_meta_title.html" %}{% endblock page_title %}
@@ -10,65 +9,55 @@
 {% block og_image %}{% if object.photo_url %}{{ object.photo_url }}{% endif %}{% endblock og_image %}
 
 {% block content %}
-<div class="ds-scope">
-  <div class="ds-page">
-    <div class="ds-stack">
-      {% include "people/includes/_person_intro_card.html" %}
 
-      {% include "people/includes/_person_policy_card.html" %}
+{% if referer_postcode %}
+{# We've come from the postcode page #}
+{% include 'elections/includes/_postcode_breadcrumbs.html' %}
+{% elif object.featured_candidacy %}
+{# There's a current post #}
+<nav class="ds-breadcrumbs ds-stack" aria-label="You are here: {{ request.path }}">
+    <ol>
+        <li>
+            <a href="{% url 'home_view' %}">Home</a>
+        </li>
+        <li>Current: {{ object.name }}</li>
+    </ol>
+</nav>
+{% endif %}
 
-      {% include "people/includes/_person_manifesto_card.html" %}
-      
-      {% include "people/includes/_person_about_card.html" %}
+{% include "elections/includes/_ld_candidate.html" with person=object.featured_candidacy.person party=object.featured_candidacy.party %}
 
-      {% include "people/includes/_person_contact_card.html" %}
+<div class="ds-stack">
+    {% include "people/includes/_person_intro_card.html" %}
 
-      {% include "people/includes/_person_local_party_card.html" %}
+    {% include "people/includes/_person_policy_card.html" %}
 
-      {% include "people/includes/_person_hustings_card.html" %}
+    {% include "people/includes/_person_manifesto_card.html" %}
 
-      {% include "people/includes/_person_previous_elections_card.html" %}
+    {% include "people/includes/_person_about_card.html" %}
 
-      {% include "people/includes/_person_edit_details_card.html" %}
+    {% include "people/includes/_person_contact_card.html" %}
 
-      {% if referer_postcode %}
-      <div class="back">
+    {% include "people/includes/_person_local_party_card.html" %}
+
+    {% include "people/includes/_person_hustings_card.html" %}
+
+    {% include "people/includes/_person_previous_elections_card.html" %}
+
+    {% include "people/includes/_person_edit_details_card.html" %}
+
+    {% if referer_postcode %}
+    <div class="back">
         <p>
-          <a href="{% url 'postcode_view' referer_postcode %}">&laquo; Back to candidates in {{ referer_postcode }}</a>
+            <a href="{% url 'postcode_view' referer_postcode %}">&laquo; Back to candidates in {{ referer_postcode }}</a>
         </p>
-      </div>
-      {% endif %}
-
-      {% if not referer_postcode %}
-      {% include "elections/includes/_postcode_search_form.html" %}
-      {% endif %}
-
     </div>
-  </div>
+    {% endif %}
+
+    {% if not referer_postcode %}
+    {% include "elections/includes/_postcode_search_form.html" %}
+    {% endif %}
+
 </div>
 
 {% endblock content %}
-
-{% block breadcrumbs %}
-{% if referer_postcode %}
-{# We've come from the postcode page #}
-<ol vocab="http://schema.org/" typeof="BreadcrumbList" class="breadcrumbs" aria-label="You are here:" role="navigation">
-  {% url 'home_view' as home_view %}
-  {% breadcrumb_item home_view 'Home' 1 %}
-  {% url 'postcode_view' referer_postcode as postcode_view %}
-  {% breadcrumb_item postcode_view 'Candidates in '|add:referer_postcode 2 %}
-  <li class="disabled"><span class="show-for-sr">Current: </span> {{ object.name }}</li>
-</ol>
-{% elif object.personpost %}
-{# There's a current post #}
-<ol vocab="http://schema.org/" typeof="BreadcrumbList" class="breadcrumbs" aria-label="You are here:" role="navigation">
-  {% url 'home_view' as home_view %}
-  {% breadcrumb_item home_view 'Home' 1 %}
-  {% breadcrumb_item object.featured_candidacy.post_election.get_absolute_url 'Candidates in '|add:object.featured_candidacy.post.label 2 %}
-  <li class="disabled"><span class="show-for-sr">Current: </span> {{ object.name }}</li>
-</ol>
-{% endif %}
-
-{% include "elections/includes/_ld_candidate.html" with personpost=object.featured_candidacy %}
-
-{% endblock breadcrumbs %}

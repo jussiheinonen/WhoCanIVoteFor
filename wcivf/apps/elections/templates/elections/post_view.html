@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-{% load breadcrumb_tags %}
 {% load humanize %}
 
 {% block page_title %}{% include "elections/includes/_post_meta_title.html" %}{% endblock page_title %}
@@ -9,51 +8,53 @@
 {% block og_description %}{% include "elections/includes/_post_meta_description.html" %}{% endblock og_description %}
 
 {% block content %}
-<div class="ds-scope">
-  <div class="ds-stack-smaller">
+<nav class="ds-breadcrumbs ds-stack" aria-label="You are here: {{ request.path }}">
+    <ol>
+        <li>
+            <a href="{% url 'home_view' %}">Home</a>
+        </li>
+        <li>
+            <a href="{% url 'elections_view' %}">Elections</a>
+        </li>
+        <li>
+            <a href="{{ object.election.get_absolute_url }}">
+                {{ postelection.election.name_without_brackets }}
+            </a>
+        </li>
+        <li>
+            {{ postelection.friendly_name }}
+        </li>
+    </ol>
+</nav>
+
+<div class="ds-stack-smaller">
     {% include "elections/includes/_single_ballot.html" with postelection=object%}
 
 
     {% if postelection.ballotnewsarticle_set.exists %}
-      {% include "news_mentions/news_articles.html" with news_articles=postelection.ballotnewsarticle_set.all %}
+    {% include "news_mentions/news_articles.html" with news_articles=postelection.ballotnewsarticle_set.all %}
     {% endif %}
 
     {% if postelection.next_ballot %}
-      <div class="ds-card">
+    <div class="ds-card">
         <div class="ds-card-body">
-          <h3>Next election</h3>
-          <p>
-            The <a href="{{ postelection.next_ballot.get_absolute_url }}">next election for {{ postelection.friendly_name }}</a> is
-              {% if postelection.next_ballot.election.is_election_day %}
+            <h3>Next election</h3>
+            <p>
+                The <a href="{{ postelection.next_ballot.get_absolute_url }}">next election for {{ postelection.friendly_name
+          }}</a> is
+                {% if postelection.next_ballot.election.is_election_day %}
                 <strong>being held today</strong>.
-              {% else %}
+                {% else %}
                 due to take place <strong>on {{ postelection.next_ballot.election.election_date|date:"l j F Y"}}</strong>.
-              {% endif %}
-          </p>
+                {% endif %}
+            </p>
         </div>
-      </div>
+    </div>
     {% endif %}
 
     {% include "elections/includes/_postcode_search_form.html" %}
 
     {% include "feedback/feedback_form.html" %}
-  </div>
 </div>
 
 {% endblock content %}
-
-
-{% block breadcrumbs %}
-<ol vocab="http://schema.org/" typeof="BreadcrumbList" class="breadcrumbs" aria-label="You are here:" role="navigation">
-  {% url 'home_view' as home_view %}
-  {% breadcrumb_item home_view 'Home' 1 %}
-
-  {% url 'elections_view' as elections %}
-  {% breadcrumb_item elections 'Elections' 2 %}
-
-  {% breadcrumb_item object.election.get_absolute_url object.election.nice_election_name 3 %}
-
-  <li class="disabled"><span class="show-for-sr">Current: </span> {{ object.post.label }}</li>
-</ol>
-
-{% endblock breadcrumbs %}

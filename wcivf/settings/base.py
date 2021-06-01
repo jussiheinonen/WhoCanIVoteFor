@@ -2,6 +2,9 @@
 import os
 import sys
 
+from dc_utils.settings.pipeline import *  # noqa
+from dc_utils.settings.pipeline import get_pipeline_settings
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 here = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 PROJECT_ROOT = here("..")
@@ -36,8 +39,10 @@ INSTALLED_APPS = (
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
     "django.contrib.sites",
-    "dc_theme",
     "dc_signup_form",
+    "dc_signup_form.signup_server",
+    "dc_utils",
+    "mailing_list",
     "pipeline",
     "elections",
     "markdown_deux",
@@ -88,7 +93,6 @@ TEMPLATES = [
                 "django.template.context_processors.i18n",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "dc_theme.context_processors.dc_theme_context",
                 "dc_signup_form.context_processors.signup_form",
                 "core.context_processors.canonical_url",
                 "core.context_processors.site_title",
@@ -143,9 +147,6 @@ STATIC_URL = "/static/"
 
 STATICFILES_DIRS = (root("assets"),)
 STATIC_ROOT = root("static")
-
-from dc_theme.settings import get_pipeline_settings
-from dc_theme.settings import STATICFILES_FINDERS  # noqa
 
 STATICFILES_STORAGE = "pipeline.storage.PipelineCachedStorage"
 

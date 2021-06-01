@@ -1,48 +1,48 @@
 {% if person.local_party %}
-  <div class="ds-card">
+<div class="ds-card">
     <div class="ds-card-body">
-      <h4 class="ds-h3">{{ person.local_party.name }}</h4>
-      <p>
-        {% if person.local_party.is_local %}
-          {{ person.name }}'s local party is {{ person.local_party.label }}.
-        {% else %}
-          {{ person.name }} is a {{ person.local_party.label }} candidate.
-        {% endif %}
-      </p>
-      <dl class="ds-descriptions">
-        {% if person.local_party.twitter %}
-        <div>
-          <dt>Twitter</dt>
-          <a href="https://twitter.com/{{ person.local_party.twitter }}">
-            {{ person.local_party.twitter }}
-          </a>
-        </div>
-        {% endif %}
-        {% if person.local_party.facebook_page %}
-        <div>
-         <dt>Facebook</dt>
-          <a href="{{ person.local_party.facebook_page }}">
-            {{ person.local_party.facebook_page }}
-          </a>  
-        </div>
-        {% endif %}
-        {% if person.local_party.homepage %}
-        <div>
-         <dt>Party Homepage</dt>
-          <a href="{{ person.local_party.homepage }}">
-            {{ person.local_party.name }}'s website
-          </a>  
-        </div>
-        {% endif %}
-        {% if person.local_party.email %}
-        <div>
-         <dt>Email</dt>
-          <a href="{{ person.local_party.email }}">
-            {{ person.local_party.name }}'s email
-          </a>  
-        </div>
-        {% endif %}
-      </dl>
+        <h4 class="ds-h3">{{ person.local_party.name }}</h4>
+        <p>
+            {% if person.local_party.is_local %}
+            {{ person.name }}'s local party is {{ person.local_party.label }}.
+            {% else %}
+            {{ person.name }} is a {{ person.local_party.label }} candidate.
+            {% endif %}
+        </p>
+        <dl class="ds-descriptions">
+            {% if person.local_party.twitter %}
+            <div>
+                <dt>Twitter</dt>
+                <a href="https://twitter.com/{{ person.local_party.twitter }}">
+                    {{ person.local_party.twitter }}
+                </a>
+            </div>
+            {% endif %}
+            {% if person.local_party.facebook_page %}
+            <div>
+                <dt>Facebook</dt>
+                <a href="{{ person.local_party.facebook_page }}">
+                    {{ person.local_party.facebook_page }}
+                </a>
+            </div>
+            {% endif %}
+            {% if person.local_party.homepage %}
+            <div>
+                <dt>Party Homepage</dt>
+                <a href="{{ person.local_party.homepage }}">
+                    {{ person.local_party.name }}'s website
+                </a>
+            </div>
+            {% endif %}
+            {% if person.local_party.email %}
+            <div>
+                <dt>Email</dt>
+                <a href="{{ person.local_party.email }}">
+                    {{ person.local_party.name }}'s email
+                </a>
+            </div>
+            {% endif %}
+        </dl>
     </div>
-  </div>
+</div>
 {% endif %}

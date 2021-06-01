@@ -331,7 +331,7 @@ class PersonViewTests(TestCase):
         PersonPostFactory(person=self.person, election=ElectionFactory())
         response = self.client.get(self.person_url, follow=True)
         self.assertEqual(response.template_name, ["people/person_detail.html"])
-        self.assertNotContains(response, "Email")
+        self.assertNotContains(response, "<dt>Email</dt>")
 
     def test_local_party_for_local_election(self):
         party = PartyFactory(party_name="Labour Party", party_id="party:53")

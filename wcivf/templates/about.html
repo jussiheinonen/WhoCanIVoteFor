@@ -5,21 +5,19 @@
 {% block page_title %}About {{ SITE_TITLE }}{% endblock page_title %}
 
 {% block content %}
-<div class="row">
-  <div class="columns large-8 large-centered">
-    <div class="card">
-
-  {% markdown %}
+<div class="ds-card">
+    <div class="ds-card-body">
+{% markdown %}
 
 # About WhoCanIVoteFor
 
-WhoCanIVoteFor is a simple tool which allows UK voters to see lists of candidates in upcoming elections using only their postcode. 
-      
-All the candidate data ued in this site is collected by volunteers from council websites and other sources. If you wish to contribute, please visit **[Democracy Club Candidates](https://candidates.democracyclub.org.uk/)**.     
+WhoCanIVoteFor is a simple tool which allows UK voters to see lists of candidates in upcoming elections using only their postcode.
+
+All the candidate data ued in this site is collected by volunteers from council websites and other sources. If you wish to contribute, please visit **[Democracy Club Candidates](https://candidates.democracyclub.org.uk/)**.
 
 Some information displayed on WhoCanIVoteFor is held by Democracy Club seperate from our candidates database. This includes 'extra' data and links such as political party contact details and manifestos, parish or town councils, or referendums.
 If you have questions or comments on any of these subjects, please get in touch using the email address below.
-      
+
 ## Contact
 
 Please email **[hello@democracyclub.org.uk](mailto:hello@democracyclub.org.uk)**
@@ -32,7 +30,7 @@ the UK, we'd suggest that you post to the **[Democracy Club Slack](https://democ
 ## Creators
 
 This site was developed by [Democracy Club](https://democracyclub.org.uk), specifically
-[Sym Roe](https://twitter.com/symroe), [Joe Mitchell](https://twitter.com/j0e_m), [Tim Green](https://twitter.com/tfgg2), [Andy Lulham](https://twitter.com/andylolz) and [David Miller](https://twitter.com/thatdavidmiller).  This site would not be possible without the help
+[Sym Roe](https://twitter.com/symroe), [Joe Mitchell](https://twitter.com/j0e_m), [Tim Green](https://twitter.com/tfgg2), [Andy Lulham](https://twitter.com/andylolz) and [David Miller](https://twitter.com/thatdavidmiller). This site would not be possible without the help
 of hundreds of contributors to [Democracy Club Candidates](https://candidates.democracyclub.org.uk/), and in turn the
 support of [mySociety](https://www.mysociety.org/).
 
@@ -73,9 +71,7 @@ The data on this website is crowd-sourced and may not be
 complete (or may contain inaccuracies). If you find an error, please either
 update the page yourself, or email us to report the problem.
 
-  {% endmarkdown %}
+{% endmarkdown %}
     </div>
-  </div>
 </div>
 {% endblock content %}
-

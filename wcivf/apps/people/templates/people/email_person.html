@@ -1,49 +1,37 @@
 {% extends "base.html" %}
 {% load markdown_deux_tags %}
-{% load breadcrumb_tags %}
-
 
 {% block og_image %}{% if object.photo_url %}{{ object.photo_url }}{% endif %}{% endblock og_image %}
 
 
 {% block og_title %}{{ object.name }}{% endblock og_title %}
 {% block page_title %}{{ object.name }}{% endblock page_title %}
-{% block og_description %}Standing for '{{ object.posts.all.0.label }}' in {{ object.posts.all.0.election.name }}{% endblock og_description %}
+{% block og_description %}Standing for '{{ object.posts.all.0.label }}' in {{ object.posts.all.0.election.name }}{%
+endblock og_description %}
 
 {% block content %}
-  <div class="ds-card">
-    <div class="ds-card-body">
-      <h2 class="ds-candidate-name">Ask {{ object.name }} for more information</h2>
 
-      {% if object.photo_url %}
-        <img src="{{ object.photo_url }}" class="person_photo" alt="profile photo of {{ object.name }}">
-      {% endif %}
-
-      {% if object.email %}
-        {% include "people/_person_email_form.html" %}
-      {% else %}
-        <p>We don't know {{ object.name }}'s email address.
-            <a href="{{ object.get_ynr_url }}">Can you add it?</a></p>
-      {% endif %}
-    </div>
-  </div>
-
-{% endblock content %}
-
-
-
-
-{% block breadcrumbs %}
 {% if referer_postcode %}
-  {# We've come from the postcode page #}
-  <ol vocab="http://schema.org/" typeof="BreadcrumbList" class="breadcrumbs" aria-label="You are here:" role="navigation">
-    {% url 'home_view' as home_view %}
-    {% breadcrumb_item home_view 'Home' 1 %}
-    {% url 'postcode_view' referer_postcode as postcode_view %}
-    {% breadcrumb_item postcode_view 'Candidates' 2 %}
-    <li class="disabled"><span class="show-for-sr">Current: </span> {{ object.name }}</li>
-  </ol>
+{# We've come from the postcode page #}
+{% include 'elections/includes/_postcode_breadcrumbs.html' %}
 {% endif %}
 
-{% endblock breadcrumbs %}
+<div class="ds-card">
+    <div class="ds-card-body">
+        <h2 class="ds-candidate-name">Ask {{ object.name }} for more information</h2>
 
+        {% if object.photo_url %}
+        <img src="{{ object.photo_url }}" class="person_photo" alt="profile photo of {{ object.name }}">
+        {% endif %}
+
+        {% if object.email %}
+        {% include "people/_person_email_form.html" %}
+        {% else %}
+        <p>We don't know {{ object.name }}'s email address.
+            <a href="{{ object.get_ynr_url }}">Can you add it?</a>
+        </p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,17 +1,25 @@
 {% load dc_forms %}
-<h1>Thanks for your feedback!</h1>
-{% if object.found_useful == "YES" %}
+<div class="ds-status">
+    <h3>Thanks for your feedback!</h3>
 
-<p>The information you see here is gathered publicly, by people like you.</p>
+    <aside class="ds-status messages" aria-label="Status" style="color: white">
+        <ul class="ds-stack">
+            <li class="ds-status-message">
+                {% if object.found_useful == "YES" %}
 
-<p>Help us do more to make democracy work better for everyone!</p>
+                <p>The information you see here is gathered publicly, by people like you.</p>
 
-{% else %}
+                <p>Help us do more to make democracy work better for everyone!</p>
 
-<p>We're sorry you didn't find what you were looking for. We'll read your feedback and pass it on to our volunteers.</p>
+                {% else %}
 
-<p>The information you see here is gathered publicly, by people like you.</p>
+                <p>We're sorry you didn't find what you were looking for. We'll read your feedback and pass it on to our volunteers.</p>
 
-<p>Help us do better in future!</p>
+                <p>The information you see here is gathered publicly, by people like you.</p>
 
-{% endif %}
+                <p>Help us do better in future!</p>
+                {% endif %}
+            </li>
+        </ul>
+    </aside>
+</div>

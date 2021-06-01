@@ -1,39 +1,33 @@
 {% extends "base.html" %}
 
-{% load breadcrumb_tags %}
-
 {% block page_title %}UK Political Parties{% endblock page_title %}
 {% block og_title %}UK Political Parties{% endblock og_title %}
 {% block og_description %}List of candidates for UK Political Parties{% endblock og_description %}
 
 
 {% block content %}
-<div class="row">
-<section class="columns large-12">
-  <div class="card">
-    <div class="row">
-      <h2>UK political parties</h2>
-      <p>The following is a list of all political parties represented by candidates in Democracy Club's UK election database (est. 2015). The list includes active, deregistered, and defunct parties.</p>
-        
-       <p>Party names and emblems are taken from the <a href="http://www.electoralcommission.org.uk/">Electoral Commission's register of political parties.</p>
+<nav class="ds-breadcrumbs ds-stack" aria-label="You are here: {{ request.path }}">
+    <ol>
+        <li>
+            <a href="{% url 'home_view' %}">Home</a>
+        </li>
+        <li>Current: </span>Parties</li>
+    </ol>
+</nav>
+<div class="ds-card ds-stack">
+    <div class="ds-card-body">
+        <h2>UK political parties</h2>
+        <p>The following is a list of all political parties represented by candidates in Democracy Club's UK election
+            database (est. 2015). The list includes active, deregistered, and defunct parties.</p>
 
-      <ul>
-      {% for party in object_list %}
-      <li><a href="{{ party.get_absolute_url }}">{{ party.party_name }}</a></li>
-      {% endfor %}
-      </ul>
+        <p>Party names and emblems are taken from the <a href="http://www.electoralcommission.org.uk/">Electoral
+                Commission's register of political parties.</p>
+
+        <ul>
+            {% for party in object_list %}
+            <li><a href="{{ party.get_absolute_url }}">{{ party.party_name }}</a></li>
+            {% endfor %}
+        </ul>
     </div>
-  </div>
-</section>
 </div>
 {% endblock content %}
-
-
-{% block breadcrumbs %}
-<ol vocab="http://schema.org/" typeof="BreadcrumbList" class="breadcrumbs" aria-label="You are here:" role="navigation">
-  {% url 'home_view' as home_view %}
-  {% breadcrumb_item home_view 'Home' 1 %}
-  <li class="disabled"><span class="show-for-sr">Current: </span> Parties</li>
-</ol>
-
-{% endblock breadcrumbs %}
