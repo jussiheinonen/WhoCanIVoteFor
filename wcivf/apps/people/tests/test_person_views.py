@@ -127,10 +127,16 @@ class PersonViewTests(TestCase):
         election_two = ElectionFactoryLazySlug()
         party = PartyFactory(party_name="Liberal Democrat", party_id="foo")
         PersonPostFactory(
-            person=self.person, election=election_one, party=party
+            person=self.person,
+            election=election_one,
+            party=party,
+            party_name=party.party_name,
         )
         PersonPostFactory(
-            person=self.person, election=election_two, party=party
+            person=self.person,
+            election=election_two,
+            party=party,
+            party_name=party.party_name,
         )
         response = self.client.get(self.person_url, follow=True)
         expected = f"<h5>{self.person.name} is a Liberal Democrat candidate in the following elections:"
@@ -141,10 +147,16 @@ class PersonViewTests(TestCase):
         election_two = ElectionFactoryLazySlug()
         party = PartyFactory(party_name="Independent", party_id="ynmp-party:2")
         PersonPostFactory(
-            person=self.person, election=election_one, party=party
+            person=self.person,
+            election=election_one,
+            party=party,
+            party_name=party.party_name,
         )
         PersonPostFactory(
-            person=self.person, election=election_two, party=party
+            person=self.person,
+            election=election_two,
+            party=party,
+            party_name=party.party_name,
         )
         response = self.client.get(self.person_url, follow=True)
         expected = f"<h5>{self.person.name} is an Independent candidate in the following elections:"
@@ -156,13 +168,16 @@ class PersonViewTests(TestCase):
             party_name="Conservative and Unionist Party", party_id="ConUnion"
         )
         person_post = PersonPostFactory(
-            person=self.person, election=election, party=party
+            person=self.person,
+            election=election,
+            party=party,
+            party_name=party.party_name,
         )
         response = self.client.get(self.person_url, follow=True)
 
         self.assertContains(
             response,
-            f"{self.person.name} is a {party.party_name} candidate in {person_post.post.label} constituency in the {election.name}.",
+            f"{self.person.name} is a {person_post.party_name} candidate in {person_post.post.label} constituency in the {election.name}.",
         )
 
     def test_no_previous_elections(self):

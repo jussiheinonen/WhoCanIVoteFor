@@ -33,6 +33,7 @@ def create_person(
         post__label="Ecclesall",
         post_election__election=election,
         person__death_date=death_date,
+        party_name=party_name,
         party__party_name=party_name,
         party__party_id=party_id,
         post_election__ballot_paper_id=f"{election_type}.{election.slug}",

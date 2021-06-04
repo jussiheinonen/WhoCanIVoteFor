@@ -69,6 +69,6 @@
 </ol>
 {% endif %}
 
-{% include "elections/includes/_ld_candidate.html" with person=object.featured_candidacy.person party=object.featured_candidacy.party %}
+{% include "elections/includes/_ld_candidate.html" with personpost=object.featured_candidacy %}
 
 {% endblock breadcrumbs %}

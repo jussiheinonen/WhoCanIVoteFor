@@ -10,7 +10,7 @@
 
       {% if object.current_or_future_candidacies.all.count > 1 %}
         <h5>{{ object.name }} is {% if object.current_or_future_candidacies.0.party.is_independent %}an{% else %}a{% endif %}
-          {{object.current_or_future_candidacies.0.party.party_name }} candidate in the following elections:</h5>
+          {{object.current_or_future_candidacies.0.party_name }} candidate in the following elections:</h5>
 
           {% for candidacy in object.current_or_future_candidacies %}
           <ul>
