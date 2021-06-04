@@ -20,6 +20,15 @@ class PersonPost(models.Model):
     )
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     party = models.ForeignKey(Party, null=True, on_delete=models.CASCADE)
+    party_name = models.CharField(
+        max_length=255,
+        help_text="The name of the party at the time of the candidacy",
+    )
+    party_description_text = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text="The party description at the time of the candidacy",
+    )
     election = models.ForeignKey(Election, null=False, on_delete=models.CASCADE)
     list_position = models.IntegerField(blank=True, null=True)
     elected = models.NullBooleanField()
