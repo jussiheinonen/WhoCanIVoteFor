@@ -2,11 +2,11 @@
 {
     "@context": "http://schema.org/",
     "@type": "Person",
-    "name": "{{ person.name }}",
-    "url": "{{ CANONICAL_URL }}{{ person.get_absolute_url }}",
+    "name": "{{ personpost.person.name }}",
+    "url": "{{ CANONICAL_URL }}{{ personpost.person.get_absolute_url }}",
     "worksFor": {
         "@type": "Organization",
-        "name": "{{ party.party_name }}"
+        "name": "{{ personpost.party_name }}"
     }
 }
 </script>

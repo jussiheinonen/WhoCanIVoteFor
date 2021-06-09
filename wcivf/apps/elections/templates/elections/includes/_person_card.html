@@ -27,7 +27,7 @@
 
     <!-- {% include "elections/includes/_ld_candidate.html" with person=person_post.person party=person_post.party %} -->
     {% if not person_post.list_position or not postelection.display_as_party_list %}
-      <div class="ds-h6">{{ person_post.party.party_name }}
+      <div class="ds-h6">{{ person_post.party_name }}
       {% if person_post.votes_cast %}
       <br><strong>{{ person_post.votes_cast|intcomma }} votes</strong>
       {% endif %}

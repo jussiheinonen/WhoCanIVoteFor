@@ -32,3 +32,7 @@ class PersonPostFactory(factory.django.DjangoModelFactory):
 class PersonPostWithPartyFactory(PersonPostFactory):
 
     party = factory.SubFactory(PartyFactory)
+
+    @factory.lazy_attribute
+    def party_name(self):
+        return self.party.party_name

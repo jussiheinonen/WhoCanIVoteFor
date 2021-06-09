@@ -20,7 +20,7 @@
         {{ person_post.post_election.short_cancelled_message_html }}
         <td>{{ person_post.election.election_date|date:"Y" }}</td>
         <td>{{ person_post.post.label }}: {{ person_post.election }}</td>
-        <td>{{ person_post.party.party_name }}</td>
+        <td>{{ person_post.party_name }}</td>
         {% if person_post.elected %}
             <td>{% if person_post.votes_cast %}{{ person_post.votes_cast|intcomma }} votes (elected){% else %}Vote count not available (elected){% endif %}</td>
         {% else %}

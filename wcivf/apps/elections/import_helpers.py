@@ -269,6 +269,10 @@ class YNRBallotImporter:
                         post_election=ballot,
                         person=person,
                         party_id=candidate["party"]["legacy_slug"],
+                        party_name=candidate["party_name"],
+                        party_description_text=candidate[
+                            "party_description_text"
+                        ],
                         list_position=candidate["party_list_position"],
                         elected=elected,
                         votes_cast=result.get("num_ballots", None),
