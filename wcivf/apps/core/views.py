@@ -60,7 +60,8 @@ class HomePageView(PostcodeFormView):
             PostElection.objects.filter(
                 election__election_date__gte=today,
                 election__election_date__lte=cut_off_date,
-                election__any_non_by_elections=False,
+                # Temporarily removed following May elections #
+                # election__any_non_by_elections=False,
             )
             .exclude(election__election_date=may_election_day_this_year())
             .select_related("election", "post")

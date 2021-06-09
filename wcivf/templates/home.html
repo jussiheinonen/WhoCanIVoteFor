@@ -26,11 +26,11 @@
       </div> 
     </div>
 
-    {% if upcoming_elections %}
-      <div class="ds-card">
-        <div class="ds-card-body">
-          <h2>Upcoming by-elections</h2>
-          {% regroup upcoming_elections by election.election_date as elections_by_date %}
+{% if upcoming_elections %}
+  <div class="ds-card">
+    <div class="ds-card-body">
+      <h2>Upcoming elections</h2>
+      {% regroup upcoming_elections by election.election_date as elections_by_date %}
 
           {% for election_group in elections_by_date %}
           <h3>{{ election_group.grouper }}</h3>
