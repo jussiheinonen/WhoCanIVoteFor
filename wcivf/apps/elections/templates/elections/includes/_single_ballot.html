@@ -50,22 +50,22 @@
             {% else %}
               {% if postelection.locked %}
                 {# Case: Candidates and the post is locked #}
-                {% if postelection.voting_system.slug == "PR-CL" %}
+                {% if postelection.get_voting_system.slug == "PR-CL" %}
                   You will have one vote, and can vote for a single party list or independent candidate.
                 {% else %}
-                  {% if postelection.winner_count and postelection.election.voting_system_id == 'FPTP' %}
+                  {% if postelection.winner_count and postelection.get_voting_system.slug == 'FPTP' %}
                     You will have {{ postelection.winner_count|apnumber }} vote{{ postelection.winner_count|pluralize }},
                     and can choose from <strong>{{ postelection.people.count|apnumber }} candidate{{ postelection.people|pluralize }}</strong>.
                   {% endif %}
-                  {% if postelection.winner_count and postelection.election.voting_system_id == 'AMS' %}
+                  {% if postelection.winner_count and postelection.get_voting_system.slug == 'AMS' %}
                     You will have one vote, and can choose from <strong>{{ postelection.party_ballot_count }}</strong>
                     in the {{ postelection.friendly_name }}.
                   {% endif %}
-                  {% if postelection.winner_count and postelection.election.voting_system_id == 'sv' %}
+                  {% if postelection.winner_count and postelection.get_voting_system.slug == 'sv' %}
                     You will have two votes, and can choose from <strong>{{ postelection.party_ballot_count }}</strong>
                     in the {{ postelection.friendly_name }}.
                   {% endif %}
-                  {% if postelection.winner_count and postelection.election.voting_system_id == 'STV' %}
+                  {% if postelection.winner_count and postelection.get_voting_system.slug == 'STV' %}
                     You can choose from {{ postelection.people.apnumber }} candidate{{ postelection.people|pluralize }}.
                   {% endif %}
                 {% endif %}
