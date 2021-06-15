@@ -5,226 +5,226 @@
 
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
+    <head>
+        <meta charset="utf-8">
 
-    <script type="application/ld+json">
-        {
-            "@context": "http://schema.org",
-            "@type": "WebSite",
-            "url": "http://whocanivotefor.co.uk/",
-            "potentialAction": {
-                "@type": "SearchAction",
-                "target": "https://whocanivotefor.co.uk/?postcode={query}",
-                "query-input": "required name=query"
+        <script type="application/ld+json">
+            {
+                "@context": "http://schema.org",
+                "@type": "WebSite",
+                "url": "http://whocanivotefor.co.uk/",
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": "https://whocanivotefor.co.uk/?postcode={query}",
+                    "query-input": "required name=query"
+                }
             }
-        }
-    </script>
-    {% block page_meta %}{% endblock page_meta %}
+        </script>
+        {% block page_meta %}{% endblock page_meta %}
 
-    {% block extra_site_css %}{% if USE_COMPRESSED_CSS %}
-    <style type="text/css">
-        {
-            % include "_compressed_css.html"%
-        }
-    </style>
-    <script id="loadcss">
-        (function(u, s) {
-            ! function(e) {
-                "use strict";
-                var n = function(n, t, o) {
-                    var l, r = e.document,
-                        i = r.createElement("link");
-                    if (t) l = t;
-                    else {
-                        var a = (r.body || r.getElementsByTagName("head")[0]).childNodes;
-                        l = a[a.length - 1]
+        {% block extra_site_css %}{% if USE_COMPRESSED_CSS %}
+            <style type="text/css">
+                {
+                    % include "_compressed_css.html"%
+                }
+            </style>
+            <script id="loadcss">
+                (function(u, s) {
+                    ! function(e) {
+                        "use strict";
+                        var n = function(n, t, o) {
+                            var l, r = e.document,
+                            i = r.createElement("link");
+                            if (t) l = t;
+                            else {
+                                var a = (r.body || r.getElementsByTagName("head")[0]).childNodes;
+                                l = a[a.length - 1]
+                            }
+                            var d = r.styleSheets;
+                            i.rel = "stylesheet", i.href = n, i.media = "only x", l.parentNode.insertBefore(i, t ? l : l.nextSibling);
+                            var f = function(e) {
+                                for (var n = i.href, t = d.length; t--;)
+                                if (d[t].href === n) return e();
+                                setTimeout(function() {
+                                    f(e)
+                                })
+                            };
+                            return i.onloadcssdefined = f, f(function() {
+                                i.media = o || "all"
+                            }), i
+                        };
+                        "undefined" != typeof module ? module.exports = n : e.loadCSS = n
+                    }("undefined" != typeof global ? global : this);
+                    for (var i in u) {
+                        loadCSS(u[i], s);
                     }
-                    var d = r.styleSheets;
-                    i.rel = "stylesheet", i.href = n, i.media = "only x", l.parentNode.insertBefore(i, t ? l : l.nextSibling);
-                    var f = function(e) {
-                        for (var n = i.href, t = d.length; t--;)
-                            if (d[t].href === n) return e();
-                        setTimeout(function() {
-                            f(e)
-                        })
-                    };
-                    return i.onloadcssdefined = f, f(function() {
-                        i.media = o || "all"
-                    }), i
-                };
-                "undefined" != typeof module ? module.exports = n : e.loadCSS = n
-            }("undefined" != typeof global ? global : this);
-            for (var i in u) {
-                loadCSS(u[i], s);
-            }
-        }(['{% static '
-            css / styles.css '%}'
-        ], document.getElementById("loadcss")));
-    </script>
-    {% else %}
-    {% stylesheet 'styles' %}
-    {% endif %}
-    {% endblock extra_site_css %}
-</head>
+                }(['{% static '
+                    css / styles.css '%}'
+                ], document.getElementById("loadcss")));
+            </script>
+        {% else %}
+            {% stylesheet 'styles' %}
+        {% endif %}
+        {% endblock extra_site_css %}
+    </head>
 
-<body class="ds-width-full">
-    <div class="ds-page">
-        <p><a class="ds-skip-link" href="#main"></a></p>
-        {% block site_menu %}
-        <header class="ds-header">
-            <a class="ds-header-home" href="/">
-                <img src="{% static 'images/logo.png' %}" alt="Democracy Club home" />
-            </a>
-            <nav>
-            </nav>
-        </header>
-        {% endblock site_menu %}
-        <main id="main" tabindex="-1" class="ds-stack">
-            {% block site_meta %}
-            <title>
-                {% block base_title %}
-                {% block page_title %}{% endblock page_title %} | {{ SITE_TITLE }} by Democracy Club
-                {% endblock base_title %}
-            </title>
-            <link rel="canonical" href="{{ CANONICAL_URL }}{{ request.path }}" />
-            <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="{{ SITE_TITLE }}" />
-            <meta name="description" content="{% block page_description %}Find out about elections, candidates and polling stations with Democracy Club's {{ SITE_TITLE }}{% endblock page_description %}" />
-            <meta property="og:site_name" content="{{ SITE_TITLE }} by Democracy Club" />
-            <meta property="og:url" content="{{ CANONICAL_URL }}{{ request.path }}" />
-            <meta property="fb:app_id" content="262795130596272" />
-            <meta name="twitter:card" content="summary">
-            <meta name="twitter:site" content="@democlub">
-            <meta property="og:image" content="{% block og_image %}{{ CANONICAL_URL }}{% static "dc_theme/images/logo.png" %}{% endblock og_image %}" />
-            <meta property="og:image:width" content="{{ site_logo_width }}">
-            <meta property="og:title" content="{% block og_title %}{{ SITE_TITLE }} by Democracy Club{% endblock og_title %}" />
-            <meta property="og:description" content="{% block og_description %}Find out about elections, candidates and polling stations with Democracy Club's {{ SITE_TITLE }}{% endblock og_description %}" />
-            {% endblock site_meta %}
+    <body class="ds-width-full">
+        <div class="ds-page">
+            <p><a class="ds-skip-link" href="#main"></a></p>
+            {% block site_menu %}
+                <header class="ds-header">
+                    <a class="ds-header-home" href="/">
+                        <img src="{% static 'images/logo.png' %}" alt="Democracy Club home" />
+                    </a>
+                    <nav>
+                    </nav>
+                </header>
+            {% endblock site_menu %}
+            <main id="main" tabindex="-1" class="ds-stack">
+                {% block site_meta %}
+                    <title>
+                        {% block base_title %}
+                            {% block page_title %}{% endblock page_title %} | {{ SITE_TITLE }} by Democracy Club
+                        {% endblock base_title %}
+                    </title>
+                    <link rel="canonical" href="{{ CANONICAL_URL }}{{ request.path }}" />
+                    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="{{ SITE_TITLE }}" />
+                    <meta name="description" content="{% block page_description %}Find out about elections, candidates and polling stations with Democracy Club's {{ SITE_TITLE }}{% endblock page_description %}" />
+                    <meta property="og:site_name" content="{{ SITE_TITLE }} by Democracy Club" />
+                    <meta property="og:url" content="{{ CANONICAL_URL }}{{ request.path }}" />
+                    <meta property="fb:app_id" content="262795130596272" />
+                    <meta name="twitter:card" content="summary">
+                    <meta name="twitter:site" content="@democlub">
+                    <meta property="og:image" content="{% block og_image %}{{ CANONICAL_URL }}{% static "dc_theme/images/logo.png" %}{% endblock og_image %}" />
+                    <meta property="og:image:width" content="{{ site_logo_width }}">
+                    <meta property="og:title" content="{% block og_title %}{{ SITE_TITLE }} by Democracy Club{% endblock og_title %}" />
+                    <meta property="og:description" content="{% block og_description %}Find out about elections, candidates and polling stations with Democracy Club's {{ SITE_TITLE }}{% endblock og_description %}" />
+                {% endblock site_meta %}
 
-            {% if messages %}
-            <aside class="ds-status messages" aria-label="Status">
-                <ul class="ds-stack">
-                    {% for message in messages %}
-                    <li {% if message.tags %}class=" {{ message.tags }} ds-status-message " {% endif %}> {{ message }} </li>
-                    {% endfor %}
-                </ul>
-            </aside>
-            {% endif %}
+                {% if messages %}
+                    <aside class="ds-status messages" aria-label="Status">
+                        <ul class="ds-stack">
+                            {% for message in messages %}
+                                <li {% if message.tags %}class=" {{ message.tags }} ds-status-message " {% endif %}> {{ message }} </li>
+                            {% endfor %}
+                        </ul>
+                    </aside>
+                {% endif %}
 
-            {% block content %}
-            {% endblock content %}
-        </main>
-        {% block site_footer %}
-        <footer class="ds-footer ds-stack">
-            <div class="ds-block-centered ds-text-centered ds-stack">
-                <div>
-                    {% include "mailing_list.html" %}
-                </div>
-                <div class="ds-cluster-center">
-                    <ul>
-                        <li><a href="{% url 'home_view' %}">Home</a></li>
-                        <li><a href="{% url 'elections_view' %}">All Elections</a></li>
-                        <li><a href="{% url 'standing_as_a_candidate' %}">Standing as a candidate?</a></li>
-                        <li><a href="{% url 'about_view' %}">About {{ SITE_TITLE }}</a></li>
-                        <li><a href="https://democracyclub.org.uk/privacy/">Privacy</a></li>
-                        <li><a href="https://github.com/DemocracyClub/WhoCanIVoteFor">Source code</a></li>
-                        <li><a href="https://democracyclub.org.uk/about/">About Democracy Club</a></li>
-                        <li><a href="https://democracyclub.org.uk/contact/">Contact Us</a></li>
-                        <li><a href="https://democracyclub.org.uk/blog/">Blog</a></li>
-                        <li><a href="https://twitter.com/democlub">Twitter</a></li>
-                        <li><a href="https://facebook.com/DemocracyClub">Facebook</a></li>
-                        <li><a href="https://github.com/DemocracyClub">GitHub</a></li>
-                    </ul>
-                </div>
-                <div class="ds-copyright ds-padded">
-                    <div class="ds-cluster-center">
-                        <a href="https://democracyclub.org.uk/">
-                            <img src="https://DemocracyClub.github.io/design-system/images/logo_white_text.svg" alt="Democracy Club Home" />
-                        </a>
-                        <p>Copyright &copy; {% now 'Y' %} </p>
-                        <p>Democracy Club Community Interest Company</p>
-                        <p>Company No: <a href="https://beta.companieshouse.gov.uk/company/09461226">09461226</a></p>
-                        <p class="ds-text-centered">Democracy Club is a UK-based Community Interest Company that builds
-                            the digital infrastructure needed for a 21st century democracy
-                        </p>
+                {% block content %}
+                {% endblock content %}
+            </main>
+            {% block site_footer %}
+                <footer class="ds-footer ds-stack">
+                    <div class="ds-block-centered ds-text-centered ds-stack">
+                        <div>
+                            {% include "mailing_list.html" %}
+                        </div>
+                        <div class="ds-cluster-center">
+                            <ul>
+                                <li><a href="{% url 'home_view' %}">Home</a></li>
+                                <li><a href="{% url 'elections_view' %}">All Elections</a></li>
+                                <li><a href="{% url 'standing_as_a_candidate' %}">Standing as a candidate?</a></li>
+                                <li><a href="{% url 'about_view' %}">About {{ SITE_TITLE }}</a></li>
+                                <li><a href="https://democracyclub.org.uk/privacy/">Privacy</a></li>
+                                <li><a href="https://github.com/DemocracyClub/WhoCanIVoteFor">Source code</a></li>
+                                <li><a href="https://democracyclub.org.uk/about/">About Democracy Club</a></li>
+                                <li><a href="https://democracyclub.org.uk/contact/">Contact Us</a></li>
+                                <li><a href="https://democracyclub.org.uk/blog/">Blog</a></li>
+                                <li><a href="https://twitter.com/democlub">Twitter</a></li>
+                                <li><a href="https://facebook.com/DemocracyClub">Facebook</a></li>
+                                <li><a href="https://github.com/DemocracyClub">GitHub</a></li>
+                            </ul>
+                        </div>
+                        <div class="ds-copyright ds-padded">
+                            <div class="ds-cluster-center">
+                                <a href="https://democracyclub.org.uk/">
+                                    <img src="https://DemocracyClub.github.io/design-system/images/logo_white_text.svg" alt="Democracy Club Home" />
+                                </a>
+                                <p>Copyright &copy; {% now 'Y' %} </p>
+                                <p>Democracy Club Community Interest Company</p>
+                                <p>Company No: <a href="https://beta.companieshouse.gov.uk/company/09461226">09461226</a></p>
+                                <p class="ds-text-centered">Democracy Club is a UK-based Community Interest Company that builds
+                                    the digital infrastructure needed for a 21st century democracy
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </footer>
-        {% endblock site_footer %}
-    </div>
-</body>
+                </footer>
+            {% endblock site_footer %}
+        </div>
+    </body>
 
-<script>
-    /**
+    <script>
+        /**
      * Function that tracks a click on an outbound link in Analytics.
      * This function takes a valid URL string as an argument, and uses that URL string
      * as the event label. Setting the transport method to 'beacon' lets the hit be sent
      * using 'navigator.sendBeacon' in browser that support it.
      */
-    var trackOutboundLink = function(cat, url) {
-        ga('send', 'event', 'outbound', 'click', url, {
-            'transport': 'beacon',
-            eventCategory: cat,
-            eventAction: 'click',
-            'hitCallback': function() {
-                window.open(url, '_blank');
-            }
-        });
-    }
-</script>
+        var trackOutboundLink = function(cat, url) {
+            ga('send', 'event', 'outbound', 'click', url, {
+                'transport': 'beacon',
+                eventCategory: cat,
+                eventAction: 'click',
+                'hitCallback': function() {
+                    window.open(url, '_blank');
+                }
+            });
+        }
+    </script>
 
 </html>
 {% block extra_javascript %}
-{% if debug %}
-<script>
-    // shim fallback in debug mode
-    if (typeof fallback == 'undefined') {
-        var fallback = {
-            ready: function(l, f) {
-                if (typeof l == "function") {
-                    l()
-                } else {
-                    f();
+    {% if debug %}
+        <script>
+            // shim fallback in debug mode
+            if (typeof fallback == 'undefined') {
+                var fallback = {
+                    ready: function(l, f) {
+                        if (typeof l == "function") {
+                            l()
+                        } else {
+                            f();
+                        }
+                    }
                 }
             }
-        }
-    }
-</script>
-{% javascript 'scripts' %}
-{% else %}
-<script src="{% static "dc_theme/js/fallback.min.js" %}"></script>
-<script type="text/javascript">
-    fallback.load({
-        scripts: [
-            '{% static "js/scripts.js" %}'
-        ],
-    });
-</script>
-{% endif %}
+        </script>
+        {% javascript 'scripts' %}
+    {% else %}
+        <script src="{% static "dc_theme/js/fallback.min.js" %}"></script>
+        <script type="text/javascript">
+            fallback.load({
+                scripts: [
+                    '{% static "js/scripts.js" %}'
+                ],
+            });
+        </script>
+    {% endif %}
 
 {% endblock extra_javascript %}
 
 
 {% block ga_tracking_code %}
-{% if request.META.HTTP_HOST != "localhost:8000" %}
-<script type="text/javascript">
-    var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack || "0";
-    if (dnt != "1" && dnt != "yes") {
-        (function(i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function() {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-        ga('create', 'UA-660910-28', 'whocanivotefor.co.uk');
-        ga('send', 'pageview');
-    }
-</script>
-{% endif %}
+    {% if request.META.HTTP_HOST != "localhost:8000" %}
+        <script type="text/javascript">
+            var dnt = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack || "0";
+            if (dnt != "1" && dnt != "yes") {
+                (function(i, s, o, g, r, a, m) {
+                    i['GoogleAnalyticsObject'] = r;
+                    i[r] = i[r] || function() {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+                    a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+                    a.async = 1;
+                    a.src = g;
+                    m.parentNode.insertBefore(a, m)
+                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+                ga('create', 'UA-660910-28', 'whocanivotefor.co.uk');
+                ga('send', 'pageview');
+            }
+        </script>
+    {% endif %}
 {% endblock ga_tracking_code %}

@@ -41,6 +41,11 @@ urlpatterns = (
 
 
 if settings.DEBUG:
+    import debug_toolbar
     from dc_utils.urls import dc_utils_testing_patterns
 
-    urlpatterns += dc_utils_testing_patterns
+    urlpatterns = (
+        [url(r"^__debug__/", include(debug_toolbar.urls))]
+        + dc_utils_testing_patterns
+        + urlpatterns
+    )

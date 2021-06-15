@@ -16,18 +16,18 @@
         <blockquote>{{ referendum.answer_one }}</blockquote> or <blockquote>{{ referendum.answer_two }}</blockquote>
 
         {% if referendum.council_url %}
-        <p><a href="{{ referendum.council_url }}">You can find out more information on the {{ referendum.council_name }} website.</a></p>
+            <p><a href="{{ referendum.council_url }}">You can find out more information on the {{ referendum.council_name }} website.</a></p>
         {% endif %}
 
         {% if referendum.campaign_urls %}
-        <p>Here are some other links about the campaign that we know about:</p>
-        <dl class="ds-descriptions">
-            {% for url in referendum.campaign_urls %}
-            <div>
-                <dd><a href="{{ url }}">{{ url }}</a></dd>
-            </div>
-            {% endfor %}
-        </dl>
+            <p>Here are some other links about the campaign that we know about:</p>
+            <dl class="ds-descriptions">
+                {% for url in referendum.campaign_urls %}
+                    <div>
+                        <dd><a href="{{ url }}">{{ url }}</a></dd>
+                    </div>
+                {% endfor %}
+            </dl>
         {% endif %}
     </div>
 </div>

@@ -1,27 +1,27 @@
 {% load markdown_deux_tags %}
 {% if object.metadata.cancelled_election.title %}
-<h2>{{ object.metadata.cancelled_election.title }}</h2>
+    <h2>{{ object.metadata.cancelled_election.title }}</h2>
 {% else %}
-<h2>Cancelled Election</h2>
+    <h2>Cancelled Election</h2>
 {% endif %}
 <p>
     The poll for {{ object.post.label }} in the {{ object.election.name }}
     {% if object.election.in_past %}was{% else %}has been{% endif %}
     {% if object.replaced_by %}rescheduled{% else %}cancelled{% endif %}.
     {% if object.replaced_by %}
-    {% if object.election.in_past %}
-    It was rescheduled for
-    {% else %}
-    It will now take place on
-    {% endif %}
-    <a href="{{ object.replaced_by.get_absolute_url }}">
-        {{ object.replaced_by.election.election_date|date:"j F Y" }}
-    </a>
+        {% if object.election.in_past %}
+            It was rescheduled for
+        {% else %}
+            It will now take place on
+        {% endif %}
+        <a href="{{ object.replaced_by.get_absolute_url }}">
+            {{ object.replaced_by.election.election_date|date:"j F Y" }}
+        </a>
     {% endif %}
     {% if object.metadata.cancelled_election.detail %}
-    {{ object.metadata.cancelled_election.detail }}
+        {{ object.metadata.cancelled_election.detail }}
     {% endif %}
     {% if object.metadata.cancelled_election.url %}
-    <a href="{{ object.metadata.cancelled_election.url }}">Read more</a>
+        <a href="{{ object.metadata.cancelled_election.url }}">Read more</a>
     {% endif %}
 </p>

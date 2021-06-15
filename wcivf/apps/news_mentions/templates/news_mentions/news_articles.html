@@ -7,17 +7,17 @@
         </h2>
         <ul>
             {% for news_article in news_articles %}
-            <li>
-                {% if news_article.publisher %}
-                <em>{{ news_article.publisher }}</em>:
-                {% endif %}
-                <a href="{{ news_article.url }}" rel="noopener noreferrer">
-                    {{ news_article.title }}
-                </a>
-                {% if news_article.summary %}
-                <p>{{ news_article.summary }}</p>
-                {% endif %}
-            </li>
+                <li>
+                    {% if news_article.publisher %}
+                        <em>{{ news_article.publisher }}</em>:
+                    {% endif %}
+                    <a href="{{ news_article.url }}" rel="noopener noreferrer">
+                        {{ news_article.title }}
+                    </a>
+                    {% if news_article.summary %}
+                        <p>{{ news_article.summary }}</p>
+                    {% endif %}
+                </li>
             {% endfor %}
         </ul>
     </div>

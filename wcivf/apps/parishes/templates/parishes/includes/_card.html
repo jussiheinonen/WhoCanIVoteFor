@@ -10,9 +10,9 @@
 
         <p>
             {% if parish_council_election.is_contested %}
-            You {% if parish_council_election.in_past %}were also{% else %}will also be{% endif %} able to vote for {{ parish_council_election.ward_seats }} councillors to sit
+                You {% if parish_council_election.in_past %}were also{% else %}will also be{% endif %} able to vote for {{ parish_council_election.ward_seats }} councillors to sit
             {% else %}
-            You are also represented by {{ parish_council_election.ward_seats }} councillors
+                You are also represented by {{ parish_council_election.ward_seats }} councillors
             {% endif %}
             on <a href="{{ parish_council_election.website }}">{{ parish_council_election.council_name }}</a>{% if parish_council_election.parish_ward_name %} - {{ parish_council_election.parish_ward_name}}{% endif %}.
         </p>
@@ -24,12 +24,12 @@
         </p>
 
         {% if parish_council_election.is_contested %}
-        <p><a href="{{ parish_council_election.sopn }}">View the official list of candidates (PDF).</a></p>
+            <p><a href="{{ parish_council_election.sopn }}">View the official list of candidates (PDF).</a></p>
         {% elif parish_council_election.is_uncontested %}
-        <p>
-            This election was uncontested because not enough candidates came forward to stand for it.
-            {% if parish_council_election.sopn %}<a href="{{ parish_council_election.sopn }}">See who was elected</a>.{% endif %}
-        </p>
+            <p>
+                This election was uncontested because not enough candidates came forward to stand for it.
+                {% if parish_council_election.sopn %}<a href="{{ parish_council_election.sopn }}">See who was elected</a>.{% endif %}
+            </p>
         {% endif %}
     </div>
 </div>

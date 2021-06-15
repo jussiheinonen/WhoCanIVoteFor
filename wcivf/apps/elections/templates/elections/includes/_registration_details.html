@@ -22,37 +22,37 @@
             to vote by post on {{ postelection.election.election_date }}.</p>
         <p>To register by post, contact your local council.</p>
         {% if council.council_id %}
-        <p>{{ council.name }}
-            {{ council.electoral_services_contacts.address|linebreaksbr }}
-            {{ council.electoral_services_contacts.postcode }}
-            <br>
-            <a href="mailto:{{ council.electoral_services_contacts.email }}">
-                {{ council.electoral_services_contacts.email }}
-            </a>
-            <br>
-            <a href="{{ council.electoral_services_contacts.website }}">
-                {{ council.electoral_services_contacts.website }}
-            </a>
-            {% for number in council.electoral_services_contacts.phone_numbers %}
-            <br>{{ number }}
-            {% endfor %}
-        </p>
+            <p>{{ council.name }}
+                {{ council.electoral_services_contacts.address|linebreaksbr }}
+                {{ council.electoral_services_contacts.postcode }}
+                <br>
+                <a href="mailto:{{ council.electoral_services_contacts.email }}">
+                    {{ council.electoral_services_contacts.email }}
+                </a>
+                <br>
+                <a href="{{ council.electoral_services_contacts.website }}">
+                    {{ council.electoral_services_contacts.website }}
+                </a>
+                {% for number in council.electoral_services_contacts.phone_numbers %}
+                    <br>{{ number }}
+                {% endfor %}
+            </p>
         {% endif %}
         <!-- valid only for Scottish postcodes -->
         {% if council.registration_contacts %}
-        <h2>Need help with electoral services?</h2>
-        {{ council.registration_contacts.name }}
-        {{ council.registration_contacts.address|linebreaksbr }}
-        <br>{{ council.registration_contacts.postcode  }}
-        <br>
-        <a href="{{ council.registration_contacts.website }}">
-            {{ council.registration_contacts.website }}
-        </a>
-        <br>{{ council.registration_contacts.email }}
-        {% for number in council.registration_contacts.phone_numbers %}
-        <br>{{ number }}
-        {% endfor %}
-        </p>
+            <h2>Need help with electoral services?</h2>
+            {{ council.registration_contacts.name }}
+            {{ council.registration_contacts.address|linebreaksbr }}
+            <br>{{ council.registration_contacts.postcode  }}
+            <br>
+            <a href="{{ council.registration_contacts.website }}">
+                {{ council.registration_contacts.website }}
+            </a>
+            <br>{{ council.registration_contacts.email }}
+            {% for number in council.registration_contacts.phone_numbers %}
+                <br>{{ number }}
+            {% endfor %}
+            </p>
         {% endif %}
     </div>
 </section>

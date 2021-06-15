@@ -9,8 +9,8 @@
             <span aria-hidden="true">🔎</span>
         </h5>
         {% for choice in feedback_form.found_useful %}
-        {{ choice.tag }}
-        <label class="link-button" for="{{ choice.id_for_label }}"> {{ choice.choice_label }}</label>
+            {{ choice.tag }}
+            <label class="link-button" for="{{ choice.id_for_label }}"> {{ choice.choice_label }}</label>
         {% endfor %}
 
         <div>
