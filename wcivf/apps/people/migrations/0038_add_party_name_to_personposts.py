@@ -11,9 +11,9 @@ def add_party_name(apps, schema_editor):
 
     PersonPost = apps.get_model("people", "PersonPost")
 
-    for candidacy in PersonPost.objects.all().select_related(
+    for candidacy in PersonPost.objects.select_related(
         "party", "post_election__election"
-    ):
+    ).iterator():
         party_id = candidacy.party.party_id
         election_date = candidacy.post_election.election.election_date
 
