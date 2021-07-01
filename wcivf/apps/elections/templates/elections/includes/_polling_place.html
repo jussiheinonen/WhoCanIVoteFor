@@ -108,19 +108,12 @@
                 };
 
                 var polling_station_point = [{
-                    {
-                        polling_station.polling_station.geometry.coordinates .1
-                    }
-                },
-                    {
-                        {
-                            polling_station.polling_station.geometry.coordinates .0
-                        }
-                    }
+                    {{ polling_station.polling_station.geometry.coordinates.1 }},
+                    {{ polling_station.polling_station.geometry.coordinates.0 }},
                 ];
 
-                create_area_map(polling_station_point);
-            </script>
+                    create_area_map(polling_station_point);
+                    </script>
         {% endif %}
     </div>
 </div>

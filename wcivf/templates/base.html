@@ -73,11 +73,10 @@
             <p><a class="ds-skip-link" href="#main"></a></p>
             {% block site_menu %}
                 <header class="ds-header">
-                    <a class="ds-header-home" href="/">
-                        <img src="{% static 'images/logo.png' %}" alt="Democracy Club home" />
+                    <a class="ds-logo" href="/">
+                        <img src="{% static 'images/logo_icon.svg' %}" alt="" />
+                        <span>Who Can I Vote For?<br></span>
                     </a>
-                    <nav>
-                    </nav>
                 </header>
             {% endblock site_menu %}
             <main id="main" tabindex="-1" class="ds-stack">
@@ -95,7 +94,7 @@
                     <meta property="fb:app_id" content="262795130596272" />
                     <meta name="twitter:card" content="summary">
                     <meta name="twitter:site" content="@democlub">
-                    <meta property="og:image" content="{% block og_image %}{{ CANONICAL_URL }}{% static "dc_theme/images/logo.png" %}{% endblock og_image %}" />
+                    <meta property="og:image" content="{% block og_image %}{{ CANONICAL_URL }}{% static "images/logo.png" %}{% endblock og_image %}" />
                     <meta property="og:image:width" content="{{ site_logo_width }}">
                     <meta property="og:title" content="{% block og_title %}{{ SITE_TITLE }} by Democracy Club{% endblock og_title %}" />
                     <meta property="og:description" content="{% block og_description %}Find out about elections, candidates and polling stations with Democracy Club's {{ SITE_TITLE }}{% endblock og_description %}" />
@@ -116,7 +115,7 @@
             </main>
             {% block site_footer %}
                 <footer class="ds-footer ds-stack">
-                    <div class="ds-block-centered ds-text-centered ds-stack">
+                    <div class="ds-block-centered ds-stack">
                         <div>
                             {% include "mailing_list.html" %}
                         </div>
@@ -136,11 +135,16 @@
                                 <li><a href="https://github.com/DemocracyClub">GitHub</a></li>
                             </ul>
                         </div>
-                        <div class="ds-copyright ds-padded">
+
+                        <div class="ds-cluster-center ds-text-centered ">
+                            <a class="ds-logo" href="https://democracyclub.org.uk/">
+                                <img src="{% static 'images/logo_icon.svg' %}" alt="" />
+                                <span>Democracy Club<br></span>
+                            </a>
+                        </div>
+
+                        <div class="ds-copyright">
                             <div class="ds-cluster-center">
-                                <a href="https://democracyclub.org.uk/">
-                                    <img src="https://DemocracyClub.github.io/design-system/images/logo_white_text.svg" alt="Democracy Club Home" />
-                                </a>
                                 <p>Copyright &copy; {% now 'Y' %} </p>
                                 <p>Democracy Club Community Interest Company</p>
                                 <p>Company No: <a href="https://beta.companieshouse.gov.uk/company/09461226">09461226</a></p>

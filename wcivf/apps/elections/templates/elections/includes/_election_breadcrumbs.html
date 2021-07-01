@@ -1,13 +1,11 @@
-<nav class="ds-breadcrumbs ds-stack" aria-label="You are here: {{ request.path }}">
-    <ol>
-        <li>
-            <a href="{% url 'home_view' %}">Home</a>
-        </li>
-        <li>
-            <a href="{% url 'elections_view' %}">Elections</a>
-        </li>
-        <li>
-            {{ object.nice_election_name }}
-        </li>
-    </ol>
-</nav>
+{% extends "elections/includes/_elections_breadcrumbs.html" %}
+
+{% block extra_crumbs %}
+    <li>
+        <a href="{{ object.election.get_absolute_url }}">
+            {{ election.nice_election_name }}
+        </a>
+    </li>
+
+
+{% endblock extra_crumbs %}

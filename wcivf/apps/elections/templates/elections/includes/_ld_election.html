@@ -9,33 +9,25 @@
         "startDate": "{{ election.election.start_time | date:'Y-m-d H:i' }}",
         "endDate": "{{ election.election.end_time | date:'Y-m-d H:i' }}",
 
-        {
-            %
-            if election.election.election_type == 'parl' %
-        }
+        {% if election.election.election_type == 'parl' %}
 
-        "name": "UK Parliament Election - {{ election.post.area_name }}",
-        "description": "Election of the Member of Parliament for {{ election.post.area_name }}",
-        "location": {
-            "@type": "Place",
-            "address": "{{ election.post.area_name }}, UK"
-        }
+            "name": "UK Parliament Election - {{ election.post.area_name }}",
+            "description": "Election of the Member of Parliament for {{ election.post.area_name }}",
+            "location": {
+                "@type": "Place",
+                "address": "{{ election.post.area_name }}, UK"
+            }
 
-        {
-            %
-            else %
-        }
+        {% else %}
 
-        "name": "{{ election.election.nice_name }}",
-        "description": "{{ election.friendly_name }}",
-        "location": {
-            "@type": "Place",
-            "address": "{{ election.post.nice_organization }}, {{ election.post.nice_territory }}, UK"
-        }
+            "name": "{{ election.election.nice_name }}",
+            "description": "{{ election.friendly_name }}",
+            "location": {
+                "@type": "Place",
+                "address": "{{ election.post.nice_organization }}, {{ election.post.nice_territory }}, UK"
+            }
 
-        {
-            % endif %
-        }
+        {% endif %}
 
 
     }

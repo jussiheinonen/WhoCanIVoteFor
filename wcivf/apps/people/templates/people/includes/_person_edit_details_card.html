@@ -25,10 +25,9 @@
         </a>
         {% if object.should_show_email_cta %}
             <p>You can also email {{ object.name }} directly to ask them to add information to this page.
-                <p>
-                    <a href="{% url 'email_person_view' pk=object.pk ignored_slug=person.name|slugify %}" class="ds-cta ds-cta-blue">Ask the
-                        candidate for more information &raquo;</a>
-                </p>
+                <a href="{% url 'email_person_view' pk=object.pk ignored_slug=person.name|slugify %}"
+                    class="ds-cta ds-cta-blue">Ask the candidate for more information &raquo;</a>
+            </p>
         {% endif %}
 
         {#    <h4>Upload your leaflets</h4>#}

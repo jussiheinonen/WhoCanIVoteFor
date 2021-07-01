@@ -77,28 +77,21 @@
     <script src="//cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>
     <script>
         $(document).ready(function() {
-            var tableId, table; {
-                %
-                for election_dict in elections %
-            } {
-                %
-                if election_dict.results %
-            }
-            tableId = '#' + '{{ election_dict.election.name.split|join:"_" }}';
-            table = $(tableId).DataTable({
-                bInfo: false,
-                pageLength: 50,
-                lengthChange: false
-            });
-            new $.fn.dataTable.Responsive(table, {
-                details: {
-                    display: $.fn.dataTable.Responsive.display.childRowImmediate
-                }
-            }); {
-                % endif %
-            } {
-                % endfor %
-            }
+            var tableId, table;
+            {% for election_dict in elections %}
+                {% if election_dict.results %}
+                    tableId = '#' + '{{ election_dict.election.name.split|join:"_" }}';
+                    table = $(tableId).DataTable({
+                        bInfo: false,
+                        pageLength: 50,
+                        lengthChange: false
+                    });
+                    new $.fn.dataTable.Responsive(table, {
+                        details: {
+                            display: $.fn.dataTable.Responsive.display.childRowImmediate
+                        }
+                    }); {% endif %}
+            {% endfor %}
         });
     </script>
 {% endblock content %}

@@ -3,40 +3,8 @@
 {% load humanize %}
 
 {% block content %}
-<nav class="ds-breadcrumbs ds-stack" aria-label="You are here: {{ request.path }}">
-    <ol>
-        <li>
-            <a href="{% url 'home_view' %}">Home</a>
-        </li>
-        <li>
-            First-past-the-post Voting System
-        </li>
-    </ol>
-</nav>
-<div class="ds-page">
-    <div class="ds-stack">
-        <div class="ds-card ds-padded">
-            <div class="ds-card-body">
-                <h2>First-past-the-post (FPTP)</h2>
-                <p>The First-past-the-post voting system
-                    is the simplest of all the voting
-                    systems used in UK elections. Simply put:
-                    each voter has a single vote, and the
-                    candidate with the most votes wins the seat.
-                    It is used in UK Parliament elections and for
-                    English and Welsh local government elections.
-                </p>
 
-                <h3>Block vote</h3>
-                <p>The only variation of this voting system is
-                    known as the Block Vote. Some local government
-                    seats are multi-member, meaning, for example,
-                    that they may return three councillors to represent
-                    one ward. In this instance, the voter will get three
-                    votes. This is sometimes called a block vote.
-                    Voters do not have to vote for candidates from the
-                    same party, however.
-                </p>
+    {% include "elections/includes/_voting_system_breadcrumbs.html" %}
 
     <div class="ds-page">
         <div class="ds-stack">
@@ -82,7 +50,7 @@
                                     2019 South Kesteven District Council election
                                 </h2>
                                 <h2>
-                                    Deeping St James Ward (three seats))
+                                    Deeping St James Ward (three seats)
                                 </h2>
                             </caption>
                             <tbody>
