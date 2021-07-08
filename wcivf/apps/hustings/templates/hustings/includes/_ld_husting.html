@@ -4,7 +4,7 @@
         "@context": "http://schema.org/",
         "@type": "Event",
         "url": "{{ CANONICAL_URL }}{{ husting.post_election.get_absolute_url }}#hustings",
-        "image": "{{ CANONICAL_URL }}{% static "dc_theme/images/logo.png" %}",
+        "image": "{{ CANONICAL_URL }}{% static "images/logo_icon.svg" %}",
         "startDate": "{{ husting.starts | date:'Y-m-d H:i' }}",
         {% if husting.ends %}
             "endDate": "{{ husting.ends | date:'Y-m-d H:i' }}",

@@ -1,5 +1,4 @@
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
 import sys
 
 from dc_utils.settings.pipeline import *  # noqa
@@ -147,8 +146,6 @@ STATIC_URL = "/static/"
 
 STATICFILES_DIRS = (root("assets"),)
 STATIC_ROOT = root("static")
-
-STATICFILES_STORAGE = "pipeline.storage.PipelineCachedStorage"
 
 PIPELINE = get_pipeline_settings(
     extra_css=["scss/main.scss"],

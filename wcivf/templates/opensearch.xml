@@ -3,7 +3,7 @@
     <ShortName>{{ SITE_TITLE }}</ShortName>
     <Description>{{ SITE_TITLE }}</Description>
     <InputEncoding>UTF-8</InputEncoding>
-    <Image width="16" height="16" type="image/x-icon">{{ CANONICAL_URL }}{% static 'dc_theme/icons/favicon-16x16.png' %}</Image>
+    <Image width="16" height="16" type="image/x-icon">{{ CANONICAL_URL }}{% static 'images/logo_icon.svg' %}</Image>
     <Url type="text/html" method="get" template="{{ CANONICAL_URL }}/elections/{% verbatim %}{searchTerms}{% endverbatim %}"/>
     <moz:SearchForm>{{ CANONICAL_URL }}/elections</moz:SearchForm>
 </OpenSearchDescription>
