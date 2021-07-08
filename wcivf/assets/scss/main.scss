@@ -31,7 +31,7 @@
 // // Generate atomic classes for documentation demos
 @import 'partials/_classes-colors.scss';
 @import 'partials/_classes-scales.scss';
-$scope: false;
+$scope: true;
 @mixin optional-styles {
     @include description-lists;
     @include button;
@@ -74,6 +74,8 @@ $scope: false;
     .ds-scope *::after {
         box-sizing: border-box;
     }
+
+    body {margin:0;}
 }
 
 @else {
