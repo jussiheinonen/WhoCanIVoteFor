@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load markdown_deux_tags %}
-{% load breadcrumb_tags %}
 {% load humanize %}
 
 {% block page_title %}{% include "people/includes/_person_meta_title.html" %}{% endblock page_title %}
@@ -9,41 +8,36 @@
 {% block og_description %}{% include "people/includes/_person_meta_description.html" %}{% endblock og_description %}
 {% block og_image %}{% if object.photo_url %}{{ object.photo_url }}{% endif %}{% endblock og_image %}
 
-{% block page_meta %}<meta name="robots" content="noindex">{% endblock page_meta %}
+{% block page_meta %}
+    <meta name="robots" content="noindex">
+{% endblock page_meta %}
 
 {% block content %}
-<div class="ds-scope">
-  <div class="ds-page">
-    <div class="ds-stack">
-      <section class="ds-candidate">
-        <div class="ds-candidate-body ds-stack-smaller">
-          <h2 class="ds-candidate-name ds-h3">
-            {{ object.name }}
-            {% if person.display_deceased and person.featured_candidacy.party.is_independent %}
-            (Deceased)
-            {% endif %}
-          </h2>
-          <p>{{ object.name }} stood for election {{ object.past_not_current_candidacies.count }} times.</p>
-        </div> 
-        {% if object.photo_url %}
-          <div class="ds-candidate-image">
-            <img src="{{ object.photo_url }}" alt="profile photo of {{ object.name }}">
-          </div>
-        {% endif %} 
-      </section>
+    <div class="ds-page">
+        <div class="ds-stack">
+            <section class="ds-candidate">
+                <div class="ds-candidate-body ds-stack-smaller">
+                    <h2 class="ds-candidate-name ds-h3">
+                        {{ object.name }}
+                        {% if person.display_deceased and person.featured_candidacy.party.is_independent %}
+                            (Deceased)
+                        {% endif %}
+                    </h2>
+                    <p>{{ object.name }} stood for election {{ object.past_not_current_candidacies.count }} times.</p>
+                </div>
 
-      {% include "people/includes/_person_previous_elections_card.html" %}
-      
-      {% include "elections/includes/_postcode_search_form.html" %}
+                {% if object.photo_url %}
+                    <div class="ds-candidate-image">
+                        <img src="{{ object.photo_url }}" alt="profile photo of {{ object.name }}">
+                    </div>
+                {% endif %}
+            </section>
 
+            {% include "people/includes/_person_previous_elections_card.html" %}
+
+            {% include "elections/includes/_postcode_search_form.html" %}
+
+        </div>
     </div>
-  </div>
-</div>
 
 {% endblock content %}
-
-{% block breadcrumbs %}
-
-{% include "elections/includes/_ld_candidate.html" with personpost=object.featured_candidacy %}
-
-{% endblock breadcrumbs %}

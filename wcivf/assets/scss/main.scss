@@ -1,7 +1,3 @@
-@import 'dc_base';
-@import 'cards';
-@import 'feedback_form';
-
 @import 'partials/_fonts.scss';
 @import 'partials/_variables.scss';
 @import 'partials/_type.scss';
@@ -31,41 +27,70 @@
 @import 'partials/_dark.scss';
 @import 'partials/_page.scss';
 @import 'partials/_utilities.scss';
-
+@import 'partials/_logo.scss';
 // // Generate atomic classes for documentation demos
 @import 'partials/_classes-colors.scss';
 @import 'partials/_classes-scales.scss';
-
 $scope: true;
-
 @mixin optional-styles {
-  @include description-lists;
-  @include button;
-  @include cta;
-  @include cluster;
-  @include grid;
-  @include sidebar;
-  @include details;
-  @include card;
-  @include candidate;
-  @include breadcrumbs;
-  @include table;
-  @include language;
-  @include header;
-  @include subnav;
-  @include footer;
-  @include radio;
-  @include checkbox;
-  @include select;
-  @include filter;
-  @include status;
-  @include codeblock;
+    @include description-lists;
+    @include button;
+    @include cta;
+    @include cluster;
+    @include grid;
+    @include sidebar;
+    @include details;
+    @include card;
+    @include candidate;
+    @include breadcrumbs;
+    @include table;
+    @include language;
+    @include header;
+    @include subnav;
+    @include footer;
+    @include radio;
+    @include checkbox;
+    @include select;
+    @include filter;
+    @include status;
+    @include codeblock;
+    @include logo;
 }
 
 @if $scope {
-  .ds-scope {
-    font-size: clamp(#{$s1}, 2vw, #{$s2});
-    @include fontMain;
+    .ds-scope {
+        font-size: clamp(#{$s1}, 2vw, #{$s2});
+        @include fontMain;
+        @include type;
+        @include forms;
+        @include stack;
+        @include optional-styles;
+        @include dark;
+        @include page;
+        @include utilities;
+    }
+    .ds-scope *,
+    .ds-scope *::before,
+    .ds-scope *::after {
+        box-sizing: border-box;
+    }
+
+    body {margin:0;}
+}
+
+@else {
+     :root {
+        font-size: clamp(#{$s1}, 2vw, #{$s2});
+        @include fontMain;
+    }
+     :root *,
+     :root *::before,
+     :root *::after {
+        box-sizing: border-box;
+    }
+    body {
+        margin: 0;
+    }
     @include type;
     @include forms;
     @include stack;
@@ -73,140 +98,33 @@ $scope: true;
     @include dark;
     @include page;
     @include utilities;
-  }
+}
 
-  .ds-scope *,
-  .ds-scope *::before,
-  .ds-scope *::after {
-    box-sizing: border-box;
-  }
-} @else {
-  :root {
-    font-size: clamp(#{$s1}, 2vw, #{$s2});
-    @include fontMain;
-  }
-
-  :root *,
-  :root *::before,
-  :root *::after {
-    box-sizing: border-box;
-  }
-
-  body {
-    margin: 0;
-  }
-
-  @include type;
-  @include forms;
-  @include stack;
-  @include optional-styles;
-  @include dark;
-  @include page;
-  @include utilities;
+.ds-page {
+    background-color: white;
 }
 
 main {
-  background-color: white;
+    padding: 0 0 !important;
 }
 
-
-footer {
-  ul {
-    overflow: hidden;
-  }
-  li {
-    float: left;
-  }
+input[type=radio] {
+    visibility: hidden;
 }
 
-#bottom_banner {
-  margin-top: 2rem;
-
-  p {
-    margin:0;
-    line-height:2em;
-    text-align: center;
-    background: $dc-light-grey;
-  }
-  a {
-    color: $dc-bright-pink;
-  }
-}
-
-.person_banner {
-    overflow:auto;
-
-    img.person_photo {
-        height: 150px;
-        float: right;
-        margin-right: 20px;
-        border: 1px solid #ccc;
-        margin-left: 20px;
-    }
-
-    h2.person_name {
-      float:left;
-    }
-    p {
-      clear:left;
-    }
-}
-
-dt {
-  margin-top:1em;
-}
-dd {
-  margin-left:1em;
-}
-
-.next_election {
-    h2 {
-        color: #666;
-
-        span.postcode {
-            color: #222;
-        }
-    }
-}
-
-.upcoming_elections ul li {
-  //  add a little margin below the li items on the upcoming_elections block
-  margin-bottom:0.5em;
-}
-
-.container {
-    padding: 20px;
-    box-sizing: content-box;
-    overflow: auto;
-    @include media($max-width: 530px) {
-      padding:0;
-    }
-}
-
-.breadcrumbs {
-  @include media($max-width: 530px) {
-      padding-left:20px;
-    }
-  li {
+.link-button {
     display: inline-block;
-    float:none;
-  }
+    border: 2px solid #00AEEF;
+    color: #00AEEF;
+    font-size: 1rem;
+    padding: 1rem 2rem 1.0625rem 2rem;
+    text-decoration: none;
 }
 
-
-.card {
-  @include media($max-width: 530px) {
-      padding-left:10px;
-    }
-}
-
-summary {
-  cursor: pointer;
-  color: $dc-bright-pink;
-}
-
-@media (min-width: 750px) {
-  .ds-candidate.elected {
-    grid-column: 1/3;
-  }
+#feedback_form input[data-toggle]:checked+label,
+#feedback_form input[data-toggle]:checked+label:active {
+    background-color: #00AEEF;
+    color: white;
+    border-color: #0089bc;
+    outline: 3px solid #ffbf47;
 }

@@ -1,32 +1,34 @@
 {% extends "base.html" %}
 {% load markdown_deux_tags %}
 {% block content %}
-<div class="card">
-{% markdown %}
-## Running in a UK election? Update your candidate profile!
+    <div class="ds-card">
+        <div class="ds-card-body">
+            {% markdown %}
+                ## Running in a UK election? Update your candidate profile!
 
-[WhoCanIVoteFor.co.uk](https://whocanivotefor.co.uk/) aims to have an up to date profile for every candidate standing in a UK election. These profiles have become a useful tool in helping millions of voters across the country decide who to vote for.
+                [WhoCanIVoteFor.co.uk](https://whocanivotefor.co.uk/) aims to have an up to date profile for every candidate standing in a UK election. These profiles have become a useful tool in helping millions of voters across the country decide who to vote for.
 
-WhoCanIVoteFor.co.uk is powered by data from Democracy Club’s public database of election candidates, built with help from many volunteers. [Democracy Club](https://democracyclub.org.uk/about/) is a non-partisan and not-for-profit Community Interest Company whose vision is of a country with the digital foundations to support everyone’s participation in democratic life.
+                WhoCanIVoteFor.co.uk is powered by data from Democracy Club’s public database of election candidates, built with help from many volunteers. [Democracy Club](https://democracyclub.org.uk/about/) is a non-partisan and not-for-profit Community Interest Company whose vision is of a country with the digital foundations to support everyone’s participation in democratic life.
 
-Democracy Club’s candidates database is an open portal where users can update profiles with sourced information. We encourage candidates, agents and parties to add information such as photos, statements to voters and social media links - and more importantly, a candidate’s favourite biscuit. 
+                Democracy Club’s candidates database is an open portal where users can update profiles with sourced information. We encourage candidates, agents and parties to add information such as photos, statements to voters and social media links - and more importantly, a candidate’s favourite biscuit.
 
-### How do I create or update my profile? 
+                ### How do I create or update my profile?
 
-To update your profile, you need to head over to our [Candidates Website](https://candidates.democracyclub.org.uk/) and create an account. This will allow you to add information to your profile. You may already have a candidate profile (thanks to our trusty volunteers!) so please [search your name](https://candidates.democracyclub.org.uk/search) before attempting to create a new one.
+                To update your profile, you need to head over to our [Candidates Website](https://candidates.democracyclub.org.uk/) and create an account. This will allow you to add information to your profile. You may already have a candidate profile (thanks to our trusty volunteers!) so please [search your name](https://candidates.democracyclub.org.uk/search) before attempting to create a new one.
 
-### Want to add more than one candidate? The more the merrier!
+                ### Want to add more than one candidate? The more the merrier!
 
-If you are an agent, party administrator, or just happen to have lots of information about upcoming candidates in your local area, you can add more than one candidate to a specific party and election at a time. To add all candidates for a party in a single election, select the relevant election from the column on the [future elections page](https://candidates.democracyclub.org.uk/elections/). You can ‘bulk add’ all candidates for a single party by using the “add candidates for a single party” feature to add multiple candidates on a single form. Ta-da!
+                If you are an agent, party administrator, or just happen to have lots of information about upcoming candidates in your local area, you can add more than one candidate to a specific party and election at a time. To add all candidates for a party in a single election, select the relevant election from the column on the [future elections page](https://candidates.democracyclub.org.uk/elections/). You can ‘bulk add’ all candidates for a single party by using the “add candidates for a single party” feature to add multiple candidates on a single form. Ta-da!
 
-### Candidate data policy
-  
-All data collected by Democracy Club is free and open for anyone to view. Information collected on candidates is displayed on WhoCanIVoteFor.co.uk, and is also available as a [CSV download or API.](https://candidates.democracyclub.org.uk/api/docs/) If you wish Democracy Club to permanently delete any of the personal information (contact details, election statement, photo, etc) it has collected relating to your previous candidacies, please let us know by emailing hello@democracyclub.org.uk.
+                ### Candidate data policy
 
-Please be aware that we retain all information published on the Statement of Persons Nominated, as this is a matter of public record. This includes name, party, and election.
+                All data collected by Democracy Club is free and open for anyone to view. Information collected on candidates is displayed on WhoCanIVoteFor.co.uk, and is also available as a [CSV download or API.](https://candidates.democracyclub.org.uk/api/docs/) If you wish Democracy Club to permanently delete any of the personal information (contact details, election statement, photo, etc) it has collected relating to your previous candidacies, please let us know by emailing hello@democracyclub.org.uk.
 
-### Contact us
-As always, Democracy Club is on call to help with any issues. Send us a message or give us some feedback! [Get in touch.](https://democracyclub.org.uk/contact/)
-{% endmarkdown %}
-  </div>
+                Please be aware that we retain all information published on the Statement of Persons Nominated, as this is a matter of public record. This includes name, party, and election.
+
+                ### Contact us
+                As always, Democracy Club is on call to help with any issues. Send us a message or give us some feedback! [Get in touch.](https://democracyclub.org.uk/contact/)
+            {% endmarkdown %}
+        </div>
+    </div>
 {% endblock %}

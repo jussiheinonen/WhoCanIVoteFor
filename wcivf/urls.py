@@ -33,7 +33,7 @@ urlpatterns = (
             name="django.contrib.sitemaps.views.sitemap",
         ),
         url(r"^robots\.txt", include("robots.urls")),
-        url(r"^email/", include("dc_signup_form.urls")),
+        url(r"^mailing_list/", include("mailing_list.urls", "dc_signup_form")),
     ]
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
@@ -42,7 +42,10 @@ urlpatterns = (
 
 if settings.DEBUG:
     import debug_toolbar
+    from dc_utils.urls import dc_utils_testing_patterns
 
-    urlpatterns = [
-        url(r"^__debug__/", include(debug_toolbar.urls))
-    ] + urlpatterns
+    urlpatterns = (
+        [url(r"^__debug__/", include(debug_toolbar.urls))]
+        + dc_utils_testing_patterns
+        + urlpatterns
+    )

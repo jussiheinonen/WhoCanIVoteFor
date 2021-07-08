@@ -45,17 +45,26 @@ urlpatterns = [
     ),
     url(
         r"^voting_system/fptp/",
-        TemplateView.as_view(template_name="elections/fptp.html"),
+        TemplateView.as_view(
+            template_name="elections/fptp.html",
+            extra_context={"voting_system": "First-past-the-post"},
+        ),
         name="fptp_voting_system_view",
     ),
     url(
         r"^voting_system/ams/",
-        TemplateView.as_view(template_name="elections/ams.html"),
+        TemplateView.as_view(
+            template_name="elections/ams.html",
+            extra_context={"voting_sytem": "Additional Member System"},
+        ),
         name="ams_voting_system_view",
     ),
     url(
         r"^voting_system/sv/",
-        TemplateView.as_view(template_name="elections/sv.html"),
+        TemplateView.as_view(
+            template_name="elections/sv.html",
+            extra_context={"voting_sytem": "Supplementary Vote"},
+        ),
         name="sv_voting_system_view",
     ),
 ]

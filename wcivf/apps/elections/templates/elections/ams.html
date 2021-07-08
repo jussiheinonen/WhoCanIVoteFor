@@ -1,20 +1,11 @@
 {% extends "base.html" %}
 {% load markdown_deux_tags %}
-{% load breadcrumb_tags %}
 {% load humanize %}
 
-{% block breadcrumbs %}
-<ol vocab="http://schema.org/" typeof="BreadcrumbList" class="breadcrumbs" aria-label="You are here:" role="navigation">
-  {% url 'home_view' as home_view %}
-  {% breadcrumb_item home_view 'Home' 1 %}
-  {% url 'elections_view' as elections %}
-  {% breadcrumb_item elections 'Elections' 2 %}
-  <li class="disabled"><span class="show-for-sr">Current: </span> {{ object.nice_election_name }}</li>
-</ol>
-{% endblock breadcrumbs %}
-
 {% block content %}
-<div class="ds-scope">
+
+    {% include "elections/includes/_voting_system_breadcrumbs.html" %}
+
     <div class="ds-page">
         <div class="ds-stack">
             <div class="ds-card ds-padded">
@@ -26,8 +17,7 @@
                     </p>
                     <p>
                         Voters get two ballot papers and may vote on both: one for their
-                        constituency representative, elected on the <a
-                            href="{% url 'fptp_voting_system_view' %}">First-past-the-post</a>
+                        constituency representative, elected on the <a href="{% url 'fptp_voting_system_view' %}">First-past-the-post</a>
                         method, and one for a regional representative. They don’t have to
                         vote for the same party on both ballots.
 
@@ -49,15 +39,15 @@
                         Regional seats are allocated according to a formula known as the D’Hondt
                         method. The number of votes needed to win a seat (the ‘quota’) is
                         calculated using the following formula:
-                    <p class="ds-card ds-padded ds-dark">
-                        Vote quota = Total number of votes won by the party / Total number of seats already won by the
-                        party, +1.
-                    </p>
-                    <p>
-                        Seats are allocated after rounds of counting. In order to be
-                        allocated a regional seat, a party must have the highest vote number
-                        after the above formula has been applied.
-                    </p>
+                        <p class="ds-card ds-padded ds-dark">
+                            Vote quota = Total number of votes won by the party / Total number of seats already won by the
+                            party, +1.
+                        </p>
+                        <p>
+                            Seats are allocated after rounds of counting. In order to be
+                            allocated a regional seat, a party must have the highest vote number
+                            after the above formula has been applied.
+                        </p>
                     </p>
                     <h3>Example election</h3>
                     <p>
@@ -150,7 +140,7 @@
                                     <td>No change</td>
                                     <td>0</td>
                                 </tr>
-                                
+
                             </tbody>
                         </table>
                     </div>
@@ -170,21 +160,20 @@
                         is divided by one. Labour’s vote quota in
                         round one was 36,272 (72,544/2) so the
                         top-ranked person on their list was elected.
-                    <p>
-                    </p>
-                    <p> This process was then repeated, with
-                        Labour’s vote total now 24,181 as it was
-                        divided by three. The Conservatives,
-                        therefore, took the second list seat.
-                        This process went on until the seventh
-                        seat was won by the Green party, who
-                        had 17,218 votes to the SNP’s quota of
-                        15,091.
-                    </p>
+                        <p>
+                        </p>
+                        <p> This process was then repeated, with
+                            Labour’s vote total now 24,181 as it was
+                            divided by three. The Conservatives,
+                            therefore, took the second list seat.
+                            This process went on until the seventh
+                            seat was won by the Green party, who
+                            had 17,218 votes to the SNP’s quota of
+                            15,091.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
 {% endblock content %}

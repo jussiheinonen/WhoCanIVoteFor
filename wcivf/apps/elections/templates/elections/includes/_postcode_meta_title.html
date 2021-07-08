@@ -1,2 +1,2 @@
 {% if postelections.count == 0 %}Election candidates in {{ postcode }}{% else %}
-{% regroup postelections by election.election_date as header_elections_by_date %}{{ header_elections_by_date.0.list.0.election.name }} candidates in {{ postcode }}{% endif %}
+    {% regroup postelections by election.election_date as header_elections_by_date %}{{ header_elections_by_date.0.list.0.election.name }} candidates in {{ postcode }}{% endif %}
