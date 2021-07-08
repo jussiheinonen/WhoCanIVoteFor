@@ -4,8 +4,7 @@
         "@context": "http://schema.org/",
         "@type": "Event",
         "url": "{{ CANONICAL_URL }}{{ election.get_absolute_url }}",
-        "image": "{{ CANONICAL_URL }}{% static "
-        dc_theme / images / logo.png " %}",
+        "image": "{{ CANONICAL_URL }}{% static "dc_theme/images/logo.png" %}",
         "startDate": "{{ election.election.start_time | date:'Y-m-d H:i' }}",
         "endDate": "{{ election.election.end_time | date:'Y-m-d H:i' }}",
 
