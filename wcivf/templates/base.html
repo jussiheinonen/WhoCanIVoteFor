@@ -114,8 +114,8 @@
                 {% endblock content %}
             </main>
             {% block site_footer %}
-                <footer class="ds-footer ds-stack">
-                    <div class="ds-block-centered ds-stack">
+                <footer class="ds-footer">
+                    <div class="ds-block-centered ds-text-centered ds-stack">
                         <div>
                             {% include "mailing_list.html" %}
                         </div>
@@ -135,23 +135,17 @@
                                 <li><a href="https://github.com/DemocracyClub">GitHub</a></li>
                             </ul>
                         </div>
-
-                        <div class="ds-cluster-center ds-text-centered ">
+                        <div class="ds-copyright">
                             <a class="ds-logo" href="https://democracyclub.org.uk/">
                                 <img src="{% static 'images/logo_icon.svg' %}" alt="" />
-                                <span>Democracy Club<br></span>
+                                <span>democracy<br>club<br></span>
                             </a>
-                        </div>
-
-                        <div class="ds-copyright">
-                            <div class="ds-cluster-center">
-                                <p>Copyright &copy; {% now 'Y' %} </p>
-                                <p>Democracy Club Community Interest Company</p>
-                                <p>Company No: <a href="https://beta.companieshouse.gov.uk/company/09461226">09461226</a></p>
-                                <p class="ds-text-centered">Democracy Club is a UK-based Community Interest Company that builds
-                                    the digital infrastructure needed for a 21st century democracy
-                                </p>
-                            </div>
+                            <p>Copyright &copy; {% now 'Y' %} </p>
+                            <p>Democracy Club Community Interest Company</p>
+                            <p>Company No: <a href="https://beta.companieshouse.gov.uk/company/09461226">09461226</a></p>
+                            <p class="ds-text-centered">Democracy Club is a UK-based Community Interest Company that builds
+                                the digital infrastructure needed for a 21st century democracy
+                            </p>
                         </div>
                     </div>
                 </footer>
