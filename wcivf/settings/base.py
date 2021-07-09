@@ -1,4 +1,5 @@
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import os
 import sys
 
 from dc_utils.settings.pipeline import *  # noqa
