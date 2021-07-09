@@ -24,9 +24,7 @@
 
         {% block extra_site_css %}{% if USE_COMPRESSED_CSS %}
             <style type="text/css">
-                {
-                    % include "_compressed_css.html"%
-                }
+                {% include "_compressed_css.html" %}
             </style>
             <script id="loadcss">
                 (function(u, s) {
