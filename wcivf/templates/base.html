@@ -96,6 +96,7 @@
                     <meta property="og:image:width" content="{{ site_logo_width }}">
                     <meta property="og:title" content="{% block og_title %}{{ SITE_TITLE }} by Democracy Club{% endblock og_title %}" />
                     <meta property="og:description" content="{% block og_description %}Find out about elections, candidates and polling stations with Democracy Club's {{ SITE_TITLE }}{% endblock og_description %}" />
+                    <link rel="shortcut icon" href="{% static "iimages/logo.png" %}">
                 {% endblock site_meta %}
 
                 {% if messages %}
@@ -136,7 +137,7 @@
                         <div class="ds-copyright">
                             <a class="ds-logo" href="https://democracyclub.org.uk/">
                                 <img src="{% static 'images/logo_icon.svg' %}" alt="" />
-                                <span>democracy<br>club<br></span>
+                                <span class="ds-text-left">democracy<br>club</span>
                             </a>
                             <p>Copyright &copy; {% now 'Y' %} </p>
                             <p>Democracy Club Community Interest Company</p>
