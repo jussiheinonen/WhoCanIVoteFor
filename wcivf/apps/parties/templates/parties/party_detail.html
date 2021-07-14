@@ -62,18 +62,20 @@
                 {% for election in people_by_election %}
                     <h4>{{ election.grouper }}</h4>
                     {% for post in election.list %}
-                        <dl class="ds-descriptions">
-                            <div>
-                                <dt>{{ post.post__label }}
-                                    {% if post.post_election__cancelled %}
-                                        (The poll for this election was cancelled)
-                                    {% endif %}
-                                </dt>
-                                <dd>
-                                    {{ post.num_candidates }} candidate{{ post.num_candidates|pluralize }}
-                                </dd>
-                            </div>
-                        </dl>
+                        <div>
+                            <dl class="ds-descriptions">
+                                <div>
+                                    <dt>{{ post.post__label }}
+                                        {% if post.post_election__cancelled %}
+                                            (The poll for this election was cancelled)
+                                        {% endif %}
+                                    </dt>
+                                    <dd>
+                                        {{ post.num_candidates }} candidate{{ post.num_candidates|pluralize }}
+                                    </dd>
+                                </div>
+                            </dl>
+                        </div>
                     {% endfor %}
                 {% endfor %}
             </div>
