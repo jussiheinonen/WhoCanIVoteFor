@@ -1,0 +1,13 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "wcivf-dev"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-bpwbpsluzkgd"
+s3_prefix = "wcivf-dev"
+region = "eu-west-2"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = """
+  AppDjangoSettingsModule=wcivf.settings \
+"""

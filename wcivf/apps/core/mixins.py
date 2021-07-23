@@ -55,6 +55,10 @@ class ImportAdditionalElectionMixin(ReadFromUrlMixin):
         Deletes existing objects to ensure we have latest data and then creates
         a new object for each row
         """
+        print("DELETING OLD OBJECTS...")
         self.model.objects.all().delete()
+        print("GETTING THE NEW DATA")
         for row in self.read_from_url():
+            print(row)
             self.create_object(row=row)
+            print("Created the object")
