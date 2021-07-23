@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  aws-lambda
+
+  WCIVF Template for aws-lambda
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 60
+
+Parameters:
+
+  AppDjangoSettingsModule:
+    Description: "The DJANGO_SETTINGS_MODULE environment variable passed to the app."
+    Type: String
+
+  AppDBHost:
+    Description: "The DB_HOST environment variable passed to the app."
+    Type: String
+
+  AppDBPassword:
+    Description: "The DB_PASSWORD environment variable passed to the app."
+    Type: String
+
+Resources:
+  WCIVFControllerFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: .
+      Handler: wcivf.lambda_handler.handler
+      Runtime: python3.6
+      Environment:
+        Variables:
+          DJANGO_SETTINGS_MODULE: !Ref AppDjangoSettingsModule
+          DB_HOST: !Ref AppDBHost
+          DB_PASSWORD: !Ref AppDBPassword
+      Events:
+        ImportReferendums:
+          Type: Schedule
+          Properties:
+            Schedule: rate(5 minutes)
+            Name: import_referendums
+            Description: Update Referendums from google sheet
+            Input: '{"command": "import_referendums"}'
+        # ImportPeople:
+        #   Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
+        #   Properties:
+        #     Schedule: rate(5 minutes)
+        #     Name: import_people
+        #     Description: Update people from the last 5 minutes
+        #     Input: '{"command": "import_people", "args": ["--recent"]}'
+        # ImportBallots:
+        #   Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
+        #   Properties:
+        #     Schedule: rate(5 minutes)
+        #     Name: import_ballots
+        #     Description: Update ballots from the last 5 minutes
+
+Outputs:
+  WCIVFControllerFunction:
+    Description: "WCIVF Controller Lambda Function ARN"
+    Value: !GetAtt WCIVFControllerFunction.Arn
+  WCIVFControllerIamRole:
+    Description: "Implicit IAM Role created for WCIVF Controller Lambda function"
+    Value: !GetAtt WCIVFControllerFunctionRole.Arn
