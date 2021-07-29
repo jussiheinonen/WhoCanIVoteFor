@@ -3,4 +3,3 @@
 ipdb
 pre-commit
 djhtml
-aws-sam-cli

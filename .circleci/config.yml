@@ -2,9 +2,9 @@
 #
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
-version: 2
+version: 2.1
 jobs:
-  build:
+  build_and_test:
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
@@ -17,22 +17,13 @@ jobs:
           POSTGRES_USER: wcivf
           POSTGRES_DB: wcivf
       - image: circleci/redis:3.2.12-alpine
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-
     working_directory: ~/repo
-
     steps:
       - checkout
-
       # Download and cache dependencies
       - restore_cache:
           keys:
           - v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
-
-
       - run:
           name: install Tox
           command: |
@@ -46,13 +37,12 @@ jobs:
             . .venv/bin/activate
             pip install -r requirements.txt
             tox --notest --workdir /home/circleci/repo/.tox/
-
       - save_cache:
           paths:
             - ./.venv
             - /home/circleci/repo/.tox/
-          key: v2-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
-      
+          key: v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
+
       - run:
           name: Install HTML Tidy
           command: wget https://github.com/htacg/tidy-html5/releases/download/5.8.0/tidy-5.8.0-Linux-64bit.deb && sudo dpkg -i tidy-5.8.0-Linux-64bit.deb
@@ -61,17 +51,37 @@ jobs:
       - run:
           name: run tests
           command: |
+            python3 -m venv .venv
             . .venv/bin/activate
             tox --workdir /home/circleci/repo/.tox/
-      # Coverage
       - run:
           name: Update Coveralls
           command: |
             . .venv/bin/activate
             coveralls
-
-
       - store_artifacts:
           path: test-reports
           destination: test-reports
 
+  sam_build:
+    docker:
+      - image: amazon/aws-sam-cli-build-image-python3.6:latest
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: sam build
+          command: |
+            pip install --upgrade pip aws-sam-cli
+            make build clean
+      - persist_to_workspace:
+          root: ~/repo/
+          paths: [ .aws-sam/build/ ]
+      
+workflows:
+  main:
+    jobs:
+      - build_and_test
+      - sam_build:
+          requires:
+          - build_and_test

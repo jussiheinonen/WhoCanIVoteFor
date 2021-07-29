@@ -5,10 +5,10 @@ make all: build clean
 
 .PHONY: build
 build:
-	sam build --use-container -t ./sam-template.yaml
+	sam build -t ./sam-template.yaml
 
 .PHONY: clean
-clean: ## Delete any generated static asset or req.txt files and git-restore the rendered API documentation file
+clean: ## Delete any unneeded static asset files and git-restore the rendered API documentation file
 	rm -rf .aws-sam/build/WCIVFControllerFunction/wcivf/static/booklets/
 	rm -rf .aws-sam/build/WCIVFControllerFunction/wcivf/assets/booklets/
 	rm -rf .aws-sam/build/WCIVFControllerFunction/wcivf/media/
