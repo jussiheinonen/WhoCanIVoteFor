@@ -21,3 +21,13 @@ lambda-migrate:
 	--payload '{ "command": "migrate" }' \
 	--cli-binary-format raw-in-base64-out \
 	tmp/lambda-log.json
+
+.PHONY: lambda-deploy
+lambda-deploy:
+	sam deploy \
+	--no-confirm-changeset \
+	--config-file ~/repo/samconfig.toml \
+	--template-file ~/repo/.aws-sam/build/template.yaml \
+	--parameter-overrides "AppDjangoSettingsModule=wcivf.settings \
+		AppDBHost=${DB_HOST} \
+		AppDBPassword=${DB_PASSWORD}"
