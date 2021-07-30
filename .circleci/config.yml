@@ -77,6 +77,25 @@ jobs:
       - persist_to_workspace:
           root: ~/repo/
           paths: [ .aws-sam/build/ ]
+
+  sam_deploy:
+    docker:
+      - image: circleci/python:3.6-jessie-node
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo/
+      - run:
+          name: install sam-cli
+          command: |
+            python3 -m venv .venv
+            . .venv/bin/activate
+            pip install --upgrade pip aws-sam-cli
+      - run: printenv AWS_ACCESS_KEY_ID | md5sum
+      - run: printenv AWS_SECRET_ACCESS_KEY | md5sum
+      - run: . .venv/bin/activate && make lambda-deploy
+
       
 workflows:
   main:
@@ -85,3 +104,8 @@ workflows:
       - sam_build:
           requires:
           - build_and_test
+      - sam_deploy:
+          requires:
+          - build_and_test
+          - sam_build
+          context: [ deployment-lambda-wcivf ]
