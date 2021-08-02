@@ -28,6 +28,7 @@ Resources:
   WCIVFControllerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/WCIVFLambdaExecutionRole"
       CodeUri: .
       Handler: wcivf.lambda_handler.handler
       Runtime: python3.6
@@ -51,17 +52,15 @@ Resources:
         #     Name: import_people
         #     Description: Update people from the last 5 minutes
         #     Input: '{"command": "import_people", "args": ["--recent"]}'
-        # ImportBallots:
-        #   Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
-        #   Properties:
-        #     Schedule: rate(5 minutes)
-        #     Name: import_ballots
-        #     Description: Update ballots from the last 5 minutes
+        ImportBallots:
+          Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
+          Properties:
+            Schedule: rate(5 minutes)
+            Name: import_ballots
+            Description: Update current ballots from the last 5 minutes
+            Input: '{"command": "import_ballots", "args": ["--current"]}'
 
 Outputs:
   WCIVFControllerFunction:
     Description: "WCIVF Controller Lambda Function ARN"
     Value: !GetAtt WCIVFControllerFunction.Arn
-  WCIVFControllerIamRole:
-    Description: "Implicit IAM Role created for WCIVF Controller Lambda function"
-    Value: !GetAtt WCIVFControllerFunctionRole.Arn
