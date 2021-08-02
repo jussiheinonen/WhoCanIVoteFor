@@ -94,9 +94,22 @@ jobs:
             pip install --upgrade pip aws-sam-cli
       - run: printenv AWS_ACCESS_KEY_ID | md5sum
       - run: printenv AWS_SECRET_ACCESS_KEY | md5sum
-      - run: . .venv/bin/activate && make lambda-deploy
+      - run: printenv DB_HOST
+      - run:
+          name: deploy
+          command: |
+            . .venv/bin/activate
+            sam deploy \
+                --no-confirm-changeset \
+                --config-file ~/repo/samconfig.toml \
+                --template-file ~/repo/.aws-sam/build/template.yaml \
+                --parameter-overrides " \
+                   AppDjangoSettingsModule=wcivf.settings \
+                   AppDBHost='$DB_HOST' \
+                   AppDBPassword='$DB_PASSWORD' \
+                  "
 
-      
+
 workflows:
   main:
     jobs:
