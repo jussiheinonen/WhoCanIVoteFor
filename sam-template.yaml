@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 60
+    Timeout: 900
 
 Parameters:
 
@@ -28,6 +28,7 @@ Resources:
   WCIVFControllerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
+      FunctionName: WCIVF-dev
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/WCIVFLambdaExecutionRole"
       CodeUri: .
       Handler: wcivf.lambda_handler.handler
@@ -60,7 +61,8 @@ Resources:
             Description: Update current ballots from the last 5 minutes
             Input: '{"command": "import_ballots", "args": ["--current"]}'
 
+
 Outputs:
-  WCIVFControllerFunction:
+  WCIVFControllerFunctionArn:
     Description: "WCIVF Controller Lambda Function ARN"
     Value: !GetAtt WCIVFControllerFunction.Arn
