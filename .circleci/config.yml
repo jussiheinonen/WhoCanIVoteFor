@@ -35,6 +35,7 @@ jobs:
           command: |
             python3 -m venv .venv
             . .venv/bin/activate
+            pip install --upgrade pip
             pip install -r requirements.txt
             tox --notest --workdir /home/circleci/repo/.tox/
       - save_cache:
@@ -84,6 +85,9 @@ jobs:
     working_directory: ~/repo
     steps:
       - checkout
+      - restore_cache:
+          keys:
+          - v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
       - attach_workspace:
           at: ~/repo/
       - run:
@@ -91,7 +95,6 @@ jobs:
           command: |
             python3 -m venv .venv
             . .venv/bin/activate
-            pip install --upgrade pip aws-sam-cli
       - run: printenv AWS_ACCESS_KEY_ID | md5sum
       - run: printenv AWS_SECRET_ACCESS_KEY | md5sum
       - run: printenv DB_HOST
@@ -108,6 +111,12 @@ jobs:
                    AppDBHost='$DB_HOST' \
                    AppDBPassword='$DB_PASSWORD' \
                   "
+      - run:
+          name: post deploy tests
+          command: |
+            . .venv/bin/activate
+            pip install pytest
+            pytest ~/repo/.circleci/
 
 
 workflows:
