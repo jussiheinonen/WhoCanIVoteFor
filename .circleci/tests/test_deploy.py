@@ -78,3 +78,22 @@ def test_check_succeeds(lambda_function_arn, sam_cli_configuration):
     payload = json.loads(response["Payload"].read())
     assert payload.get("errorMessage") is None
     assert payload["statusCode"] == 200
+
+
+def test_makemigrations_check_succeeds(
+    lambda_function_arn, sam_cli_configuration
+):
+    """
+    Tests that the deployed lambda function can run djangos
+    makemigrations --check command
+    """
+    region = sam_cli_configuration["deploy"]["parameters"]["region"]
+    lambda_client = boto3.client("lambda", region_name=region)
+    response = lambda_client.invoke(
+        FunctionName=lambda_function_arn,
+        InvocationType="RequestResponse",
+        Payload='{"command": "makemigrations", "args": ["--check"]}',
+    )
+    payload = json.loads(response["Payload"].read())
+    assert payload.get("errorMessage") is None
+    assert payload["statusCode"] == 200
