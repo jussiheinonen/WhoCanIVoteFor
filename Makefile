@@ -1,4 +1,6 @@
 export DJANGO_SETTINGS_MODULE?=wcivf.settings
+export DC_ENVIRONMENT?=development
+export AWS_DEFAULT_REGION?=eu-west-2
 
 .PHONY: all
 make all: build clean
@@ -15,12 +17,11 @@ clean: ## Delete any unneeded static asset files and git-restore the rendered AP
 	rm -f .aws-sam/build/WCIVFControllerFunction/wcivf/settings/local.py
 
 .PHONY: lambda-migrate
-lambda-migrate:
+lambda-migrate:  ## Invoke lambda to migrate the database
 	aws lambda invoke \
-	--function-name wcivf-dev-WCIVFControllerFunction-Wxf2rcMohMmQ \
+	--function-name WCIVF-dev \
 	--payload '{ "command": "migrate" }' \
-	--cli-binary-format raw-in-base64-out \
-	tmp/lambda-log.json
+	/dev/stdout
 
 .PHONY: lambda-deploy
 lambda-deploy:

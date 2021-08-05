@@ -83,6 +83,15 @@ jobs:
     docker:
       - image: circleci/python:3.6-jessie-node
     working_directory: ~/repo
+    parameters:
+      dc-environment:
+        type: enum
+        enum: [ development, stage, production ]
+      aws-region:
+        type: string
+    environment:
+      DC_ENVIRONMENT: <<parameters.dc-environment>>
+      AWS_DEFAULT_REGION: <<parameters.aws-region>>
     steps:
       - checkout
       - restore_cache:
@@ -97,7 +106,7 @@ jobs:
             . .venv/bin/activate
       - run: printenv AWS_ACCESS_KEY_ID | md5sum
       - run: printenv AWS_SECRET_ACCESS_KEY | md5sum
-      - run: printenv DB_HOST
+      - run: printenv DB_HOST DC_ENVIRONMENT AWS_DEFAULT_REGION
       - run:
           name: deploy
           command: |
@@ -105,6 +114,7 @@ jobs:
             sam deploy \
                 --no-confirm-changeset \
                 --config-file ~/repo/samconfig.toml \
+                --config-env $DC_ENVIRONMENT \
                 --template-file ~/repo/.aws-sam/build/template.yaml \
                 --parameter-overrides " \
                    AppDjangoSettingsModule=wcivf.settings \
@@ -115,8 +125,12 @@ jobs:
           name: post deploy tests
           command: |
             . .venv/bin/activate
-            pip install pytest
             pytest ~/repo/.circleci/
+      - run:
+          name: migrate the database
+          command: |
+            . .venv/bin/activate
+            make lambda-migrate
 
 
 workflows:
@@ -127,6 +141,9 @@ workflows:
           requires:
           - build_and_test
       - sam_deploy:
+          name: sam_deploy_dev
+          dc-environment: development
+          aws-region: eu-west-2
           requires:
           - build_and_test
           - sam_build
