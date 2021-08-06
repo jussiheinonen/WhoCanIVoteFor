@@ -1,4 +1,4 @@
-export DJANGO_SETTINGS_MODULE?=wcivf.settings
+export DJANGO_SETTINGS_MODULE?=wcivf.settings.lambda
 export DC_ENVIRONMENT?=development
 export AWS_DEFAULT_REGION?=eu-west-2
 
@@ -22,13 +22,3 @@ lambda-migrate:  ## Invoke lambda to migrate the database
 	--function-name WCIVFControllerFunction \
 	--payload '{ "command": "migrate" }' \
 	/dev/stdout
-
-.PHONY: lambda-deploy
-lambda-deploy:
-	sam deploy \
-	--no-confirm-changeset \
-	--config-file ~/repo/samconfig.toml \
-	--template-file ~/repo/.aws-sam/build/template.yaml \
-	--parameter-overrides "AppDjangoSettingsModule=wcivf.settings \
-		AppDBHost=${DB_HOST} \
-		AppDBPassword=${DB_PASSWORD}"

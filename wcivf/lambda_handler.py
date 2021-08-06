@@ -1,4 +1,5 @@
 import json
+import sentry_sdk
 
 import django
 from django.core.management import call_command
@@ -25,14 +26,16 @@ def handler(event, context):
 
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
+
     cmd = event["command"]
     args = event.get("args", [])
-    print(cmd)
-    print(args)
+
+    sentry_sdk.set_context("event", event)
+
     django.setup()
-    print("SETUP COMPLETE")
+
+    print(f"Calling {cmd} with args {args}")
     call_command(cmd, *args)
-    print("CALLED THE COMMAND")
 
     arg_str = " ".join(args)
     return {
