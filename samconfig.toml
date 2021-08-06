@@ -2,9 +2,9 @@ version = 0.1
 [development]
 [development.deploy]
 [development.deploy.parameters]
-stack_name = "wcivf-dev"
+stack_name = "WCIVFControllerApp"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-bpwbpsluzkgd"
-s3_prefix = "wcivf-dev"
+s3_prefix = "WCIVFController"
 region = "eu-west-2"
 confirm_changeset = false
 fail_on_empty_changeset = false
