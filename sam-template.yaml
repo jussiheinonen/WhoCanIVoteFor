@@ -28,7 +28,7 @@ Resources:
   WCIVFControllerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      FunctionName: WCIVF-dev
+      FunctionName: WCIVFControllerFunction
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/WCIVFLambdaExecutionRole"
       CodeUri: .
       Handler: wcivf.lambda_handler.handler
