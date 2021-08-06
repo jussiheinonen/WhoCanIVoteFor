@@ -117,9 +117,10 @@ jobs:
                 --config-env $DC_ENVIRONMENT \
                 --template-file ~/repo/.aws-sam/build/template.yaml \
                 --parameter-overrides " \
-                   AppDjangoSettingsModule=wcivf.settings \
+                   AppDjangoSettingsModule=wcivf.settings.lambda \
                    AppDBHost='$DB_HOST' \
                    AppDBPassword='$DB_PASSWORD' \
+                   AppSentryDsn='$SENTRY_DSN' \
                   "
       - run:
           name: post deploy tests

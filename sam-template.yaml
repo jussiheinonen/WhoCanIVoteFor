@@ -24,6 +24,10 @@ Parameters:
     Description: "The DB_PASSWORD environment variable passed to the app."
     Type: String
 
+  AppSentryDsn:
+    Description: "The SENTRY_DSN environment variable passed to the app."
+    Type: String
+
 Resources:
   WCIVFControllerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -38,6 +42,7 @@ Resources:
           DJANGO_SETTINGS_MODULE: !Ref AppDjangoSettingsModule
           DB_HOST: !Ref AppDBHost
           DB_PASSWORD: !Ref AppDBPassword
+          SENTRY_DSN: !Ref AppSentryDsn
       Events:
         ImportPeople:
           Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
