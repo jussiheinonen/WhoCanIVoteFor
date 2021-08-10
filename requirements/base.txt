@@ -20,7 +20,7 @@ django-debug-toolbar==3.2.1
 newspaper3k==0.2.8
 
 git+https://github.com/DemocracyClub/dc_signup_form.git@2.1.0
-git+https://github.com/DemocracyClub/design-system.git@0.1.4
+git+https://github.com/DemocracyClub/design-system.git@0.1.5
 git+https://github.com/DemocracyClub/dc_django_utils.git@0.0.5
 djangorestframework-jsonp==1.0.2
 feedparser==6.0.8
