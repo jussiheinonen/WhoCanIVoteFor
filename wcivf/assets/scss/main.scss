@@ -31,7 +31,7 @@
 // // Generate atomic classes for documentation demos
 @import 'partials/_classes-colors.scss';
 @import 'partials/_classes-scales.scss';
-$scope: true;
+$scope: false;
 @mixin optional-styles {
     @include description-lists;
     @include button;
@@ -79,13 +79,14 @@ $scope: true;
 }
 
 @else {
-     :root {
+     body {
+        // font-size: 100%;
         font-size: clamp(#{$s1}, 2vw, #{$s2});
         @include fontMain;
     }
-     :root *,
-     :root *::before,
-     :root *::after {
+     body *,
+     body *::before,
+     body *::after {
         box-sizing: border-box;
     }
     body {
