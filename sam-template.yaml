@@ -75,14 +75,14 @@ Resources:
         ImportVotesCast:
           Type: Schedule
           Properties:
-            Schedule: rate(5 minutes)
+            Schedule: rate(1 day)
             Name: import-votes-cast
             Description: Import votes cast from given date
             Input: '{"command": "import_votes_cast", "args": ["--since=2021-05-05"]}'
         ImportReferendums:
           Type: Schedule
           Properties:
-            Schedule: rate(5 minutes)
+            Schedule: rate(1 day)
             Name: import-referendums
             Description: Update Referendums from google sheet
             Input: '{"command": "import_referendums"}'
