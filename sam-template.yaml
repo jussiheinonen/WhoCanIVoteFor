@@ -87,6 +87,50 @@ Resources:
             Description: Update Referendums from google sheet
             Input: '{"command": "import_referendums"}'
 
+  WCIVFCodeDeployApp:
+    Type: AWS::CodeDeploy::Application
+    Properties:
+      ApplicationName: WCIVFCodeDeploy
+      ComputePlatform: Server
+
+  # WCIVFCodeDeployDeploymentGroup:
+  #   Type: AWS::CodeDeploy::DeploymentGroup
+  #   Properties:
+  #     # AlarmConfiguration:
+  #     #   AlarmConfiguration
+  #     ApplicationName: WCIVFDeploymentGroup
+  #     # AutoRollbackConfiguration:
+  #     #   AutoRollbackConfiguration
+  #     AutoScalingGroups:
+  #       - CodeDeploy_WCIVF-BlueGreen-DepGrp-CLI-asg_d-BV7LBDO8N
+  #     BlueGreenDeploymentConfiguration:
+  #       DeploymentReadyOption:
+  #         ActionOnTimeout: CONTINUE_DEPLOYMENT
+  #       GreenFleetProvisioningOption:
+  #         Action: COPY_AUTO_SCALING_GROUP
+  #       TerminateBlueInstancesOnDeploymentSuccess:
+  #         Action: TERMINATE
+  #         TerminationWaitTimeInMinutes: 5
+  #     # Deployment:
+  #     #   Deployment
+  #     # DeploymentConfigName: String
+  #     # DeploymentGroupName: String
+  #     DeploymentStyle:
+  #       DeploymentOption: WITH_TRAFFIC_CONTROL
+  #       DeploymentType: BLUE_GREEN
+  #     # Ec2TagFilters:
+  #     #   - EC2TagFilter
+  #     # Ec2TagSet:
+  #     #   EC2TagSet
+  #     # ECSServices:
+  #     #   - ECSService
+  #     LoadBalancerInfo:
+  #       ElbInfoList:
+  #         - Name: wcivf-test
+  #     ServiceRoleArn: arn:aws:iam::061126312678:role/CodeDeployServiceRole
+  #     # TriggerConfigurations:
+  #       # - TriggerConfig
+
 
 Outputs:
   WCIVFControllerFunctionArn:
