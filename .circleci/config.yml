@@ -133,6 +133,23 @@ jobs:
             . .venv/bin/activate
             make lambda-migrate
 
+  code_deploy:
+    docker:
+      - image: circleci/python:3.6-jessie-node
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
+      - attach_workspace:
+          at: ~/repo/
+      - run: printenv CIRCLE_SHA1
+      - run:
+          name: create deployment with codedeploy
+          command: |
+            . .venv/bin/activate
+            COMMIT_SHA=$CIRCLE_SHA1 make create-deployment
 
 workflows:
   main:
@@ -148,4 +165,11 @@ workflows:
           requires:
           - build_and_test
           - sam_build
+          context: [ deployment-lambda-wcivf ]
+      - code_deploy:
+          name: code_deploy
+          requires:
+          - build_and_test
+          - sam_build
+          - sam_deploy_dev
           context: [ deployment-lambda-wcivf ]
