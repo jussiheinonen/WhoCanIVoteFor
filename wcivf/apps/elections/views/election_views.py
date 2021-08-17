@@ -2,10 +2,8 @@ from django.views.generic import TemplateView, DetailView, RedirectView
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
-
 from django.db.models import Prefetch
 from django.apps import apps
-
 
 from elections.views.mixins import (
     NewSlugsRedirectMixin,
@@ -14,6 +12,7 @@ from elections.views.mixins import (
 from elections.models import PostElection
 from parties.models import LocalParty, Party
 from people.models import PersonPost
+from elections.filters import ElectionTypeFilter
 
 
 class ElectionsView(TemplateView):
@@ -22,14 +21,12 @@ class ElectionsView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         Election = apps.get_model("elections.Election")
-        all_elections = Election.objects.all().order_by(
-            "-election_date", "election_type", "name"
+        qs = Election.objects.all().order_by(
+            "-election_date", "-election_type", "name"
         )
-
-        context["past_elections"] = all_elections.past()
-        context[
-            "current_or_future_elections"
-        ] = all_elections.current_or_future()
+        f = ElectionTypeFilter(self.request.GET, queryset=qs)
+        context["filter"] = f
+        context["queryset"] = f.qs
 
         return context
 
