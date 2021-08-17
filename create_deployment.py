@@ -2,15 +2,14 @@ import os
 import boto3
 import time
 
-COMMIT_SHA = os.environ.get("COMMIT_SHA")
-
-client = boto3.client("codedeploy")
+session = boto3.Session()
 
 
 def create_deployment():
     """
     Create a new deployment and return deploy ID
     """
+    client = session.client("codedeploy")
     deployment = client.create_deployment(
         applicationName="WCIVFCodeDeploy",
         deploymentGroupName="WCIVF-BlueGreen-DepGrp-asg",
@@ -18,11 +17,21 @@ def create_deployment():
             "revisionType": "GitHub",
             "gitHubLocation": {
                 "repository": "DemocracyClub/WhoCanIVoteFor",
-                "commitId": COMMIT_SHA,
+                "commitId": os.environ.get("COMMIT_SHA"),
             },
         },
     )
     return deployment["deploymentId"]
+
+
+def delete_asg(asg_name):
+    """
+    Deletes an AutoScalingGroup and all associated instances
+    """
+    client = session.client("autoscaling")
+    return client.delete_auto_scaling_group(
+        AutoScalingGroupName=asg_name, ForceDelete=True
+    )
 
 
 def check_deployment(deployment_id):
@@ -30,6 +39,7 @@ def check_deployment(deployment_id):
     Checks the status of the deploy every 5 seconds,
     returns a success or error code
     """
+    client = session.client("codedeploy")
     deployment = client.get_deployment(deploymentId=deployment_id)[
         "deploymentInfo"
     ]
@@ -40,7 +50,10 @@ def check_deployment(deployment_id):
 
     if deployment["status"] == "Failed":
         print("FAIL")
-        # could delete the failed ASG before exit?
+        # delete the ASG that was created during the failed deployment
+        delete_asg(
+            asg_name=deployment["targetInstances"]["autoScalingGroups"][0]
+        )
         exit(1)
 
     print(deployment["status"])
@@ -48,5 +61,10 @@ def check_deployment(deployment_id):
     check_deployment(deployment_id=deployment_id)
 
 
-deployment_id = create_deployment()
-check_deployment(deployment_id=deployment_id)
+def main():
+    deployment_id = create_deployment()
+    check_deployment(deployment_id=deployment_id)
+
+
+if __name__ == "__main__":
+    main()

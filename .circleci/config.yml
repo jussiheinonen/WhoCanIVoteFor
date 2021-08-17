@@ -149,7 +149,7 @@ jobs:
           name: create deployment with codedeploy
           command: |
             . .venv/bin/activate
-            COMMIT_SHA=$CIRCLE_SHA1 make create-deployment
+            COMMIT_SHA=$CIRCLE_SHA1 python create_deployment.py
 
 workflows:
   main:
