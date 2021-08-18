@@ -158,6 +158,7 @@ jobs:
             MAX_SIZE=1 \
             DESIRED_CAPACITY=1 \
             python update_auto_scaling_group.py
+          no_output_timeout: 15m # TODO reduce/discuss what is suitable?
 
 
 workflows:
