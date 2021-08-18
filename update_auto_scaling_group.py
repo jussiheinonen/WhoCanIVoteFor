@@ -56,14 +56,15 @@ def check_asg_instances_healthy(asg):
         print("All instances healthy and inservice")
         exit(0)
 
-    print(f"Instance states: {dict(states)}")
     time.sleep(10)
     check_asg_instances_healthy(asg=asg)
+    # TODO let circleci timeout when no output? alternatives e.g. catch error states?
 
 
 def main():
     asg = get_latest_code_deploy_tagged_asg()
     update_asg(asg=asg)
+    print("ASG updated, waiting for all instances to become healthy...")
     check_asg_instances_healthy(asg=asg)
 
 
