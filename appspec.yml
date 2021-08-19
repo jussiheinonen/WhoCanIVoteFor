@@ -89,6 +89,9 @@ hooks:
     - location: deployscripts/install_python_deps.sh
       timeout: 300
       runas: wcivf
+    - location: deployscripts/write_envfile.sh
+      timeout: 300
+      runas: wcivf
     - location: deployscripts/migrate.sh
       timeout: 300
       runas: wcivf
