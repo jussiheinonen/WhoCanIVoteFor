@@ -149,7 +149,7 @@ jobs:
           name: create deployment with codedeploy
           command: |
             . .venv/bin/activate
-            COMMIT_SHA=$CIRCLE_SHA1 python create_deployment.py
+            COMMIT_SHA=$CIRCLE_SHA1 python deployscripts/create_deployment.py
       - run:
           name: Update auto scaling group
           command: |
@@ -157,7 +157,7 @@ jobs:
             MIN_SIZE=1 \
             MAX_SIZE=1 \
             DESIRED_CAPACITY=1 \
-            python update_auto_scaling_group.py
+            python deployscripts/update_auto_scaling_group.py
           no_output_timeout: 15m # TODO reduce/discuss what is suitable?
 
 
