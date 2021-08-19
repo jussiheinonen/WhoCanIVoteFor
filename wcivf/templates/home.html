@@ -10,7 +10,7 @@
         <div class="ds-card-body ds-text-centered">
             <h4>Find out about candidates in your area</h4>
             <div class="ds-field">
-                <form method=post>
+                <form method="post">
                     {% csrf_token %}
                     {{ form|dc_form }}
                     {% if request.GET.invalid_postcode %}
