@@ -19,12 +19,6 @@ os: linux
 files:
   - source: /
     destination: /var/www/wcivf/code/
-# using this because some files will exist on the server from image provision
-# that do not exist in the git repo, that we will need to keep e.g. prod settings
-# if we move away from copying files in the ansible image provision an alternative
-# would be to add a BeforeInstall that deletes the code/ directory, then this
-# setting can be removed
-file_exists_behavior: OVERWRITE
 # For deployments to Amazon Linux, Ubuntu Server, or RHEL instances,
 #   you can specify a "permissions" 
 #   section here that describes special permissions to apply to the files 
@@ -76,10 +70,10 @@ hooks:
   #     runas: 
 # During the BeforeInstall deployment lifecycle event, run the commands 
 #   in the script specified in "location".
-  # BeforeInstall:
-  #   - location: 
-  #     timeout:
-  #     runas: 
+  BeforeInstall:
+    - location: deployscripts/clean_instance.sh
+      timeout: 300
+      runas: root
   #   - location: 
   #     timeout:
   #     runas:
