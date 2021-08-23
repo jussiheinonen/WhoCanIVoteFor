@@ -124,6 +124,7 @@ Then, create a file `wcivf/settings/local.py` with the following contents, assum
         }
     }
 
+See the local.example file for other suggested settings to use for local development.
 
 ## Creating inline CSS
 

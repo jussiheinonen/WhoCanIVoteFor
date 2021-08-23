@@ -18,12 +18,15 @@ sys.path.insert(0, root("apps"))
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "1$s^ggnnc16*_9=a^5yv3jr4pw3a=f##c#fc!ewc&i5n^q88l%"
+SECRET_KEY = os.environ.get("SECRET_KEY")
+ADMINS = (("WCIVF Developers", "developers@democracyclub.org.uk"),)
+MANAGERS = ADMINS
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+# add to param store?
+ALLOWED_HOSTS = ["*"]
 
 SITE_ID = 1
 
@@ -118,12 +121,22 @@ WSGI_APPLICATION = "wcivf.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
         "NAME": "wcivf",
         "USER": "",
         "PASSWORD": "",
     }
 }
+
+if os.environ.get("LOGGER_DB_PASSWORD") and os.environ.get("LOGGER_DB_HOST"):
+    DATABASES["logger"] = {
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "NAME": "wcivf_logger",
+        "USER": "wcivf",
+        "PASSWORD": os.environ.get("LOGGER_DB_PASSWORD"),
+        "HOST": os.environ.get("LOGGER_DB_HOST"),
+        "PORT": "",
+    }
 
 
 # Internationalization
@@ -171,7 +184,7 @@ SESSION_CACHE_ALIAS = "default"
 
 YNR_BASE = "https://candidates.democracyclub.org.uk"
 YNR_UTM_QUERY_STRING = "utm_source=who&utm_campaign=ynr_cta"
-EE_BASE = "https://elections.democracyclub.org.uk"
+EE_BASE = "http://localhost:8000"
 
 WDIV_BASE = "https://wheredoivote.co.uk"
 WDIV_API = "/api/beta"
@@ -182,7 +195,7 @@ ROBOTS_USE_HOST = False
 EMAIL_SIGNUP_ENDPOINT = (
     "https://democracyclub.org.uk/mailing_list/api_signup/v1/"
 )
-EMAIL_SIGNUP_API_KEY = ""
+EMAIL_SIGNUP_API_KEY = os.environ.get("EMAIL_SIGNUP_API_KEY", "")
 
 # DC Base Theme settings
 SITE_TITLE = "Who Can I Vote For?"
@@ -208,6 +221,30 @@ REST_FRAMEWORK = {
 }
 
 PARTY_LIST_VOTING_TYPES = ["PR-CL", "AMS"]
+
+WDIV_API_KEY = os.environ.get("WDIV_API_KEY")
+SLACK_FEEDBACK_WEBHOOK_URL = os.environ.get(
+    "SLACK_FEEDBACK_WEBHOOK_URL"
+)  # noqa
+
+CHECK_HOST_DIRTY = False
+DIRTY_FILE_PATH = "~/server_dirty"
+
+if os.environ.get("DC_ENVIRONMENT"):
+    CHECK_HOST_DIRTY = True
+
+    import sentry_sdk
+    from sentry_sdk.integrations import django, aws_lambda
+
+    sentry_sdk.init(
+        dsn=os.environ.get("SENTRY_DSN"),
+        integrations=[
+            django.DjangoIntegration(),
+            aws_lambda.AwsLambdaIntegration(),
+        ],
+        environment=os.environ.get("DC_ENVIRONMENT"),
+    )
+
 
 # .local.py overrides all the common settings.
 try:
