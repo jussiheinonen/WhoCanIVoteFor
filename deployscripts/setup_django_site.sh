@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -xeE
 
 # not sure this is necessary anymore with DB replication?
 source /var/www/wcivf/env/bin/activate
