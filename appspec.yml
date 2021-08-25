@@ -61,13 +61,10 @@ hooks:
 # During the ApplicationStop deployment lifecycle event, run the commands 
 #   in the script specified in "location" starting from the root of the 
 #   revision's file bundle.
-  # ApplicationStop:
-  #   - location: 
-  #     timeout:
-  #     runas:
-  #   - location: 
-  #     timeout:
-  #     runas: 
+  ApplicationStop:
+    - location: deployscripts/stop_application.sh
+      timeout: 300
+      runas: root
 # During the BeforeInstall deployment lifecycle event, run the commands 
 #   in the script specified in "location".
   BeforeInstall:
@@ -98,15 +95,15 @@ hooks:
 # During the ApplicationStart deployment lifecycle event, run the commands 
 #   in the script specified in "location".
   ApplicationStart:
-    - location: deployscripts/restart_gunicorn.sh
+    - location: deployscripts/start_application.sh
       timeout: 300
       runas: root
 # During the ValidateService deployment lifecycle event, run the commands 
 #   in the script specified in "location".
-  # ValidateService:
-  #   - location:     
-  #     timeout: 
-  #     runas:
+  ValidateService:
+    - location: deployscripts/validate_application.sh
+      timeout: 300
+      runas: root
   #   - location: 
   #     timeout:
   #     runas:
