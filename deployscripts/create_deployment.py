@@ -12,7 +12,7 @@ def create_deployment():
     client = session.client("codedeploy")
     deployment = client.create_deployment(
         applicationName="WCIVFCodeDeploy",
-        deploymentGroupName="WCIVF-BlueGreen-DepGrp-asg",
+        deploymentGroupName="WCIVFDefaultDeploymentGroup",
         revision={
             "revisionType": "GitHub",
             "gitHubLocation": {
