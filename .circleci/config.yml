@@ -86,12 +86,15 @@ jobs:
     parameters:
       dc-environment:
         type: enum
-        enum: [ development, stage, production ]
-      aws-region:
+        enum: [ development, staging, production ]
+      vpc-id:
+        type: string
+      ssl-certificate-arn:
         type: string
     environment:
       DC_ENVIRONMENT: <<parameters.dc-environment>>
-      AWS_DEFAULT_REGION: <<parameters.aws-region>>
+      VPC_ID: <<parameters.vpc-id>>
+      SSL_CERTIFICATE_ARN: <<parameters.ssl-certificate-arn>>
     steps:
       - checkout
       - restore_cache:
@@ -104,9 +107,6 @@ jobs:
           command: |
             python3 -m venv .venv
             . .venv/bin/activate
-      - run: printenv AWS_ACCESS_KEY_ID | md5sum
-      - run: printenv AWS_SECRET_ACCESS_KEY | md5sum
-      - run: printenv DB_HOST DC_ENVIRONMENT AWS_DEFAULT_REGION
       - run:
           name: deploy
           command: |
@@ -118,9 +118,13 @@ jobs:
                 --template-file ~/repo/.aws-sam/build/template.yaml \
                 --parameter-overrides " \
                    AppDjangoSettingsModule=wcivf.settings.lambda \
-                   AppDBHost='$DB_HOST' \
-                   AppDBPassword='$DB_PASSWORD' \
+                   AppRdsHost='$RDS_HOST' \
+                   AppRdsDbName='$RDS_DB_NAME' \
+                   AppRdsDbPassword='$RDS_DB_PASSWORD' \
                    AppSentryDsn='$SENTRY_DSN' \
+                   AppSecretKey='$SECRET_KEY' \
+                   VpcIdParameter='$VPC_ID' \
+                   SSLCertificateArn='$SSL_CERTIFICATE_ARN'
                   "
       - run:
           name: post deploy tests
@@ -144,7 +148,11 @@ jobs:
           - v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
       - attach_workspace:
           at: ~/repo/
-      - run: printenv CIRCLE_SHA1
+      - run:
+          name: ensure the deployment group ready
+          command: |
+            . .venv/bin/activate
+            python deployscripts/create_deployment_group.py
       - run:
           name: create deployment with codedeploy
           command: |
@@ -168,18 +176,39 @@ workflows:
       - sam_build:
           requires:
           - build_and_test
+
       - sam_deploy:
-          name: sam_deploy_dev
+          name: sam_deploy_development
           dc-environment: development
-          aws-region: eu-west-2
+          vpc-id: vpc-fa2e0792
+          ssl-certificate-arn: arn:aws:acm:eu-west-2:061126312678:certificate/3ac6d121-aed6-48a7-af80-6a021e05167c
           requires:
           - build_and_test
           - sam_build
-          context: [ deployment-lambda-wcivf ]
+          context: [ deployment-development-wcivf ]
+
       - code_deploy:
-          name: code_deploy
+          name: code_deploy_development
           requires:
           - build_and_test
           - sam_build
-          - sam_deploy_dev
-          context: [ deployment-lambda-wcivf ]
+          - sam_deploy_development
+          context: [ deployment-development-wcivf ]
+
+      - sam_deploy:
+          name: sam_deploy_staging
+          dc-environment: staging
+          vpc-id: vpc-69cef901
+          ssl-certificate-arn: arn:aws:acm:eu-west-2:897471774344:certificate/a448e49a-5f47-41a3-a3d8-b6cc88781235
+          requires:
+          - build_and_test
+          # NB should this be dependent on successful sam_deploy_development job?
+          - sam_build
+          context: [ deployment-staging-wcivf ]
+
+      - code_deploy:
+          name: code_deploy_staging
+          requires:
+          - build_and_test
+          - sam_deploy_staging
+          context: [ deployment-staging-wcivf ]
