@@ -186,6 +186,7 @@ workflows:
           - build_and_test
           - sam_build
           context: [ deployment-development-wcivf ]
+          filters: { branches: { only: [ main, master, staging ] } }
 
       - code_deploy:
           name: code_deploy_development
@@ -194,6 +195,7 @@ workflows:
           - sam_build
           - sam_deploy_development
           context: [ deployment-development-wcivf ]
+          filters: { branches: { only: [ main, master, staging ] } }
 
       - sam_deploy:
           name: sam_deploy_staging
@@ -205,6 +207,7 @@ workflows:
           # NB should this be dependent on successful sam_deploy_development job?
           - sam_build
           context: [ deployment-staging-wcivf ]
+          filters: { branches: { only: [ main, master, staging ] } }
 
       - code_deploy:
           name: code_deploy_staging
@@ -212,3 +215,4 @@ workflows:
           - build_and_test
           - sam_deploy_staging
           context: [ deployment-staging-wcivf ]
+          filters: { branches: { only: [ main, master, staging ] } }

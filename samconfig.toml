@@ -10,3 +10,14 @@ confirm_changeset = false
 fail_on_empty_changeset = false
 capabilities = "CAPABILITY_IAM"
 force_upload = true
+
+[staging]
+[staging.deploy]
+[staging.deploy.parameters]
+stack_name = "WCIVFApp"
+s3_bucket = "wcivf-deployment-artifacts-tpssjdsa"
+region = "eu-west-2"
+confirm_changeset = false
+fail_on_empty_changeset = false
+capabilities = "CAPABILITY_IAM"
+force_upload = true
