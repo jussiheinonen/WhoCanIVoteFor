@@ -12,6 +12,7 @@ from elections.tests.factories import (
 )
 from people.tests.factories import PersonFactory, PersonPostFactory
 from pytest_django.asserts import assertContains, assertNotContains
+from elections.views import PostView
 
 
 @override_settings(
@@ -279,3 +280,23 @@ class TestPostViewNextElection:
         response = client.get(past.get_absolute_url(), follow=True)
         assertContains(response, "<h3>Next election</h3>")
         assertContains(response, "<strong>being held today</strong>.")
+
+
+class TestPostViewTemplateName:
+    @pytest.fixture
+    def view_obj(self, rf):
+        request = rf.get("/elections/ref.foo.2021-09-01/bar/")
+        view = PostView()
+        view.setup(request=request)
+        return view
+
+    @pytest.mark.parametrize(
+        "boolean,template",
+        [
+            (True, "referendums/detail.html"),
+            (False, "elections/post_view.html"),
+        ],
+    )
+    def test_get_template_names(self, boolean, template, view_obj, mocker):
+        view_obj.object = mocker.Mock(is_referendum=boolean)
+        assert view_obj.get_template_names() == [template]

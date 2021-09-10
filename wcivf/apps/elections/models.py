@@ -411,6 +411,13 @@ class PostElection(models.Model):
         return self.ballot_paper_id.startswith(("gla.r", "senedd.r", "sp.r"))
 
     @property
+    def is_referendum(self):
+        """
+        Return a boolean for if this is a Referendum ballot
+        """
+        return self.ballot_paper_id.startswith("ref.")
+
+    @property
     def friendly_name(self):
         """
         Helper property used in templates to build a 'friendly' name using

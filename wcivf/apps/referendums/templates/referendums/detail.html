@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% load humanize %}
+
+{% block page_title %}{% include "elections/includes/_post_meta_title.html" %}{% endblock page_title %}
+{% block page_description %}{% include "elections/includes/_post_meta_description.html" %}{% endblock page_description %}
+{% block og_title %}{% include "elections/includes/_post_meta_title.html" %}{% endblock og_title %}
+{% block og_description %}{% include "elections/includes/_post_meta_description.html" %}{% endblock og_description %}
+
+{% block content %}
+    {% include "elections/includes/_post_breadcrumbs.html" %}
+
+    <div class="ds-stack-smaller">
+        {% include "referendums/includes/_card.html" with referendum=object.referendum %}
+
+        {% include "elections/includes/_postcode_search_form.html" %}
+
+        {% include "feedback/feedback_form.html" %}
+    </div>
+
+{% endblock content %}

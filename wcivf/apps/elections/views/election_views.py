@@ -79,8 +79,15 @@ class RedirectPostView(RedirectView):
 
 
 class PostView(NewSlugsRedirectMixin, PostelectionsToPeopleMixin, DetailView):
-    template_name = "elections/post_view.html"
     model = apps.get_model("elections.PostElection")
+
+    def get_template_names(self):
+        """
+        Checks if the object is a Referendum
+        """
+        if self.object.is_referendum:
+            return ["referendums/detail.html"]
+        return ["elections/post_view.html"]
 
     def get_object(self, queryset=None):
         if queryset is None:

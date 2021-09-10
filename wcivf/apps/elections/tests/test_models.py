@@ -244,6 +244,13 @@ class TestPostElectionModel:
         post = PostElectionFactory.build(ballot_paper_id=org_type)
         assert post.is_pcc == expected
 
+    @pytest.mark.parametrize(
+        "org_type,expected", [("ref.ballot", True), ("not.ref", False)]
+    )
+    def test_is_referendum(self, org_type, expected):
+        post = PostElectionFactory.build(ballot_paper_id=org_type)
+        assert post.is_referendum == expected
+
     @pytest.mark.django_db
     @pytest.mark.freeze_time("2021-5-1")
     def test_next_ballot(self):
