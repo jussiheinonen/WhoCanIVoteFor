@@ -19,7 +19,11 @@
         {% regroup postelections by election.election_date as elections_by_date %}
         {% for election_group in elections_by_date %}
             {% for postelection in election_group.list %}
-                {% include "elections/includes/_single_ballot.html" %}
+                {% if postelection.referendum %}
+                    {% include "referendums/includes/_card.html" with referendum=postelection.referendum %}
+                {% else %}
+                    {% include "elections/includes/_single_ballot.html" %}
+                {% endif %}
             {% endfor %}
         {% endfor %}
 
