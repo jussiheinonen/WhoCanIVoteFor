@@ -1,5 +1,5 @@
 from referendums.models import Referendum
-from elections.models import Election, PostElection
+from elections.models import Election, PostElection, Post
 from django.core.management.base import BaseCommand
 
 
@@ -8,8 +8,8 @@ class Command(BaseCommand):
     Creates an Election, PostElection and Referendum object
     Example usage:
     python manage.py add_referendum -e ref.croydon.2021-10-07 \
-        -p gss:E14000654 \
         -n 'Croydon Governance Referendum' \
+        -p CRY:REF2021 # this should be a new ID \
         -q 'How would you like the London Borough of Croydon to be run?' \
         -a1 'By a leader who is an elected councillor chosen by a vote of the other elected councillors. This is how the council is run now.' \
         -a2 'By a mayor who is elected by voters. This would be a change from how the council is run now.' \
@@ -100,16 +100,25 @@ class Command(BaseCommand):
         )
         self.stdout.write(f"{'Created' if created else 'Updated'} {election}")
 
+        council_name = election_id.split(".")[1].title()
+
+        post, created = Post.objects.update_or_create(
+            ynr_id=options["post_id"],
+            defaults={
+                "label": council_name,
+            },
+        )
+        self.stdout.write(f"{'Created' if created else 'Updated'} {post}")
+
         ballot, created = PostElection.objects.update_or_create(
             ballot_paper_id=election_id,
             defaults={
-                "post_id": options["post_id"],
+                "post": post,
                 "election": election,
             },
         )
         self.stdout.write(f"{'Created' if created else 'Updated'} {ballot}")
 
-        council_name = election_id.split(".")[1].title()
         referendum, created = Referendum.objects.update_or_create(
             ballot=ballot,
             defaults={
