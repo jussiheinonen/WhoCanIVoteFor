@@ -13,3 +13,4 @@ DATABASES = {
         "PORT": os.environ.get("RDS_DB_PORT", "5432"),
     }
 }
+EE_BASE = "https://elections.democracyclub.org.uk"
