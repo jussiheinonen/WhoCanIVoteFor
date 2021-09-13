@@ -5,9 +5,17 @@ from django.utils import timezone
 
 class Referendum(models.Model):
 
+    # TODO remove this as part of a wider refactor of referendums if
+    # these changes are kept
     ballots = models.ManyToManyField(
         to="elections.PostElection",
         related_name="referendums",
+    )
+    ballot = models.OneToOneField(
+        to="elections.PostElection",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
     )
     question = models.CharField(max_length=255)
     council_name = models.CharField(max_length=255)
