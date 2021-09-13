@@ -36,6 +36,10 @@ Parameters:
     Description: "The django SECRET_KEY environment variable passed to the app."
     Type: String
 
+  AppDcEnvironment:
+    Description: "The DC_ENVIRONMENT environment variable passed to the app."
+    Type: String
+
   VpcIdParameter:
     Description: "VPC ID"
     Type: String
@@ -61,6 +65,7 @@ Resources:
           RDS_DB_PASSWORD: !Ref AppRdsDbPassword
           SENTRY_DSN: !Ref AppSentryDsn
           SECRET_KEY: !Ref AppSecretKey
+          DC_ENVIRONMENT: !Ref AppDcEnvironment
       Events:
         ImportPeople:
           Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule

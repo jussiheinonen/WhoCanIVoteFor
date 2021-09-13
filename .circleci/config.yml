@@ -123,6 +123,7 @@ jobs:
                    AppRdsDbPassword='$RDS_DB_PASSWORD' \
                    AppSentryDsn='$SENTRY_DSN' \
                    AppSecretKey='$SECRET_KEY' \
+                   AppDcEnvironment='$DC_ENVIRONMENT' \
                    VpcIdParameter='$VPC_ID' \
                    SSLCertificateArn='$SSL_CERTIFICATE_ARN'
                   "
