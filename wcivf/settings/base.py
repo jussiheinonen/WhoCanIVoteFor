@@ -240,7 +240,7 @@ if os.environ.get("DC_ENVIRONMENT"):
         dsn=os.environ.get("SENTRY_DSN"),
         integrations=[
             django.DjangoIntegration(),
-            aws_lambda.AwsLambdaIntegration(),
+            aws_lambda.AwsLambdaIntegration(timeout_warning=True),
         ],
         environment=os.environ.get("DC_ENVIRONMENT"),
     )
