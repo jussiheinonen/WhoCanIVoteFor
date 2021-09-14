@@ -52,3 +52,10 @@ class Referendum(models.Model):
         Return boolean for whether it is election day
         """
         return self.date == timezone.now().date()
+
+    @property
+    def in_past(self):
+        """
+        Return boolean for whether it is election day
+        """
+        return self.date < timezone.now().date()
