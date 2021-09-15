@@ -48,7 +48,7 @@ def check_deployment(deployment_id):
         print("SUCCESS")
         exit(0)
 
-    if deployment["status"] == "Failed":
+    if deployment["status"] in ["Failed", "Stopped"]:
         print("FAIL")
         # delete the ASG that was created during the failed deployment
         delete_asg(
