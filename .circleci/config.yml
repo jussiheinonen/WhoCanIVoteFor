@@ -195,7 +195,7 @@ workflows:
           dc-environment: development
           vpc-id: vpc-fa2e0792
           ssl-certificate-arn: arn:aws:acm:eu-west-2:061126312678:certificate/3ac6d121-aed6-48a7-af80-6a021e05167c
-          instance-type: t3.micro
+          instance-type: t3.small
           requires:
           - build_and_test
           - sam_build
@@ -219,7 +219,7 @@ workflows:
           dc-environment: staging
           vpc-id: vpc-69cef901
           ssl-certificate-arn: arn:aws:acm:eu-west-2:897471774344:certificate/a448e49a-5f47-41a3-a3d8-b6cc88781235
-          instance-type: t3.micro
+          instance-type: t3.small
           requires:
           - build_and_test
           # NB should this be dependent on successful sam_deploy_development job?
