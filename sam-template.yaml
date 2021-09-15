@@ -48,6 +48,10 @@ Parameters:
     Description: "SSL Certificate ARN"
     Type: String
 
+  InstanceType:
+    Description: "The instance type to be used"
+    Type: String
+
 Resources:
   WCIVFControllerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -193,7 +197,7 @@ Resources:
         IamInstanceProfile: 
           Name: 'CodeDeploy-EC2-Instance-Profile'
         ImageId: 'ami-0ace230d897ee8dee' # AMI number
-        InstanceType: 't3.large'
+        InstanceType: !Ref InstanceType
         UserData: |
           I2Nsb3VkLWNvbmZpZwp1c2VyczoKICAtIG5hbWU6IGFzaAogICAgc3VkbzogQUxMPShBTEwpIE5P
           UEFTU1dEOkFMTAogICAgc2hlbGw6IC9iaW4vYmFzaAogICAgc3NoLWF1dGhvcml6ZWQta2V5czoK

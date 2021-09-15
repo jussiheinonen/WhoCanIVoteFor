@@ -91,6 +91,8 @@ jobs:
         type: string
       ssl-certificate-arn:
         type: string
+      instance-type:
+        type: string
     environment:
       DC_ENVIRONMENT: <<parameters.dc-environment>>
       VPC_ID: <<parameters.vpc-id>>
@@ -102,6 +104,7 @@ jobs:
           - v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
       - attach_workspace:
           at: ~/repo/
+      - run: echo <<parameters.instance-type>>
       - run:
           name: install sam-cli
           command: |
@@ -125,7 +128,8 @@ jobs:
                    AppSecretKey='$SECRET_KEY' \
                    AppDcEnvironment='$DC_ENVIRONMENT' \
                    VpcIdParameter='$VPC_ID' \
-                   SSLCertificateArn='$SSL_CERTIFICATE_ARN'
+                   SSLCertificateArn='$SSL_CERTIFICATE_ARN' \
+                   InstanceType='<<parameters.instance-type>>'
                   "
       - run:
           name: post deploy tests
@@ -142,6 +146,13 @@ jobs:
     docker:
       - image: circleci/python:3.6-jessie-node
     working_directory: ~/repo
+    parameters:
+      min-size:
+        type: integer
+      max-size:
+        type: integer
+      desired-capacity:
+        type: integer
     steps:
       - checkout
       - restore_cache:
@@ -149,6 +160,9 @@ jobs:
           - v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
       - attach_workspace:
           at: ~/repo/
+      - run: echo <<parameters.min-size>>
+      - run: echo <<parameters.max-size>>
+      - run: echo <<parameters.desired-capacity>>
       - run:
           name: ensure the deployment group ready
           command: |
@@ -163,9 +177,9 @@ jobs:
           name: Update auto scaling group
           command: |
             . .venv/bin/activate
-            MIN_SIZE=1 \
-            MAX_SIZE=1 \
-            DESIRED_CAPACITY=1 \
+            MIN_SIZE=<<parameters.min-size>> \
+            MAX_SIZE=<<parameters.max-size>> \
+            DESIRED_CAPACITY=<<parameters.desired-capacity>> \
             python deployscripts/update_auto_scaling_group.py
           no_output_timeout: 15m # TODO reduce/discuss what is suitable?
 
@@ -183,6 +197,7 @@ workflows:
           dc-environment: development
           vpc-id: vpc-fa2e0792
           ssl-certificate-arn: arn:aws:acm:eu-west-2:061126312678:certificate/3ac6d121-aed6-48a7-af80-6a021e05167c
+          instance-type: t3.micro
           requires:
           - build_and_test
           - sam_build
@@ -191,6 +206,9 @@ workflows:
 
       - code_deploy:
           name: code_deploy_development
+          min-size: 1
+          max-size: 1
+          desired-capacity: 1
           requires:
           - build_and_test
           - sam_build
@@ -203,6 +221,7 @@ workflows:
           dc-environment: staging
           vpc-id: vpc-69cef901
           ssl-certificate-arn: arn:aws:acm:eu-west-2:897471774344:certificate/a448e49a-5f47-41a3-a3d8-b6cc88781235
+          instance-type: t3.micro
           requires:
           - build_and_test
           # NB should this be dependent on successful sam_deploy_development job?
@@ -212,6 +231,9 @@ workflows:
 
       - code_deploy:
           name: code_deploy_staging
+          min-size: 1
+          max-size: 1
+          desired-capacity: 1
           requires:
           - build_and_test
           - sam_deploy_staging
