@@ -95,8 +95,6 @@ jobs:
         type: string
     environment:
       DC_ENVIRONMENT: <<parameters.dc-environment>>
-      VPC_ID: <<parameters.vpc-id>>
-      SSL_CERTIFICATE_ARN: <<parameters.ssl-certificate-arn>>
     steps:
       - checkout
       - restore_cache:
@@ -127,8 +125,8 @@ jobs:
                    AppSentryDsn='$SENTRY_DSN' \
                    AppSecretKey='$SECRET_KEY' \
                    AppDcEnvironment='$DC_ENVIRONMENT' \
-                   VpcIdParameter='$VPC_ID' \
-                   SSLCertificateArn='$SSL_CERTIFICATE_ARN' \
+                   VpcIdParameter=<<parameters.vpc-id>> \
+                   SSLCertificateArn=<<parameters.ssl-certificate-arn>> \
                    InstanceType='<<parameters.instance-type>>'
                   "
       - run:
