@@ -5,15 +5,16 @@ from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     help = """
-    Creates an Election, PostElection and Referendum object
+    Creates an Election, PostElection and Referendum object.
+    NB: generally Post ID will be a new ID.
     Example usage:
     python manage.py add_referendum -e ref.croydon.2021-10-07 \
         -n 'Croydon Governance Referendum' \
-        -p CRY:REF2021 # this should be a new ID \
+        -p CRY:REF2021 \
         -q 'How would you like the London Borough of Croydon to be run?' \
         -a1 'By a leader who is an elected councillor chosen by a vote of the other elected councillors. This is how the council is run now.' \
         -a2 'By a mayor who is elected by voters. This would be a change from how the council is run now.' \
-        g'
+        -url 'https://www.croydon.gov.uk/council-and-elections/voting-and-elections/governance-referendum-7-october-2021'
     """
 
     def add_arguments(self, parser):
