@@ -237,3 +237,29 @@ workflows:
           - sam_deploy_staging
           context: [ deployment-staging-wcivf ]
           filters: { branches: { only: [ main, master, staging ] } }
+
+      - sam_deploy:
+          name: sam_deploy_production
+          dc-environment: production
+          vpc-id: vpc-0d23d243e8bff4415
+          ssl-certificate-arn: arn:aws:acm:eu-west-2:705594574410:certificate/4cee2a82-405a-42bd-b14a-4ea6bc63e36c
+          instance-type: t3.small
+          requires:
+          - build_and_test
+          # NB should this be dependent on successful sam_deploy_development job?
+          - sam_build
+          - code_deploy_staging
+          context: [ deployment-production-wcivf ]
+          filters: { branches: { only: [ main, master ] } }
+
+      - code_deploy:
+          name: code_deploy_production
+          min-size: 1
+          max-size: 1
+          desired-capacity: 1
+          requires:
+          - build_and_test
+          - sam_deploy_staging
+          - sam_deploy_production
+          context: [ deployment-production-wcivf ]
+          filters: { branches: { only: [ main, master ] } }
