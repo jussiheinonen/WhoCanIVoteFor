@@ -1,0 +1,232 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  aws-lambda
+
+  WCIVF Template for aws-lambda
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 900
+
+Parameters:
+
+  AppDjangoSettingsModule:
+    Description: "The DJANGO_SETTINGS_MODULE environment variable passed to the app."
+    Type: String
+
+  AppRdsHost:
+    Description: "The RDS_HOST environment variable passed to the app."
+    Type: String
+
+  AppRdsDbName:
+    Description: "The RDS_DB_NAME environment variable passed to the app."
+    Type: String
+
+  AppRdsDbPassword:
+    Description: "The DB_PASSWORD environment variable passed to the app."
+    Type: String
+
+  AppSentryDsn:
+    Description: "The SENTRY_DSN environment variable passed to the app."
+    Type: String
+
+  AppSecretKey:
+    Description: "The django SECRET_KEY environment variable passed to the app."
+    Type: String
+
+  AppDcEnvironment:
+    Description: "The DC_ENVIRONMENT environment variable passed to the app."
+    Type: String
+
+  VpcIdParameter:
+    Description: "VPC ID"
+    Type: String
+
+  SSLCertificateArn:
+    Description: "SSL Certificate ARN"
+    Type: String
+
+  InstanceType:
+    Description: "The instance type to be used"
+    Type: String
+
+Resources:
+  WCIVFControllerFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: WCIVFControllerFunction
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/WCIVFLambdaExecutionRole"
+      CodeUri: .
+      Handler: wcivf.lambda_handler.handler
+      Runtime: python3.6
+      Environment:
+        Variables:
+          DJANGO_SETTINGS_MODULE: !Ref AppDjangoSettingsModule
+          RDS_HOST: !Ref AppRdsHost
+          RDS_DB_NAME: !Ref AppRdsDbName
+          RDS_DB_PASSWORD: !Ref AppRdsDbPassword
+          SENTRY_DSN: !Ref AppSentryDsn
+          SECRET_KEY: !Ref AppSecretKey
+          DC_ENVIRONMENT: !Ref AppDcEnvironment
+      Events:
+        ImportPeople:
+          Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
+          Properties:
+            Schedule: rate(5 minutes)
+            Name: import-recent-people
+            Description: Update people from the last 5 minutes
+            Input: '{"command": "import_people", "args": ["--recent"]}'
+        ImportBallotsCurrent:
+          Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
+          Properties:
+            Schedule: rate(5 minutes)
+            Name: import-current-ballots
+            Description: Update all ballots marked as current
+            Input: '{"command": "import_ballots", "args": ["--current"]}'
+        ImportBallotsFull:
+          Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
+          Properties:
+            Schedule: rate(1 day)
+            Name: import-ballots
+            Description: Run a full import of ballots
+            Input: '{"command": "import_ballots"}'
+        ImportParties:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 day)
+            Name: import-parties
+            Description: Import parties
+            Input: '{"command": "import_parties"}'
+        ImportVotesCast:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 day)
+            Name: import-votes-cast
+            Description: Import votes cast from given date
+            Input: '{"command": "import_votes_cast", "args": ["--since=2021-05-05"]}'
+        ImportReferendums:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 day)
+            Name: import-referendums
+            Description: Update Referendums from google sheet
+            Input: '{"command": "import_referendums"}'
+
+  WCIVFCodeDeployApp:
+    Type: AWS::CodeDeploy::Application
+    Properties:
+      ApplicationName: WCIVFCodeDeploy
+      ComputePlatform: Server
+
+  ElbHTTPSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'HTTP traffic'
+      GroupName: 'Elb Security Group'
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+        - CidrIp: 0.0.0.0/0
+          FromPort: 443
+          IpProtocol: tcp
+          ToPort: 443
+      VpcId: !Ref VpcIdParameter
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'Allow access for SSH and HTTP from the ELB'
+      GroupName: 'InstanceSecurityGroup'
+      SecurityGroupIngress:
+        - FromPort: 80
+          IpProtocol: tcp
+          SourceSecurityGroupId: !Ref ElbHTTPSecurityGroup
+          ToPort: 80
+  ElasticLoadBalancer:
+    Type: AWS::ElasticLoadBalancing::LoadBalancer
+    Properties:
+      AvailabilityZones:
+        - 'eu-west-2a'
+        - 'eu-west-2b'
+        - 'eu-west-2c'
+      ConnectionDrainingPolicy:
+        Enabled: 'true'
+        Timeout: 20
+      CrossZone: 'true'
+      LoadBalancerName: wcivf-elb
+      Listeners:
+        - InstancePort: '80'
+          InstanceProtocol: HTTP
+          LoadBalancerPort: '80'
+          Protocol: HTTP
+        - InstancePort: '80'
+          InstanceProtocol: HTTP
+          LoadBalancerPort: '443'
+          Protocol: HTTPS
+          SSLCertificateId: !Ref SSLCertificateArn
+      HealthCheck:
+        Target: HTTP:80/_status_check/
+        HealthyThreshold: '2'
+        UnhealthyThreshold: '5'
+        Interval: '30'
+        Timeout: '2'
+      SecurityGroups:
+        - !Ref ElbHTTPSecurityGroup
+
+  WCIVFLaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateName: wcivf
+      LaunchTemplateData:
+        BlockDeviceMappings:
+          - DeviceName: /dev/sda1
+            Ebs:
+              VolumeSize: 35
+              VolumeType: gp2
+              DeleteOnTermination: true
+        NetworkInterfaces:
+          - DeviceIndex: 0
+            AssociatePublicIpAddress: true
+            Groups:
+              - !Ref ElbHTTPSecurityGroup
+        # This is needed as it has permissions needed for the instance
+        # TODO create new role without packer permissions
+        IamInstanceProfile: 
+          Name: 'CodeDeploy-EC2-Instance-Profile'
+        ImageId: 'ami-0ace230d897ee8dee' # AMI number
+        InstanceType: !Ref InstanceType
+        UserData: |
+          I2Nsb3VkLWNvbmZpZwp1c2VyczoKICAtIG5hbWU6IGFzaAogICAgc3VkbzogQUxMPShBTEwpIE5P
+          UEFTU1dEOkFMTAogICAgc2hlbGw6IC9iaW4vYmFzaAogICAgc3NoLWF1dGhvcml6ZWQta2V5czoK
+          ICAgICAgLSAic3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSUdXL25hUk1zSUEy
+          RWxwQW5TSHhUeXZvMFBlc2tjbWt0Y0wwVTFzMkNSa0ogYXNoQGRlbW9jbHViLWp1bmUyMDE2Igog
+          IC0gbmFtZTogc3ltCiAgICBzdWRvOiBBTEw9KEFMTCkgTk9QQVNTV0Q6QUxMCiAgICBzaGVsbDog
+          L2Jpbi9iYXNoCiAgICBzc2gtYXV0aG9yaXplZC1rZXlzOgogICAgICAtICJzc2gtcnNhIEFBQUFC
+          M056YUMxeWMyRUFBQUFEQVFBQkFBQUJBUUM4QkxNOUxKVkFkR0ZRWVVlTXZaNTZMbDNzV1VvUHAz
+          cCsxenZJYXFnNzN0bjQ3MGZUZ2lRNk1PUy9jS2piWnFjTjI0MkgxSWgrb1VEQWtiTWt5MmtzLzlI
+          YXhBZ3hIc1lvUkJjU21lYWZxNngwSkxob203Mmo1TEMyekNoTWV5R0xwdC82T2ZhY1BQTDhQZFpz
+          VzlWL3NDelNRVUQ3QUljKy9iZ3FwVEluL1hmcFRUTU5VWmk4cWtvRE1yNTNUZ1pocTcwcDVaWnAy
+          ejBJVVNna1o1TEVMeGxPa2hUUndBNlNoWWQxRVdGc3ZMZGR6ZTJ2UVVDWmZTV2VjVm9WZWpCUko2
+          amFPVGVjUDg2NlhTY2lRdTZwb2FiMGJyRkNtM2swMzc3VU1salhZV0NxczY1M3hnSzF4eXJPMmV6
+          aGljeUt4c3poNzdxZklyVE1RZEdMK3dZeiBzeW1yb2VAU3ltcy1NYWNCb29rLVByby5sb2NhbCIK
+          ICAtIG5hbWU6IGNocmlzCiAgICBzdWRvOiBBTEw9KEFMTCkgTk9QQVNTV0Q6QUxMCiAgICBzaGVs
+          bDogL2Jpbi9iYXNoCiAgICBzc2gtYXV0aG9yaXplZC1rZXlzOgogICAgICAtICJzc2gtcnNhIEFB
+          QUFCM056YUMxeWMyRUFBQUFEQVFBQkFBQUJBUURQNzAwVmpiblRJd1JuT2VtdGNKSkdQcjBQZ3E4
+          Z093aFI0U1ZCUi81MFJWR2RkWDdKdzlYcVc4d01ObUk5M3haUFY1WVI1SmZNbG52YU1mQWdIRDF6
+          ZFNCUHMxbGJ4OE1aYWhiVmdCUVRpckxhSG9yamdselVYVEJ6TG5ub3BDOERWdDRJd0Z1aDN2Ujcx
+          K3JWbjN2dW04L2ZKQUk3SVNkQmRrY0R4SGt2NHpJYTNJK3NRMjJZbWZsbnpwSkEvbDFBN1dKWVRR
+          VWpMaURFbGlqV0hId01Rdjg2U0JweHNITjN1M25FeWF5bHJJTkRJM0w0RlRUbkJXWCtmRi9IeGFv
+          Ym45OHhpQ2FzOEhvOEVjbXZ5L1piUCtHUzdmSmVLWm1RQ20wUk9TQ0oxTGRBQXlkcHJBZll3TUc4
+          dlBudXQzZk83LzhNeHlUMFBiWWlpRzRJOXo3UCBjaHJpc0BsZW9uYXJkIgogIC0gbmFtZTogbWlj
+          aGFlbAogICAgc3VkbzogQUxMPShBTEwpIE5PUEFTU1dEOkFMTAogICAgc2hlbGw6IC9iaW4vYmFz
+          aAogICAgc3NoLWF1dGhvcml6ZWQta2V5czoKICAgICAgLSAic3NoLWVkMjU1MTkgQUFBQUMzTnph
+          QzFsWkRJMU5URTVBQUFBSUxHenpBM1hIK1JNcUVlOGpEbnovVHZmRGRpY2QxdDJvQmVSUDBDQWV1
+          Q1kgbWljaGFlbEBtYWNib29rcHJvMjAyMSIK
+
+Outputs:
+  WCIVFControllerFunctionArn:
+    Description: "WCIVF Controller Lambda Function ARN"
+    Value: !GetAtt WCIVFControllerFunction.Arn

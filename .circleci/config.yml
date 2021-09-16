@@ -2,9 +2,9 @@
 #
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
-version: 2
+version: 2.1
 jobs:
-  build:
+  build_and_test:
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
@@ -17,22 +17,13 @@ jobs:
           POSTGRES_USER: wcivf
           POSTGRES_DB: wcivf
       - image: circleci/redis:3.2.12-alpine
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-
     working_directory: ~/repo
-
     steps:
       - checkout
-
       # Download and cache dependencies
       - restore_cache:
           keys:
           - v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
-
-
       - run:
           name: install Tox
           command: |
@@ -44,15 +35,15 @@ jobs:
           command: |
             python3 -m venv .venv
             . .venv/bin/activate
+            pip install --upgrade pip
             pip install -r requirements.txt
             tox --notest --workdir /home/circleci/repo/.tox/
-
       - save_cache:
           paths:
             - ./.venv
             - /home/circleci/repo/.tox/
-          key: v2-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
-      
+          key: v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
+
       - run:
           name: Install HTML Tidy
           command: wget https://github.com/htacg/tidy-html5/releases/download/5.8.0/tidy-5.8.0-Linux-64bit.deb && sudo dpkg -i tidy-5.8.0-Linux-64bit.deb
@@ -61,17 +52,188 @@ jobs:
       - run:
           name: run tests
           command: |
+            python3 -m venv .venv
             . .venv/bin/activate
             tox --workdir /home/circleci/repo/.tox/
-      # Coverage
       - run:
           name: Update Coveralls
           command: |
             . .venv/bin/activate
             coveralls
-
-
       - store_artifacts:
           path: test-reports
           destination: test-reports
 
+  sam_build:
+    docker:
+      - image: amazon/aws-sam-cli-build-image-python3.6:latest
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - run:
+          name: sam build
+          command: |
+            pip install --upgrade pip aws-sam-cli
+            make build clean
+      - persist_to_workspace:
+          root: ~/repo/
+          paths: [ .aws-sam/build/ ]
+
+  sam_deploy:
+    docker:
+      - image: circleci/python:3.6-jessie-node
+    working_directory: ~/repo
+    parameters:
+      dc-environment:
+        type: enum
+        enum: [ development, staging, production ]
+      vpc-id:
+        type: string
+      ssl-certificate-arn:
+        type: string
+      instance-type:
+        type: string
+    environment:
+      DC_ENVIRONMENT: <<parameters.dc-environment>>
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
+      - attach_workspace:
+          at: ~/repo/
+      - run: echo <<parameters.instance-type>>
+      - run:
+          name: install sam-cli
+          command: |
+            python3 -m venv .venv
+            . .venv/bin/activate
+      - run:
+          name: deploy
+          command: |
+            . .venv/bin/activate
+            sam deploy \
+                --no-confirm-changeset \
+                --config-file ~/repo/samconfig.toml \
+                --config-env $DC_ENVIRONMENT \
+                --template-file ~/repo/.aws-sam/build/template.yaml \
+                --parameter-overrides " \
+                   AppDjangoSettingsModule=wcivf.settings.lambda \
+                   AppRdsHost='$RDS_HOST' \
+                   AppRdsDbName='$RDS_DB_NAME' \
+                   AppRdsDbPassword='$RDS_DB_PASSWORD' \
+                   AppSentryDsn='$SENTRY_DSN' \
+                   AppSecretKey='$SECRET_KEY' \
+                   AppDcEnvironment='$DC_ENVIRONMENT' \
+                   VpcIdParameter=<<parameters.vpc-id>> \
+                   SSLCertificateArn=<<parameters.ssl-certificate-arn>> \
+                   InstanceType='<<parameters.instance-type>>'
+                  "
+      - run:
+          name: post deploy tests
+          command: |
+            . .venv/bin/activate
+            pytest ~/repo/.circleci/
+      - run:
+          name: migrate the database
+          command: |
+            . .venv/bin/activate
+            make lambda-migrate
+
+  code_deploy:
+    docker:
+      - image: circleci/python:3.6-jessie-node
+    working_directory: ~/repo
+    parameters:
+      min-size:
+        type: integer
+      max-size:
+        type: integer
+      desired-capacity:
+        type: integer
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
+      - attach_workspace:
+          at: ~/repo/
+      - run: echo <<parameters.min-size>>
+      - run: echo <<parameters.max-size>>
+      - run: echo <<parameters.desired-capacity>>
+      - run:
+          name: ensure the deployment group ready
+          command: |
+            . .venv/bin/activate
+            python deployscripts/create_deployment_group.py
+      - run:
+          name: create deployment with codedeploy
+          command: |
+            . .venv/bin/activate
+            COMMIT_SHA=$CIRCLE_SHA1 python deployscripts/create_deployment.py
+      - run:
+          name: Update auto scaling group
+          command: |
+            . .venv/bin/activate
+            MIN_SIZE=<<parameters.min-size>> \
+            MAX_SIZE=<<parameters.max-size>> \
+            DESIRED_CAPACITY=<<parameters.desired-capacity>> \
+            python deployscripts/update_auto_scaling_group.py
+          no_output_timeout: 15m # TODO reduce/discuss what is suitable?
+
+
+workflows:
+  main:
+    jobs:
+      - build_and_test
+      - sam_build:
+          requires:
+          - build_and_test
+
+      - sam_deploy:
+          name: sam_deploy_development
+          dc-environment: development
+          vpc-id: vpc-fa2e0792
+          ssl-certificate-arn: arn:aws:acm:eu-west-2:061126312678:certificate/3ac6d121-aed6-48a7-af80-6a021e05167c
+          instance-type: t3.small
+          requires:
+          - build_and_test
+          - sam_build
+          context: [ deployment-development-wcivf ]
+          filters: { branches: { only: [ main, master, staging ] } }
+
+      - code_deploy:
+          name: code_deploy_development
+          min-size: 1
+          max-size: 1
+          desired-capacity: 1
+          requires:
+          - build_and_test
+          - sam_build
+          - sam_deploy_development
+          context: [ deployment-development-wcivf ]
+          filters: { branches: { only: [ main, master, staging ] } }
+
+      - sam_deploy:
+          name: sam_deploy_staging
+          dc-environment: staging
+          vpc-id: vpc-69cef901
+          ssl-certificate-arn: arn:aws:acm:eu-west-2:897471774344:certificate/a448e49a-5f47-41a3-a3d8-b6cc88781235
+          instance-type: t3.small
+          requires:
+          - build_and_test
+          # NB should this be dependent on successful sam_deploy_development job?
+          - sam_build
+          context: [ deployment-staging-wcivf ]
+          filters: { branches: { only: [ main, master, staging ] } }
+
+      - code_deploy:
+          name: code_deploy_staging
+          min-size: 1
+          max-size: 1
+          desired-capacity: 1
+          requires:
+          - build_and_test
+          - sam_deploy_staging
+          context: [ deployment-staging-wcivf ]
+          filters: { branches: { only: [ main, master, staging ] } }

@@ -24,6 +24,7 @@ var/
 .installed.cfg
 *.egg
 .vscode/
+.aws-sam
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -74,3 +75,4 @@ wcivf/static_root/
 wcivf/media/
 *.DS_Store
 wcivf/static/
+.env

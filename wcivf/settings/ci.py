@@ -17,3 +17,7 @@ DATABASES = {
         "PORT": "",
     }
 }
+
+SECRET_KEY = "just_for_ci"
+
+EE_BASE = "https://elections.democracyclub.org.uk"
