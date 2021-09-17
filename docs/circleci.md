@@ -21,11 +21,12 @@ You will need to set a number of variables in the context so that these are used
 
 - `AWS_ACCESS_KEY_ID` - this the access key for the CircleCI user
 - `AWS_SECRET_ACCESS_KEY` - the secret accrss key of the CircleCI user
+- `AWS_DEFAULT_REGION` - this should generally be 'eu-west-2'
 - `RDS_DB_NAME` - the name of the database your lambda function will connect to
 - `RDS_DB_PASSWORD` - the password for the database your lambda function will connect to
 - `RDS_HOST` - the rds endpoint value
 - `SECRET_KEY` - a long random string. [A handy way of using Django to generate one can be found in this blog post](https://humberto.io/blog/tldr-generate-django-secret-key/).
-
+- `SENTRY_DSN` - from the project in Sentry
 
 ## In the WCIVF codebase
 
@@ -43,7 +44,20 @@ Copy one of the existing environment configurations, changing them slightly to u
 
 NB the `s3_bucket` setting is *per-AWS account*, so you should make sure it matches the name of the already-created (as per the [AWS account setup document](docs/s3.md#)) deployment-assets bucket in the AWS account.
 
-Commit and push all the changes you've made, and CI should deploy your new enviroment. 
+### AMI access
+
+One final step to check before attempting to deploy is that the account you are deploying to (development/staging/production) has access to the AMI image that is specified as the `ImageId` for the `WCIVFLaunchTemplate` in `sam-template.yml`. To check this, in the account that the image was build, go to the AWS Console:
+
+- Got to EC2
+- Under 'Images' select 'AMIs'
+- Select the image with the corresponding AMI ID, click the 'Actions' button, and select 'Modify Image Permissions'
+- Check that the AWS account ID that you are deploying to is listed. If it is missing, enter the ID and click 'Add Permission'
+
+### Create the deployment
+
+Deployments are triggered by CircleCI. Have a look at the `.circleci/config.yml` for further details about jobs and workflows, as well as which circumstances a deployment is triggered under the `requires` and `filters` section of a job under the workflows section. 
+
+When you are ready to start a deployment, commit and push all the changes you've made. Create a pull request and merge when changes have been reviewed and you are happy with them. Assuming the conditions for a deploy workflow have been met, CI will deploy your new enviroment. 
 
 NB If this is the first time deployment to a new environment, it is likely that the workflow will fail on the first attempt at the code deploy step. If this occurs, you can go to CodeDeploy in the AWS Console to view the errors. It is very likely will be "The deployment failed because no instances were found in your blue fleet." This is because as part of the initial deployment, a new "default" Auto Scaling Group is created. This will in turn provision the initial instance(s). However, before enough time has passed for the instance to complete initialisation, CodeDeploy has attempted a deployment, which fails because it expects to find some existing instances already running. If you wait a short while for the instances to be ready, then rerun this step in CircleCI it should succeed.
 
