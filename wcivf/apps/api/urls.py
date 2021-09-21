@@ -1,4 +1,4 @@
-from django.conf.urls import url, include
+from django.urls import re_path, include
 
 from rest_framework import routers
 
@@ -18,4 +18,4 @@ router.register(
 )
 
 
-urlpatterns = [url(r"^", include(router.urls))]
+urlpatterns = [re_path(r"^", include(router.urls))]
