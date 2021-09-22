@@ -158,9 +158,6 @@ jobs:
           - v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
       - attach_workspace:
           at: ~/repo/
-      - run: echo <<parameters.min-size>>
-      - run: echo <<parameters.max-size>>
-      - run: echo <<parameters.desired-capacity>>
       - run:
           name: ensure the deployment group ready
           command: |
