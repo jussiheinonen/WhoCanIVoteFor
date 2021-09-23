@@ -196,7 +196,7 @@ Resources:
         # TODO create new role without packer permissions
         IamInstanceProfile: 
           Name: 'CodeDeploy-EC2-Instance-Profile'
-        ImageId: 'ami-0c146187d9d3147b8' # AMI number
+        ImageId: 'ami-046254441c47bf3a4' # AMI number
         InstanceType: !Ref InstanceType
         UserData: |
           I2Nsb3VkLWNvbmZpZwp1c2VyczoKICAtIG5hbWU6IGFzaAogICAgc3VkbzogQUxMPShBTEwpIE5P

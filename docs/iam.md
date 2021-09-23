@@ -214,6 +214,7 @@ Create a Role with the name `CodeDeploy-EC2-Instance-Profile`. During creation:
 - Select the use-case creation shortcut for EC2
 - Attach the `CodeDeploy-EC2-Permissions` policy created earlier
 - Attach the AWS managed policy `AmazonSSMReadOnlyAccess`
+- Attach the AWS managed policy `CloudWatchAgentServerPolicy`
 
 After creation, ensure the trust relationship looks like this:
 ```
