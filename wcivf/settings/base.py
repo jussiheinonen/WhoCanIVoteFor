@@ -81,6 +81,11 @@ MIDDLEWARE = (
     "core.middleware.UTMTrackerMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 )
+# When defining a model, if no field in a model is defined with primary_key=True
+# an implicit primary key is added. The type of this implicit primary key can
+# now be controlled via the DEFAULT_AUTO_FIELD setting and AppConfig.default_auto_field
+# attribute. No more needing to override primary keys in all models.
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 ROOT_URLCONF = "wcivf.urls"
 
