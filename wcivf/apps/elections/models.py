@@ -4,7 +4,7 @@ from django.utils import timezone
 
 import pytz
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
+from django.db.models import JSONField
 from django.db import models
 from django.template.defaultfilters import pluralize
 from django.contrib.humanize.templatetags.humanize import apnumber

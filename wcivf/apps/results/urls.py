@@ -1,5 +1,7 @@
-from django.conf.urls import url
+from django.urls import re_path
 
 from .views import ResultsListView
 
-urlpatterns = [url(r"^$", ResultsListView.as_view(), name="results_list_view")]
+urlpatterns = [
+    re_path(r"^$", ResultsListView.as_view(), name="results_list_view")
+]

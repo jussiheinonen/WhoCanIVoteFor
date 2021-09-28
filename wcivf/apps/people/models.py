@@ -1,4 +1,4 @@
-from django.contrib.postgres.fields import JSONField
+from django.db.models import JSONField
 from django.urls import reverse
 from django.db import models
 from django.template.loader import render_to_string
