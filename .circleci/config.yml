@@ -37,6 +37,8 @@ jobs:
             . .venv/bin/activate
             pip install --upgrade pip
             pip install -r requirements.txt
+            python manage.py check
+            python manage.py makemigrations --check --dry-run
             tox --notest --workdir /home/circleci/repo/.tox/
       - save_cache:
           paths:
