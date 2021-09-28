@@ -31,7 +31,7 @@ class PersonPost(models.Model):
     )
     election = models.ForeignKey(Election, null=False, on_delete=models.CASCADE)
     list_position = models.IntegerField(blank=True, null=True)
-    elected = models.NullBooleanField()
+    elected = models.BooleanField(null=True)
     votes_cast = models.PositiveIntegerField(null=True)
     objects = PersonPostManager()
 
