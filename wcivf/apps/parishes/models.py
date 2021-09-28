@@ -19,7 +19,7 @@ class ParishCouncilElection(models.Model):
     )
     sopn = models.URLField(blank=True, help_text="Link to SoPN PDF")
     ward_seats = models.PositiveIntegerField(default=0)
-    is_contested = models.NullBooleanField(default=True)
+    is_contested = models.BooleanField(null=True)
 
     @property
     def in_past(self):
