@@ -47,9 +47,4 @@ class Migration(migrations.Migration):
             name="ynr_id",
             field=models.IntegerField(primary_key=True, serialize=False),
         ),
-        migrations.AlterField(
-            model_name="personpost",
-            name="person_id",
-            field=models.IntegerField(serialize=False),
-        ),
     ]
