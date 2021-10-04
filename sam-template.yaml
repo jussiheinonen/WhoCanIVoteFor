@@ -60,6 +60,7 @@ Resources:
       Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/WCIVFLambdaExecutionRole"
       CodeUri: .
       Handler: wcivf.lambda_handler.handler
+      MemorySize: 256
       Runtime: python3.6
       Environment:
         Variables:
