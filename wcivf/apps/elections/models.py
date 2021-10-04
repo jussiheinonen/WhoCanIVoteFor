@@ -13,6 +13,8 @@ from django.utils.functional import cached_property
 from django.utils.html import mark_safe
 from django.utils.text import slugify
 
+from django_extensions.db.models import TimeStampedModel
+
 from .helpers import get_election_timetable
 from .managers import ElectionManager
 
@@ -325,7 +327,7 @@ class Post(models.Model):
         return f"{self.label} {self.division_suffix}".strip()
 
 
-class PostElection(models.Model):
+class PostElection(TimeStampedModel):
     ballot_paper_id = models.CharField(blank=True, max_length=800, unique=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     election = models.ForeignKey(Election, on_delete=models.CASCADE)
@@ -346,6 +348,14 @@ class PostElection(models.Model):
     )
     wikipedia_url = models.CharField(blank=True, null=True, max_length=800)
     wikipedia_bio = models.TextField(null=True)
+    ynr_modified = models.DateTimeField(
+        blank=True,
+        null=True,
+        help_text="Timestamp of when this ballot was updated in the YNR",
+    )
+
+    class Meta:
+        get_latest_by = "ynr_modified"
 
     @property
     def expected_sopn_date(self):
