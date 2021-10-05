@@ -13,6 +13,8 @@ Now click on the 'Logical' parameter group you just created, then click 'Modify"
 
 - rds.logical: 1
 - shared_preload_libraries: pglogical
+- max_wal_size: 1028
+- max_slot_wal_keep_size: 5000
 - Click 'Continue', then 'Apply changes'
 
 Now when you craete your RDS instance, apply this parameter group to your RDS instance under the Database Options section.
@@ -48,3 +50,23 @@ Further reading about setting up logical replication:
 
 - https://aws.amazon.com/blogs/database/using-logical-replication-to-replicate-managed-amazon-rds-for-postgresql-and-amazon-aurora-to-self-managed-postgresql/
 - https://blog.searce.com/rds-postgresql-logical-replication-copy-from-aws-rds-snapshot-6983446472a9
+
+### Debugging
+
+The following queries are useful for checking replication slots on a master instance:
+
+View all replication slots:
+- `select * from pg_replication_slots;`
+
+To drop a replication slot:
+- `select pg_drop_replication_slot('slotnametodrop');`
+
+The slotname includes the EC2 instance ID so you can identify with slot relates to which instance. If a replication slot is marked as inactive then you may want to drop it.
+
+The AMI used is preconfigured to enable cloudwatch to capture logs related to database replication. Check the `cloudwatch.json` config file in the `who_deploy` repo to check the location of the logs on the server, and the log group and stream used by Cloudwatch. At the time of writing, you can view them in the AWS console at:
+
+- Cloudwatch > Log groups > /db_replication/ > logs
+
+[Pgmetrics is a useful tool for debugging an RDS instance](https://pgmetrics.io/docs/aws.html)
+
+[Blog post related to ensuring that replication slots dont use up an instances full storage space](https://www.2ndquadrant.com/en/blog/pg13-slot-size-limit/)
