@@ -170,7 +170,7 @@ class TestYNRBallotImporter:
         importer.do_import(params={"election_date": "2021-05-06"})
         importer.ee_helper.prewarm_cache.assert_not_called()
 
-        expected_url = f"{settings.YNR_BASE}/api/next/ballots/?page_size=200&election_date=2021-05-06"
+        expected_url = f"{settings.YNR_BASE}/api/next/ballots/?election_date=2021-05-06&page_size=200"
         importer.get_paginator.assert_called_once_with(expected_url)
         importer.add_ballots.assert_called_once()
         importer.run_post_ballot_import_tasks.assert_not_called()
@@ -187,7 +187,7 @@ class TestYNRBallotImporter:
         importer.ee_helper.prewarm_cache.assert_called_once_with(current=True)
 
         expected_url = (
-            f"{settings.YNR_BASE}/api/next/ballots/?page_size=200&current=True"
+            f"{settings.YNR_BASE}/api/next/ballots/?current=True&page_size=200"
         )
         importer.get_paginator.assert_called_once_with(expected_url)
         importer.add_ballots.assert_called_once()

@@ -161,6 +161,9 @@ class YNRBallotImporter:
         exclude_candidacies=False,
         force_metadata=False,
         force_current_metadata=False,
+        recently_updated=False,
+        base_url=None,
+        default_params=None,
     ):
         self.stdout = stdout
         self.ee_helper = EEHelper()
@@ -172,38 +175,46 @@ class YNRBallotImporter:
         self.exclude_candidacies = exclude_candidacies
         self.force_metadata = force_metadata
         self.force_current_metadata = force_current_metadata
+        self.recently_updated = recently_updated
+        self.base_url = base_url or settings.YNR_BASE
+        self.default_params = default_params or {"page_size": 200}
 
     def get_paginator(self, page1):
         return JsonPaginator(page1, self.stdout)
 
+    def get_last_updated(self):
+        return (
+            PostElection.objects.filter(ynr_modified__isnull=False)
+            .latest()
+            .ynr_modified
+        )
+
     def do_import(self, params=None):
-        default_params = {"page_size": "200"}
+        params = params or {}
+        if not params:
+            self.ee_helper.prewarm_cache(current=not self.force_metadata)
+
         if self.current_only:
-            default_params["current"] = True
+            params["current"] = True
+
+        if self.recently_updated:
+            params["last_updated"] = self.get_last_updated().isoformat()
+
         if params:
-            default_params.update(params)
+            params.update(self.default_params)
+            querystring = urlencode(params)
+            url = f"{self.base_url}/api/next/ballots/?{querystring}"
+            full_import = False
         else:
-            prewarm_current_only = True
-            if self.force_metadata:
-                prewarm_current_only = False
-            self.ee_helper.prewarm_cache(current=prewarm_current_only)
-
-        querystring = urlencode(default_params)
-        if not params and not self.current_only:
             # this is a full import, use the cache
-            url = (
-                settings.YNR_BASE
-                + "/media/cached-api/latest/ballots-000001.json"
-            )
-        else:
-            url = settings.YNR_BASE + "/api/next/ballots/?{}".format(
-                querystring
-            )
-        pages = self.get_paginator(url)
+            url = f"{self.base_url}/media/cached-api/latest/ballots-000001.json"
+            full_import = True
 
+        pages = self.get_paginator(url)
         for page in pages:
             self.add_ballots(page)
-        if not params:
+
+        if full_import or self.current_only:
             # Don't try to do things like add replaced
             # ballots if we've filtered the ballots.
             # This is because there's a high chance we've not
@@ -243,6 +254,7 @@ class YNRBallotImporter:
                     "winner_count": ballot_dict["winner_count"],
                     "cancelled": ballot_dict["cancelled"],
                     "locked": ballot_dict["candidates_locked"],
+                    "ynr_modified": ballot_dict["last_updated"],
                 },
             )
 

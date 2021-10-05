@@ -4,7 +4,7 @@ from elections.import_helpers import YNRBallotImporter, EEHelper
 from elections.models import Election
 
 
-class Command(YNRBallotImporter, BaseCommand):
+class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             "--current",
@@ -26,6 +26,12 @@ class Command(YNRBallotImporter, BaseCommand):
             dest="force_current_metadata",
             default=False,
             help="Imports all metadata from EE for current elections",
+        )
+        parser.add_argument(
+            "--recently-updated",
+            action="store_true",
+            dest="recently_updated",
+            help="Only import ballots updated since the last known update",
         )
 
     def populate_any_non_by_elections_field(self):
@@ -59,6 +65,7 @@ class Command(YNRBallotImporter, BaseCommand):
             current_only=options["current"],
             force_metadata=options["force_metadata"],
             force_current_metadata=options["force_current_metadata"],
+            recently_updated=options["recently_updated"],
         )
         importer.do_import()
         self.populate_any_non_by_elections_field()
