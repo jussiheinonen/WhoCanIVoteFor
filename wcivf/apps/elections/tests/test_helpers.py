@@ -1,3 +1,4 @@
+from django.conf import settings
 import pytest
 import sys
 
@@ -112,9 +113,22 @@ class TestEEHelper:
         postelection_filter.return_value.delete.assert_called_once()
 
 
-class TestYNRBallotImporter(TestCase):
-    def setUp(self):
-        self.importer = YNRBallotImporter()
+class TestYNRBallotImporter:
+    @pytest.fixture
+    def importer(self, mocker):
+        importer = YNRBallotImporter()
+        mocker.patch.object(importer.ee_helper, "prewarm_cache")
+        mocker.patch.object(
+            importer, "get_paginator", return_value=[mocker.Mock()]
+        )
+        mocker.patch.object(importer, "add_ballots")
+        mocker.patch.object(importer, "run_post_ballot_import_tasks")
+        mocker.patch.object(importer, "delete_orphan_posts")
+        return importer
+
+    @pytest.mark.django_db
+    def test_delete_orphan_posts(self):
+        importer = YNRBallotImporter()
         election = ElectionFactory(name="Adur local election")
         self.post = PostFactory(label="Adur local election")
         self.post.elections.add(election)
@@ -122,13 +136,64 @@ class TestYNRBallotImporter(TestCase):
             label="Adur local election", ynr_id="foo"
         )
 
-    def test_delete_orphan_posts(self):
-        deleted_posts, _ = self.importer.delete_orphan_posts()
+        deleted_posts, _ = importer.delete_orphan_posts()
         query_set = Post.objects.all()
-        self.assertEqual(deleted_posts, 1)
-        self.assertEqual(query_set.count(), 1)
-        self.assertIn(self.post, query_set)
-        self.assertNotIn(self.orphan_post, query_set)
+        assert deleted_posts == 1
+        assert query_set.count() == 1
+        assert self.post in query_set
+        assert self.orphan_post not in query_set
+
+    def test_do_import_no_params(self, importer):
+        """
+        When no params and not current_only this is a full import the
+        ee cache should be used and post ballot tasks should be run
+        """
+        assert importer.current_only is False
+        assert importer.force_metadata is False
+        importer.do_import(params=None)
+        importer.ee_helper.prewarm_cache.assert_called_once_with(current=True)
+
+        expected_url = (
+            f"{settings.YNR_BASE}/media/cached-api/latest/ballots-000001.json"
+        )
+        importer.get_paginator.assert_called_once_with(expected_url)
+        importer.add_ballots.assert_called_once()
+        importer.run_post_ballot_import_tasks.assert_called_once()
+        importer.delete_orphan_posts.assert_called_once()
+
+    def test_do_import_with_params(self, importer):
+        """
+        When no params this is a not a full import so the cache should
+        not be used and post ballot tasks not run
+        """
+        assert importer.current_only is False
+        importer.do_import(params={"election_date": "2021-05-06"})
+        importer.ee_helper.prewarm_cache.assert_not_called()
+
+        expected_url = f"{settings.YNR_BASE}/api/next/ballots/?page_size=200&election_date=2021-05-06"
+        importer.get_paginator.assert_called_once_with(expected_url)
+        importer.add_ballots.assert_called_once()
+        importer.run_post_ballot_import_tasks.assert_not_called()
+        importer.delete_orphan_posts.assert_called_once()
+
+    def test_do_import_no_params_current_only(self, importer):
+        """
+        When no params this is a not a full import so the cache should
+        not be used and post ballot tasks not run
+        """
+        importer.current_only = True
+        assert importer.force_metadata is False
+        importer.do_import(params=None)
+        importer.ee_helper.prewarm_cache.assert_called_once_with(current=True)
+
+        expected_url = (
+            f"{settings.YNR_BASE}/api/next/ballots/?page_size=200&current=True"
+        )
+        importer.get_paginator.assert_called_once_with(expected_url)
+        importer.add_ballots.assert_called_once()
+        # this gets called when current_only used
+        importer.run_post_ballot_import_tasks.assert_called()
+        importer.delete_orphan_posts.assert_called_once()
 
 
 class TestYNRBallotImporterDivisionType:
