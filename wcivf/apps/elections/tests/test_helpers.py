@@ -3,6 +3,7 @@ import pytest
 import sys
 
 from django.test import TestCase
+from django.utils import timezone
 from elections.tests.factories import (
     PostFactory,
     ElectionFactory,
@@ -122,7 +123,7 @@ class TestYNRBallotImporter:
             importer, "get_paginator", return_value=[mocker.Mock()]
         )
         mocker.patch.object(importer, "add_ballots")
-        mocker.patch.object(importer, "run_post_ballot_import_tasks")
+        mocker.patch.object(importer, "attach_cancelled_ballot_info")
         mocker.patch.object(importer, "delete_orphan_posts")
         return importer
 
@@ -158,7 +159,7 @@ class TestYNRBallotImporter:
         )
         importer.get_paginator.assert_called_once_with(expected_url)
         importer.add_ballots.assert_called_once()
-        importer.run_post_ballot_import_tasks.assert_called_once()
+        importer.attach_cancelled_ballot_info.assert_called_once()
         importer.delete_orphan_posts.assert_called_once()
 
     def test_do_import_with_params(self, importer):
@@ -173,7 +174,7 @@ class TestYNRBallotImporter:
         expected_url = f"{settings.YNR_BASE}/api/next/ballots/?election_date=2021-05-06&page_size=200"
         importer.get_paginator.assert_called_once_with(expected_url)
         importer.add_ballots.assert_called_once()
-        importer.run_post_ballot_import_tasks.assert_not_called()
+        importer.attach_cancelled_ballot_info.assert_not_called()
         importer.delete_orphan_posts.assert_called_once()
 
     def test_do_import_no_params_current_only(self, importer):
@@ -182,6 +183,7 @@ class TestYNRBallotImporter:
         not be used and post ballot tasks not run
         """
         importer.current_only = True
+        importer.recently_updated = False
         assert importer.force_metadata is False
         importer.do_import(params=None)
         importer.ee_helper.prewarm_cache.assert_called_once_with(current=True)
@@ -192,8 +194,62 @@ class TestYNRBallotImporter:
         importer.get_paginator.assert_called_once_with(expected_url)
         importer.add_ballots.assert_called_once()
         # this gets called when current_only used
-        importer.run_post_ballot_import_tasks.assert_called()
+        importer.attach_cancelled_ballot_info.assert_called()
         importer.delete_orphan_posts.assert_called_once()
+
+    def test_should_prewarm_ee_cache(self, importer):
+        importer.params = {"election_date": "2021-05-06"}
+        importer.recently_updated = False
+        assert importer.should_prewarm_ee_cache is False
+        importer.params = {}
+        importer.recently_updated = True
+        assert importer.should_prewarm_ee_cache is False
+        importer.recently_updated = False
+        importer.params = {}
+        assert importer.should_prewarm_ee_cache is True
+
+    def test_is_full_import(self, importer):
+        importer.params = {"election_date": "2021-05-06"}
+        importer.recently_updated = False
+        importer.current_only = False
+        assert importer.is_full_import is False
+        importer.params = {}
+        importer.recently_updated = True
+        importer.current_only = False
+        assert importer.is_full_import is False
+        importer.params = {}
+        importer.recently_updated = False
+        importer.current_only = True
+        assert importer.is_full_import is False
+        importer.params = {}
+        importer.recently_updated = False
+        importer.current_only = False
+        assert importer.is_full_import is True
+
+    def test_build_params(self, importer, mocker):
+        assert importer.build_params(params=None) == {}
+
+        importer.current_only = True
+        assert importer.build_params(params=None) == {
+            "page_size": 200,
+            "current": True,
+        }
+
+        importer.current_only = False
+        importer.recently_updated = True
+        mocker.patch.object(importer, "get_last_updated")
+        ts = timezone.now()
+        importer.get_last_updated.return_value = ts
+
+        result = importer.build_params(params=None)
+        assert result == {"last_updated": ts.isoformat(), "page_size": 200}
+
+        result = importer.build_params(params={"foo": "bar"})
+        assert result == {
+            "last_updated": ts.isoformat(),
+            "page_size": 200,
+            "foo": "bar",
+        }
 
 
 class TestYNRBallotImporterDivisionType:

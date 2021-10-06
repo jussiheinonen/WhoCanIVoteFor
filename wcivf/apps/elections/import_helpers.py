@@ -189,11 +189,30 @@ class YNRBallotImporter:
             .ynr_modified
         )
 
-    def do_import(self, params=None):
-        params = params or {}
-        if not params:
-            self.ee_helper.prewarm_cache(current=not self.force_metadata)
+    @property
+    def should_prewarm_ee_cache(self):
+        """
+        Always if current_only, otherwise check if params or is a
+        recent updates only
+        """
+        if self.current_only:
+            return True
 
+        return not any([self.params, self.recently_updated])
+
+    @property
+    def is_full_import(self):
+        """
+        Check if any flags or paras
+        """
+        return not any([self.recently_updated, self.current_only, self.params])
+
+    def build_params(self, params):
+        """
+        Build up params based on flages initialised with or return an
+        empty dict
+        """
+        params = params or {}
         if self.current_only:
             params["current"] = True
 
@@ -202,24 +221,44 @@ class YNRBallotImporter:
 
         if params:
             params.update(self.default_params)
-            querystring = urlencode(params)
-            url = f"{self.base_url}/api/next/ballots/?{querystring}"
-            full_import = False
-        else:
-            # this is a full import, use the cache
-            url = f"{self.base_url}/media/cached-api/latest/ballots-000001.json"
-            full_import = True
 
-        pages = self.get_paginator(url)
+        return params
+
+    @property
+    def import_url(self):
+        """
+        Use cached data if a full import
+        """
+        if self.is_full_import:
+            return (
+                f"{self.base_url}/media/cached-api/latest/ballots-000001.json"
+            )
+
+        querystring = urlencode(self.params)
+        return f"{self.base_url}/api/next/ballots/?{querystring}"
+
+    @property
+    def should_run_post_ballot_import_tasks(self):
+        """
+        Don't try to do things like add replaced
+        ballots if we've filtered the ballots.
+        This is because there's a high chance we've not
+        got all the ballots we need yet.
+        """
+        return any([self.is_full_import, self.current_only])
+
+    def do_import(self, params=None):
+        self.params = self.build_params(params=params)
+        if self.should_prewarm_ee_cache:
+            self.ee_helper.prewarm_cache(current=not self.force_metadata)
+
+        pages = self.get_paginator(self.import_url)
         for page in pages:
             self.add_ballots(page)
 
-        if full_import or self.current_only:
-            # Don't try to do things like add replaced
-            # ballots if we've filtered the ballots.
-            # This is because there's a high chance we've not
-            # got all the ballots we need yet.
-            self.run_post_ballot_import_tasks()
+        if self.should_run_post_ballot_import_tasks:
+            self.attach_cancelled_ballot_info()
+
         self.delete_orphan_posts()
 
     def delete_orphan_posts(self):
@@ -369,9 +408,6 @@ class YNRBallotImporter:
         # ensures the division_type is valid, or will raise a ValidationError
         ballot.post.full_clean()
         ballot.post.save()
-
-    def run_post_ballot_import_tasks(self):
-        self.attach_cancelled_ballot_info()
 
     def get_replacement_ballot(self, ballot_id):
         replacement_ballot = None
