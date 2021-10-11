@@ -303,6 +303,43 @@ class TestYNRBallotImporter:
                 expected = f"{settings.YNR_BASE}{case['url']}"
                 assert importer.import_url == expected
 
+    def test_add_replaced_ballot(self, importer, mocker, subtests):
+
+        ballot = mocker.Mock()
+        test_cases = [
+            {
+                "side_effect": PostElection.DoesNotExist,
+                "expected": False,
+                "assert": ballot.replaces.add.assert_not_called,
+                "replaced_ballot_id": None,
+            },
+            {
+                "side_effect": PostElection.DoesNotExist,
+                "expected": False,
+                "assert": ballot.replaces.add.assert_not_called,
+                "replaced_ballot_id": "not.a.valid.ballot.paper.id",
+            },
+            {
+                "side_effect": None,
+                "expected": True,
+                "assert": ballot.replaces.add.assert_called_once,
+                "replaced_ballot_id": "local.sheffield.fulwood.2020-05-07",
+            },
+        ]
+        for test_case in test_cases:
+            with subtests.test(msg=str(test_case)):
+                mocker.patch.object(
+                    PostElection.objects,
+                    "get",
+                    side_effect=test_case["side_effect"],
+                )
+                result = importer.add_replaced_ballot(
+                    ballot=ballot,
+                    replaced_ballot_id=test_case["replaced_ballot_id"],
+                )
+                assert result is test_case["expected"]
+                test_case["assert"]()
+
 
 class TestYNRBallotImporterDivisionType:
     @pytest.fixture(autouse=True)

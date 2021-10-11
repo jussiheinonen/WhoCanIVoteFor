@@ -268,6 +268,26 @@ class YNRBallotImporter:
         """
         return Post.objects.filter(postelection=None).delete()
 
+    def add_replaced_ballot(self, ballot, replaced_ballot_id):
+        """
+        Takes a ballot object and a ballot_paper_id for a ballot that
+        has been replaced. If the replaced ballot is found, adds this
+        relationship. Explicity return True or False to represent if
+        the lookup was a success and help with testing.
+        """
+        if not replaced_ballot_id:
+            return False
+
+        try:
+            replaced_ballot = PostElection.objects.get(
+                ballot_paper_id=replaced_ballot_id,
+            )
+        except PostElection.DoesNotExist:
+            return False
+
+        ballot.replaces.add(replaced_ballot)
+        return True
+
     @transaction.atomic()
     def add_ballots(self, results):
 
@@ -296,6 +316,15 @@ class YNRBallotImporter:
                     "ynr_modified": ballot_dict["last_updated"],
                 },
             )
+
+            if self.recently_updated:
+                # we can do this as the older ballot will be known.
+                # if the ballot is does not replace another ballot,
+                # nothing happens
+                self.add_replaced_ballot(
+                    ballot=ballot,
+                    replaced_ballot_id=ballot_dict.get("replaces"),
+                )
 
             if ballot.election.current or self.force_metadata:
                 self.import_metadata_from_ee(ballot)
