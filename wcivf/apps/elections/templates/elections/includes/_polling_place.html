@@ -15,7 +15,7 @@
                 Your polling station is <strong>{{ polling_station.polling_station.properties.address }}</strong>.
                 It will be open from <strong>7am to 10pm</strong>
                 <strong>
-                    {% for election in elections_by_date %}{{ election.grouper|naturalday:"\o\n l j F Y" }}{% if not forloop.last %}{% ifequal forloop.revcounter 2 %} and {% else %}, {% endifequal %}{% endif %}{% endfor %}</strong>.
+                    {% for election in elections_by_date %}{{ election.grouper|naturalday:"\o\n l j F Y" }}{% if not forloop.last %}{% if forloop.revcounter == 2 %} and {% else %}, {% endif %}{% endif %}{% endfor %}</strong>.
 
 
                 {% if not voter_id_required %}

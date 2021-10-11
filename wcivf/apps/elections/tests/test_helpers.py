@@ -251,6 +251,58 @@ class TestYNRBallotImporter:
             "foo": "bar",
         }
 
+    def test_should_run_post_ballot_import_tasks(
+        self, importer, mocker, subtests
+    ):
+        test_cases = [
+            {"full_import": True, "current_only": True, "expected": True},
+            {"full_import": False, "current_only": True, "expected": True},
+            {"full_import": True, "current_only": False, "expected": True},
+            {"full_import": False, "current_only": False, "expected": False},
+        ]
+        for case in test_cases:
+            with subtests.test(msg=str(case)):
+                full_import = mocker.PropertyMock(
+                    return_value=case["full_import"]
+                )
+                mocker.patch.object(
+                    importer.__class__,
+                    "is_full_import",
+                    new=full_import,
+                )
+                importer.current_only = case["current_only"]
+                assert (
+                    importer.should_run_post_ballot_import_tasks
+                    is case["expected"]
+                )
+
+    def test_import_url(self, importer, mocker, subtests):
+        test_cases = [
+            {
+                "full_import": True,
+                "url": "/media/cached-api/latest/ballots-000001.json",
+                "params": None,
+            },
+            {
+                "full_import": False,
+                "url": "/api/next/ballots/?foo=bar",
+                "params": {"foo": "bar"},
+            },
+        ]
+        for case in test_cases:
+            with subtests.test(msg=str(case)):
+                full_import = mocker.PropertyMock(
+                    return_value=case["full_import"]
+                )
+                mocker.patch.object(
+                    importer.__class__,
+                    "is_full_import",
+                    new=full_import,
+                )
+                importer.params = case["params"]
+                expected = f"{settings.YNR_BASE}{case['url']}"
+                assert importer.import_url == expected
+
 
 class TestYNRBallotImporterDivisionType:
     @pytest.fixture(autouse=True)
