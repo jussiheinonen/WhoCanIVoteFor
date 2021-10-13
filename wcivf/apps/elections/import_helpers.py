@@ -290,7 +290,6 @@ class YNRBallotImporter:
 
     @transaction.atomic()
     def add_ballots(self, results):
-
         for ballot_dict in results["results"]:
             print(ballot_dict["ballot_paper_id"])
 

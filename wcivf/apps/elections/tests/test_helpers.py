@@ -341,6 +341,160 @@ class TestYNRBallotImporter:
                 test_case["assert"]()
 
 
+class TestYNRImporterAddBallots:
+    @pytest.fixture
+    def ballot_dict(self):
+        return {
+            "ballot_paper_id": "local.sheffield.fulwood.2021-05-06",
+            "winner_count": 1,
+            "cancelled": False,
+            "candidates_locked": True,
+            "replaces": "local.sheffield.fulwood.2020-05-07",
+            "last_updated": "2021-10-12T00:00:00+00:00",
+        }
+
+    @pytest.fixture
+    def post(self, mocker):
+        return mocker.MagicMock(spec=Post)
+
+    @pytest.fixture
+    def election(self, mocker):
+        return mocker.MagicMock(spec=Election)
+
+    @pytest.fixture
+    def ballot(self, mocker):
+        ballot = mocker.MagicMock(spec=PostElection)
+        ballot.election.current = False
+        return ballot
+
+    @pytest.fixture
+    def importer(self, post, election, ballot, mocker):
+        importer = YNRBallotImporter()
+        importer.exclude_candidacies = True
+        mocker.patch.object(
+            importer.election_importer,
+            "update_or_create_from_ballot_dict",
+            return_value=election,
+        )
+        mocker.patch.object(
+            importer.post_importer,
+            "update_or_create_from_ballot_dict",
+            return_value=post,
+        )
+        mocker.patch.object(importer, "add_replaced_ballot")
+        mocker.patch.object(importer, "import_metadata_from_ee")
+        mocker.patch.object(
+            PostElection.objects,
+            "update_or_create",
+            return_value=(ballot, False),
+        )
+        return importer
+
+    @pytest.mark.django_db
+    def test_add_ballots_creates_objects(
+        self, importer, ballot_dict, post, election
+    ):
+        """
+        Test that the methods to update or create Election and Post
+        objects are called, and that a PostElection is updated with
+        those objects and data from the the ballot dict
+        """
+        results = {"results": [ballot_dict]}
+        importer.recently_updated = True
+        importer.add_ballots(results=results)
+
+        importer.election_importer.update_or_create_from_ballot_dict.assert_called_once_with(
+            ballot_dict
+        )
+        importer.post_importer.update_or_create_from_ballot_dict.assert_called_once_with(
+            ballot_dict
+        )
+        PostElection.objects.update_or_create.assert_called_once_with(
+            ballot_paper_id="local.sheffield.fulwood.2021-05-06",
+            defaults={
+                "election": election,
+                "post": post,
+                "winner_count": 1,
+                "cancelled": False,
+                "locked": True,
+                "ynr_modified": "2021-10-12T00:00:00+00:00",
+            },
+        )
+
+    @pytest.mark.django_db
+    def test_add_ballots_not_recently_updated(self, importer, ballot_dict):
+        """
+        Test that when not using recently_updated that the method to
+        add the replaced ballot relationship is not called
+        """
+        results = {"results": [ballot_dict]}
+        importer.recently_updated = False
+        importer.add_ballots(results=results)
+
+        importer.add_replaced_ballot.assert_not_called()
+
+    @pytest.mark.django_db
+    def test_add_ballots_is_recently_updated(
+        self,
+        importer,
+        ballot_dict,
+        ballot,
+    ):
+        """
+        Test that when using recently_updated that the method to add
+        the replaced ballot relationship is called
+        """
+        results = {"results": [ballot_dict]}
+        importer.recently_updated = True
+        importer.add_ballots(results=results)
+
+        importer.add_replaced_ballot.assert_called_once_with(
+            ballot=ballot,
+            replaced_ballot_id="local.sheffield.fulwood.2020-05-07",
+        )
+
+    @pytest.mark.django_db
+    def test_import_metadata_from_ee(
+        self, importer, ballot_dict, ballot, subtests
+    ):
+        """
+        For each test case, make sure that metadata is or is not
+        imported from EE
+        """
+        results = {"results": [ballot_dict]}
+
+        test_cases = [
+            {
+                "force_metadata": False,
+                "current": False,
+                "assert": importer.import_metadata_from_ee.assert_not_called,
+            },
+            {
+                "force_metadata": True,
+                "current": False,
+                "assert": importer.import_metadata_from_ee.assert_called_once,
+            },
+            {
+                "force_metadata": False,
+                "current": True,
+                "assert": importer.import_metadata_from_ee.assert_called_once,
+            },
+            {
+                "force_metadata": True,
+                "current": True,
+                "assert": importer.import_metadata_from_ee.assert_called_once,
+            },
+        ]
+        for test_case in test_cases:
+            # clear old calls before each test
+            importer.import_metadata_from_ee.reset_mock()
+            with subtests.test(msg=str(test_case)):
+                ballot.election.current = test_case["current"]
+                importer.force_metadata = test_case["force_metadata"]
+                importer.add_ballots(results=results)
+                test_case["assert"]()
+
+
 class TestYNRBallotImporterDivisionType:
     @pytest.fixture(autouse=True)
     def mock_ee_helper(self, mocker):
