@@ -227,9 +227,11 @@ class YNRBallotImporter:
     @property
     def import_url(self):
         """
-        Use cached data if a full import
+        Use cached data if a full import, unless base_url is using locahost
         """
-        if self.is_full_import:
+        if self.is_full_import and not self.base_url.startswith(
+            "http://localhost"
+        ):
             return (
                 f"{self.base_url}/media/cached-api/latest/ballots-000001.json"
             )
