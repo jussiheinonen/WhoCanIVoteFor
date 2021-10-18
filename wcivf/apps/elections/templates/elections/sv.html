@@ -13,13 +13,15 @@
                     <h2>Supplementary Vote</h2>
                     <p>The Supplementary Vote electoral system allows voters
                         to cast a first and second preference vote on one
-                        ballot. If no candidate gains at least half of first
-                        preference votes, then second preference votes gained
-                        by the two leading candidates are taken into consideration.
+                        ballot. If no candidate gains at least half of all first
+                        preference votes, then the two leading candidates go into a run-off round and all other candidates are eliminated.
+                        The second preference votes on the eliminated candidates' ballots are then counted and added to the leading candidates' totals.
 
                         This is designed to ensure that the elected candidate
                         has closer to majority support than would be the case
                         under <a href="{% url 'fptp_voting_system_view' %}">First-past-the-post</a>.
+                        
+                        Voters do not need to cast a second preference vote, and cannot vote for the same candidate twice.
 
                         SV is used for Police and Crime Commissioner elections
                         in England and Wales, and for the positions of directly-elected
