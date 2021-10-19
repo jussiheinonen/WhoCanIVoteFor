@@ -33,6 +33,13 @@ class Command(BaseCommand):
             dest="recently_updated",
             help="Only import ballots updated since the last known update",
         )
+        parser.add_argument(
+            "--max-items",
+            type=int,
+            action="store",
+            dest="max_items",
+            help="The maximum number of Ballots to import in this run",
+        )
 
     def populate_any_non_by_elections_field(self):
         qs = Election.objects.all().prefetch_related("postelection_set")
@@ -66,6 +73,7 @@ class Command(BaseCommand):
             force_metadata=options["force_metadata"],
             force_current_metadata=options["force_current_metadata"],
             recently_updated=options["recently_updated"],
+            max_items=options["max_items"],
         )
         importer.do_import()
         self.populate_any_non_by_elections_field()

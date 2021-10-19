@@ -164,6 +164,7 @@ class YNRBallotImporter:
         recently_updated=False,
         base_url=None,
         default_params=None,
+        max_items=None,
     ):
         self.stdout = stdout
         self.ee_helper = EEHelper()
@@ -177,6 +178,7 @@ class YNRBallotImporter:
         self.force_current_metadata = force_current_metadata
         self.recently_updated = recently_updated
         self.base_url = base_url or settings.YNR_BASE
+        self.max_items = max_items
         self.default_params = default_params or {"page_size": 200}
 
     def get_paginator(self, page1):
@@ -219,9 +221,11 @@ class YNRBallotImporter:
         if self.recently_updated:
             params["last_updated"] = self.get_last_updated().isoformat()
 
+        if self.max_items:
+            params["max_items"] = self.max_items
+
         if params:
             params.update(self.default_params)
-
         return params
 
     @property
