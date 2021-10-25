@@ -17,6 +17,7 @@ from core.helpers import show_data_on_error
 from elections.import_helpers import YNRBallotImporter
 from people.models import Person
 from elections.models import PostElection
+from wcivf.apps.people.import_helpers import YNRRecentPersonImporter
 
 
 class Command(BaseCommand):
@@ -55,6 +56,15 @@ class Command(BaseCommand):
             self.past_time_str = self.options["since"]
 
         self.past_time_str = str(self.past_time_str)
+
+        if options["recent"]:
+            importer = YNRRecentPersonImporter(
+                params={"updated_gte": last_updated}
+            )
+            for page in importer.people_to_import:
+                self.add_people(results=page)
+            self.delete_merged_people()
+            return
 
         try:
             self.download_pages()
@@ -139,6 +149,8 @@ class Command(BaseCommand):
                     self.update_candidacies(
                         person_data=person, person_obj=person_obj
                     )
+                    # dont keep track of seen people in a recent update
+                    continue
 
                 if person["candidacies"]:
                     self.seen_people.add(person_obj.pk)
