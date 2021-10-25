@@ -310,16 +310,23 @@ class YNRBallotImporter:
                 # cant create a ballot without a post so skip to the next one
                 continue
 
+            defaults = {
+                "election": election,
+                "post": post,
+                "winner_count": ballot_dict["winner_count"],
+                "cancelled": ballot_dict["cancelled"],
+                "locked": ballot_dict["candidates_locked"],
+            }
+
+            # only update this when using the recently_updated flag as otherwise
+            # the timestamp will only be the modifed timestamp on the ballot
+            # see BallotSerializer.get_last_updated in YNR
+            if self.recently_updated:
+                defaults["ynr_modified"] = ballot_dict["last_updated"]
+
             ballot, created = PostElection.objects.update_or_create(
                 ballot_paper_id=ballot_dict["ballot_paper_id"],
-                defaults={
-                    "election": election,
-                    "post": post,
-                    "winner_count": ballot_dict["winner_count"],
-                    "cancelled": ballot_dict["cancelled"],
-                    "locked": ballot_dict["candidates_locked"],
-                    "ynr_modified": ballot_dict["last_updated"],
-                },
+                defaults=defaults,
             )
 
             if self.recently_updated:
