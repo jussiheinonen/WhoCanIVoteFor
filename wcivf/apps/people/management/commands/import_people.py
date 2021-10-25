@@ -36,11 +36,6 @@ class Command(BaseCommand):
             type=self.valid_date,
             help="Import changes since [datetime]",
         )
-        parser.add_argument(
-            "--update-info-only",
-            action="store_true",
-            help="Only update person info, not posts",
-        )
 
     def valid_date(self, value):
         return parse(value)
@@ -78,14 +73,11 @@ class Command(BaseCommand):
             self.stdout.write("Importing {}".format(file))
             with open(os.path.join(self.dirpath, file), "r") as f:
                 results = json.loads(f.read())
-                self.add_people(
-                    results, update_info_only=self.options["update_info_only"]
-                )
+                self.add_people(results)
 
         should_clean_up = not any(
             [
                 self.options["recent"],
-                self.options["update_info_only"],
                 self.options["since"],
             ]
         )
@@ -134,12 +126,10 @@ class Command(BaseCommand):
             next_page = results.get("next")
 
     @transaction.atomic
-    def add_people(self, results, update_info_only=False):
+    def add_people(self, results):
         for person in results["results"]:
             with show_data_on_error("Person {}".format(person["id"]), person):
-                person_obj = Person.objects.update_or_create_from_ynr(
-                    person, update_info_only=update_info_only
-                )
+                person_obj = Person.objects.update_or_create_from_ynr(person)
 
                 if self.options["recent"]:
                     self.delete_old_candidacies(
