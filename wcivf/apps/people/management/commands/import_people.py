@@ -43,7 +43,6 @@ class Command(BaseCommand):
 
     def handle(self, **options):
         self.options = options
-        self.dirpath = tempfile.mkdtemp()
         self.ballot_importer = YNRBallotImporter(stdout=self.stdout)
 
         try:
@@ -63,15 +62,15 @@ class Command(BaseCommand):
             )
             for page in importer.people_to_import:
                 self.add_people(results=page)
-            self.delete_merged_people()
-            return
 
-        try:
+        else:
+            self.dirpath = tempfile.mkdtemp()
             self.download_pages()
             self.add_to_db()
-        finally:
-            self.delete_merged_people()
             shutil.rmtree(self.dirpath)
+
+        self.delete_merged_people()
+        self.delete_orphaned_people()
 
     def add_to_db(self):
         self.existing_people = set(Person.objects.values_list("pk", flat=True))
@@ -223,3 +222,9 @@ class Command(BaseCommand):
                 merged_ids.append(result["old_person_id"])
             url = page.get("next")
         Person.objects.filter(ynr_id__in=merged_ids).delete()
+
+    def delete_orphaned_people(self):
+        """
+        Delete all people without candidacies
+        """
+        Person.objects.filter(personpost__isnull=True).delete()
