@@ -79,6 +79,13 @@ Resources:
             Name: import-recent-people
             Description: Update people from the last 5 minutes
             Input: '{"command": "import_people", "args": ["--recent"]}'
+        DeleteDeletedPeople:
+          Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
+          Properties:
+            Schedule: rate(1 hour)
+            Name: delete-deleted-people
+            Description: Deletes people deleted in YNR in the last hour
+            Input: '{"command": "delete_deleted_people"}'
         ImportBallotsCurrent:
           Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
           Properties:
