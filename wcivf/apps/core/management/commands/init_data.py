@@ -31,7 +31,7 @@ class Command(BaseCommand):
                 ("import_people",),
             ]
         else:
-            commands = [("import_people", "--recent")]
+            commands = [("import_people", "--recently-updated")]
 
         for command in commands:
             print(" ".join(command))

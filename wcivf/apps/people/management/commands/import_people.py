@@ -23,9 +23,9 @@ from wcivf.apps.people.import_helpers import YNRPersonImporter
 class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
-            "--recent",
+            "--recently-updated",
             action="store_true",
-            dest="recent",
+            dest="recently_updated",
             default=False,
             help="Import changes in the last `n` minutes",
         )
@@ -56,7 +56,7 @@ class Command(BaseCommand):
 
         self.past_time_str = str(self.past_time_str)
 
-        if options["recent"]:
+        if options["recently_updated"]:
             importer = YNRPersonImporter(params={"updated_gte": last_updated})
             for page in importer.people_to_import:
                 self.add_people(results=page)
@@ -84,7 +84,7 @@ class Command(BaseCommand):
 
         should_clean_up = not any(
             [
-                self.options["recent"],
+                self.options["recently_updated"],
                 self.options["since"],
             ]
         )
@@ -111,7 +111,7 @@ class Command(BaseCommand):
 
     def download_pages(self):
         params = {"page_size": "200"}
-        if self.options["recent"] or self.options["since"]:
+        if self.options["recently_updated"] or self.options["since"]:
             params["updated_gte"] = self.past_time_str
 
             next_page = settings.YNR_BASE + "/api/next/people/?{}".format(
@@ -138,7 +138,7 @@ class Command(BaseCommand):
             with show_data_on_error("Person {}".format(person["id"]), person):
                 person_obj = Person.objects.update_or_create_from_ynr(person)
 
-                if self.options["recent"]:
+                if self.options["recently_updated"]:
                     self.delete_old_candidacies(
                         person_data=person,
                         person_obj=person_obj,
