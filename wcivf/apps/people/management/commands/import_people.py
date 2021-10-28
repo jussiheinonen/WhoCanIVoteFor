@@ -57,7 +57,7 @@ class Command(BaseCommand):
         self.past_time_str = str(self.past_time_str)
 
         if options["recently_updated"]:
-            importer = YNRPersonImporter(params={"updated_gte": last_updated})
+            importer = YNRPersonImporter(params={"last_updated": last_updated})
             for page in importer.people_to_import:
                 self.add_people(results=page)
 
@@ -112,7 +112,7 @@ class Command(BaseCommand):
     def download_pages(self):
         params = {"page_size": "200"}
         if self.options["recently_updated"] or self.options["since"]:
-            params["updated_gte"] = self.past_time_str
+            params["last_updated"] = self.past_time_str
 
             next_page = settings.YNR_BASE + "/api/next/people/?{}".format(
                 urlencode(params)
