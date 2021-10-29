@@ -4,6 +4,7 @@ from urllib.parse import urlencode
 
 from django.conf import settings
 from django.db import transaction
+from django.utils import timezone
 
 from elections.helpers import JsonPaginator, EEHelper
 from elections.models import PostElection, Election, Post, VotingSystem
@@ -183,11 +184,15 @@ class YNRBallotImporter:
         return JsonPaginator(page1, self.stdout)
 
     def get_last_updated(self):
-        return (
-            PostElection.objects.filter(ynr_modified__isnull=False)
-            .latest()
-            .ynr_modified
-        )
+        try:
+            return (
+                PostElection.objects.filter(ynr_modified__isnull=False)
+                .latest()
+                .ynr_modified
+            )
+        except PostElection.DoesNotExist:
+            # default before changes were added to YNR
+            return timezone.datetime(2021, 10, 27, tzinfo=timezone.utc)
 
     @property
     def should_prewarm_ee_cache(self):
