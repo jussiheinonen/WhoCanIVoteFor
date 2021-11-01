@@ -4,6 +4,7 @@ from urllib.parse import urlencode
 
 from django.conf import settings
 from django.db import transaction
+from django.utils import timezone
 
 from elections.helpers import JsonPaginator, EEHelper
 from elections.models import PostElection, Election, Post, VotingSystem
@@ -161,6 +162,9 @@ class YNRBallotImporter:
         exclude_candidacies=False,
         force_metadata=False,
         force_current_metadata=False,
+        recently_updated=False,
+        base_url=None,
+        default_params=None,
     ):
         self.stdout = stdout
         self.ee_helper = EEHelper()
@@ -172,43 +176,96 @@ class YNRBallotImporter:
         self.exclude_candidacies = exclude_candidacies
         self.force_metadata = force_metadata
         self.force_current_metadata = force_current_metadata
+        self.recently_updated = recently_updated
+        self.base_url = base_url or settings.YNR_BASE
+        self.default_params = default_params or {"page_size": 200}
 
     def get_paginator(self, page1):
         return JsonPaginator(page1, self.stdout)
 
-    def do_import(self, params=None):
-        default_params = {"page_size": "200"}
+    def get_last_updated(self):
+        try:
+            return (
+                PostElection.objects.filter(ynr_modified__isnull=False)
+                .latest()
+                .ynr_modified
+            )
+        except PostElection.DoesNotExist:
+            # default before changes were added to YNR
+            return timezone.datetime(2021, 10, 27, tzinfo=timezone.utc)
+
+    @property
+    def should_prewarm_ee_cache(self):
+        """
+        Always if current_only, otherwise check if params or is a
+        recent updates only
+        """
         if self.current_only:
-            default_params["current"] = True
+            return True
+
+        return not any([self.params, self.recently_updated])
+
+    @property
+    def is_full_import(self):
+        """
+        Check if any flags or paras
+        """
+        return not any([self.recently_updated, self.current_only, self.params])
+
+    def build_params(self, params):
+        """
+        Build up params based on flages initialised with or return an
+        empty dict
+        """
+        params = params or {}
+        if self.current_only:
+            params["current"] = True
+
+        if self.recently_updated:
+            params["last_updated"] = self.get_last_updated().isoformat()
+
         if params:
-            default_params.update(params)
-        else:
-            prewarm_current_only = True
-            if self.force_metadata:
-                prewarm_current_only = False
-            self.ee_helper.prewarm_cache(current=prewarm_current_only)
+            params.update(self.default_params)
 
-        querystring = urlencode(default_params)
-        if not params and not self.current_only:
-            # this is a full import, use the cache
-            url = (
-                settings.YNR_BASE
-                + "/media/cached-api/latest/ballots-000001.json"
-            )
-        else:
-            url = settings.YNR_BASE + "/api/next/ballots/?{}".format(
-                querystring
-            )
-        pages = self.get_paginator(url)
+        return params
 
+    @property
+    def import_url(self):
+        """
+        Use cached data if a full import, unless base_url is using locahost
+        """
+        if self.is_full_import and not self.base_url.startswith(
+            "http://localhost"
+        ):
+            return (
+                f"{self.base_url}/media/cached-api/latest/ballots-000001.json"
+            )
+
+        querystring = urlencode(self.params)
+        return f"{self.base_url}/api/next/ballots/?{querystring}"
+
+    @property
+    def should_run_post_ballot_import_tasks(self):
+        """
+        Don't try to do things like add replaced
+        ballots if we've filtered the ballots.
+        This is because there's a high chance we've not
+        got all the ballots we need yet.
+        """
+        return any([self.is_full_import, self.current_only])
+
+    def do_import(self, params=None):
+        self.params = self.build_params(params=params)
+        if self.should_prewarm_ee_cache:
+            self.ee_helper.prewarm_cache(current=not self.force_metadata)
+
+        pages = self.get_paginator(self.import_url)
         for page in pages:
             self.add_ballots(page)
-        if not params:
-            # Don't try to do things like add replaced
-            # ballots if we've filtered the ballots.
-            # This is because there's a high chance we've not
-            # got all the ballots we need yet.
-            self.run_post_ballot_import_tasks()
+
+        if self.should_run_post_ballot_import_tasks:
+            self.attach_cancelled_ballot_info()
+
         self.delete_orphan_posts()
 
     def delete_orphan_posts(self):
@@ -218,9 +275,28 @@ class YNRBallotImporter:
         """
         return Post.objects.filter(postelection=None).delete()
 
+    def add_replaced_ballot(self, ballot, replaced_ballot_id):
+        """
+        Takes a ballot object and a ballot_paper_id for a ballot that
+        has been replaced. If the replaced ballot is found, adds this
+        relationship. Explicity return True or False to represent if
+        the lookup was a success and help with testing.
+        """
+        if not replaced_ballot_id:
+            return False
+
+        try:
+            replaced_ballot = PostElection.objects.get(
+                ballot_paper_id=replaced_ballot_id,
+            )
+        except PostElection.DoesNotExist:
+            return False
+
+        ballot.replaces.add(replaced_ballot)
+        return True
+
     @transaction.atomic()
     def add_ballots(self, results):
-
         for ballot_dict in results["results"]:
             print(ballot_dict["ballot_paper_id"])
 
@@ -235,16 +311,33 @@ class YNRBallotImporter:
                 # cant create a ballot without a post so skip to the next one
                 continue
 
+            defaults = {
+                "election": election,
+                "post": post,
+                "winner_count": ballot_dict["winner_count"],
+                "cancelled": ballot_dict["cancelled"],
+                "locked": ballot_dict["candidates_locked"],
+            }
+
+            # only update this when using the recently_updated flag as otherwise
+            # the timestamp will only be the modifed timestamp on the ballot
+            # see BallotSerializer.get_last_updated in YNR
+            if self.recently_updated:
+                defaults["ynr_modified"] = ballot_dict["last_updated"]
+
             ballot, created = PostElection.objects.update_or_create(
                 ballot_paper_id=ballot_dict["ballot_paper_id"],
-                defaults={
-                    "election": election,
-                    "post": post,
-                    "winner_count": ballot_dict["winner_count"],
-                    "cancelled": ballot_dict["cancelled"],
-                    "locked": ballot_dict["candidates_locked"],
-                },
+                defaults=defaults,
             )
+
+            if self.recently_updated:
+                # we can do this as the older ballot will be known.
+                # if the ballot is does not replace another ballot,
+                # nothing happens
+                self.add_replaced_ballot(
+                    ballot=ballot,
+                    replaced_ballot_id=ballot_dict.get("replaces"),
+                )
 
             if ballot.election.current or self.force_metadata:
                 self.import_metadata_from_ee(ballot)
@@ -357,9 +450,6 @@ class YNRBallotImporter:
         # ensures the division_type is valid, or will raise a ValidationError
         ballot.post.full_clean()
         ballot.post.save()
-
-    def run_post_ballot_import_tasks(self):
-        self.attach_cancelled_ballot_info()
 
     def get_replacement_ballot(self, ballot_id):
         replacement_ballot = None

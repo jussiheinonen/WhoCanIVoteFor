@@ -17,14 +17,15 @@ from core.helpers import show_data_on_error
 from elections.import_helpers import YNRBallotImporter
 from people.models import Person
 from elections.models import PostElection
+from wcivf.apps.people.import_helpers import YNRPersonImporter
 
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
-            "--recent",
+            "--recently-updated",
             action="store_true",
-            dest="recent",
+            dest="recently_updated",
             default=False,
             help="Import changes in the last `n` minutes",
         )
@@ -36,18 +37,12 @@ class Command(BaseCommand):
             type=self.valid_date,
             help="Import changes since [datetime]",
         )
-        parser.add_argument(
-            "--update-info-only",
-            action="store_true",
-            help="Only update person info, not posts",
-        )
 
     def valid_date(self, value):
         return parse(value)
 
     def handle(self, **options):
         self.options = options
-        self.dirpath = tempfile.mkdtemp()
         self.ballot_importer = YNRBallotImporter(stdout=self.stdout)
 
         try:
@@ -61,12 +56,19 @@ class Command(BaseCommand):
 
         self.past_time_str = str(self.past_time_str)
 
-        try:
+        if options["recently_updated"]:
+            importer = YNRPersonImporter(params={"last_updated": last_updated})
+            for page in importer.people_to_import:
+                self.add_people(results=page)
+
+        else:
+            self.dirpath = tempfile.mkdtemp()
             self.download_pages()
             self.add_to_db()
-        finally:
-            self.delete_merged_people()
             shutil.rmtree(self.dirpath)
+
+        self.delete_merged_people()
+        self.delete_orphaned_people()
 
     def add_to_db(self):
         self.existing_people = set(Person.objects.values_list("pk", flat=True))
@@ -78,14 +80,11 @@ class Command(BaseCommand):
             self.stdout.write("Importing {}".format(file))
             with open(os.path.join(self.dirpath, file), "r") as f:
                 results = json.loads(f.read())
-                self.add_people(
-                    results, update_info_only=self.options["update_info_only"]
-                )
+                self.add_people(results)
 
         should_clean_up = not any(
             [
-                self.options["recent"],
-                self.options["update_info_only"],
+                self.options["recently_updated"],
                 self.options["since"],
             ]
         )
@@ -112,8 +111,8 @@ class Command(BaseCommand):
 
     def download_pages(self):
         params = {"page_size": "200"}
-        if self.options["recent"] or self.options["since"]:
-            params["updated_gte"] = self.past_time_str
+        if self.options["recently_updated"] or self.options["since"]:
+            params["last_updated"] = self.past_time_str
 
             next_page = settings.YNR_BASE + "/api/next/people/?{}".format(
                 urlencode(params)
@@ -134,14 +133,12 @@ class Command(BaseCommand):
             next_page = results.get("next")
 
     @transaction.atomic
-    def add_people(self, results, update_info_only=False):
+    def add_people(self, results):
         for person in results["results"]:
             with show_data_on_error("Person {}".format(person["id"]), person):
-                person_obj = Person.objects.update_or_create_from_ynr(
-                    person, update_info_only=update_info_only
-                )
+                person_obj = Person.objects.update_or_create_from_ynr(person)
 
-                if self.options["recent"]:
+                if self.options["recently_updated"]:
                     self.delete_old_candidacies(
                         person_data=person,
                         person_obj=person_obj,
@@ -149,6 +146,8 @@ class Command(BaseCommand):
                     self.update_candidacies(
                         person_data=person, person_obj=person_obj
                     )
+                    # dont keep track of seen people in a recent update
+                    continue
 
                 if person["candidacies"]:
                     self.seen_people.add(person_obj.pk)
@@ -221,3 +220,13 @@ class Command(BaseCommand):
                 merged_ids.append(result["old_person_id"])
             url = page.get("next")
         Person.objects.filter(ynr_id__in=merged_ids).delete()
+
+    def delete_orphaned_people(self):
+        """
+        Delete all people without candidacies
+        """
+        _, deleted_dict = Person.objects.filter(
+            personpost__isnull=True
+        ).delete()
+        count = deleted_dict.get("people.Person", 0)
+        self.stdout.write(f"Deleted {count} orphaned People objects")

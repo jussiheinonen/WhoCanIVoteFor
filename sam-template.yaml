@@ -72,34 +72,41 @@ Resources:
           SECRET_KEY: !Ref AppSecretKey
           DC_ENVIRONMENT: !Ref AppDcEnvironment
       Events:
-        ImportPeople:
+        ImportPeopleRecentlyUpdated:
           Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
           Properties:
             Schedule: rate(5 minutes)
-            Name: import-recent-people
-            Description: Update people from the last 5 minutes
-            Input: '{"command": "import_people", "args": ["--recent"]}'
-        ImportBallotsCurrent:
+            Name: import-people-recently-updated
+            Description: Update all people updated in YNR recently
+            Input: '{"command": "import_people", "args": ["--recently-updated"]}'
+        DeleteDeletedPeople:
+          Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
+          Properties:
+            Schedule: rate(1 hour)
+            Name: delete-deleted-people
+            Description: Deletes people deleted in YNR in the last hour
+            Input: '{"command": "delete_deleted_people"}'
+        ImportBallotsRecentlyUpdated:
           Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
           Properties:
             Schedule: rate(5 minutes)
-            Name: import-current-ballots
-            Description: Update all ballots marked as current
-            Input: '{"command": "import_ballots", "args": ["--current"]}'
-        ImportBallotsFull:
-          Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
-          Properties:
-            Schedule: rate(1 day)
-            Name: import-ballots
-            Description: Run a full import of ballots
-            Input: '{"command": "import_ballots"}'
-        ImportParties:
-          Type: Schedule
-          Properties:
-            Schedule: rate(1 day)
-            Name: import-parties
-            Description: Import parties
-            Input: '{"command": "import_parties"}'
+            Name: import-ballots-recently-updated
+            Description: Update all ballots updated in YNR recently
+            Input: '{"command": "import_ballots", "args": ["--recently-updated"]}'
+        # ImportBallotsFull:
+        #   Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
+        #   Properties:
+        #     Schedule: rate(1 day)
+        #     Name: import-ballots
+        #     Description: Run a full import of ballots
+        #     Input: '{"command": "import_ballots"}'
+        # ImportParties:
+        #   Type: Schedule
+        #   Properties:
+        #     Schedule: rate(1 day)
+        #     Name: import-parties
+        #     Description: Import parties
+        #     Input: '{"command": "import_parties"}'
         ImportVotesCast:
           Type: Schedule
           Properties:
@@ -107,13 +114,13 @@ Resources:
             Name: import-votes-cast
             Description: Import votes cast from given date
             Input: '{"command": "import_votes_cast", "args": ["--since=2021-05-05"]}'
-        ImportReferendums:
-          Type: Schedule
-          Properties:
-            Schedule: rate(1 day)
-            Name: import-referendums
-            Description: Update Referendums from google sheet
-            Input: '{"command": "import_referendums"}'
+        # ImportReferendums:
+        #   Type: Schedule
+        #   Properties:
+        #     Schedule: rate(1 day)
+        #     Name: import-referendums
+        #     Description: Update Referendums from google sheet
+        #     Input: '{"command": "import_referendums"}'
 
   WCIVFCodeDeployApp:
     Type: AWS::CodeDeploy::Application

@@ -89,7 +89,7 @@ class JsonPaginator:
 
     def __iter__(self):
         while self.next_page:
-            self.stdout.write(self.next_page)
+            self.stdout.write(f"{self.next_page}\n")
 
             r = requests.get(self.next_page)
             if r.status_code != 200:
