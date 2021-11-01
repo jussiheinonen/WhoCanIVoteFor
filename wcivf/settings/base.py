@@ -189,7 +189,7 @@ SESSION_CACHE_ALIAS = "default"
 
 YNR_BASE = "https://candidates.democracyclub.org.uk"
 YNR_UTM_QUERY_STRING = "utm_source=who&utm_campaign=ynr_cta"
-EE_BASE = "http://localhost:8000"
+EE_BASE = "https://elections.democracyclub.org.uk"
 
 WDIV_BASE = "https://wheredoivote.co.uk"
 WDIV_API = "/api/beta"
