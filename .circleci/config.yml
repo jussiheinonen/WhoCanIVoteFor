@@ -219,52 +219,56 @@ workflows:
           context: [ deployment-development-wcivf ]
           filters: { branches: { only: [ main, master, staging ] } }
 
-      # - sam_deploy:
-      #     name: sam_deploy_staging
-      #     dc-environment: staging
-      #     vpc-id: vpc-69cef901
-      #     ssl-certificate-arn: arn:aws:acm:eu-west-2:897471774344:certificate/a448e49a-5f47-41a3-a3d8-b6cc88781235
-      #     instance-type: t3.small
-      #     requires:
-      #     - build_and_test
-      #     # NB should this be dependent on successful sam_deploy_development job?
-      #     - sam_build
-      #     context: [ deployment-staging-wcivf ]
-      #     filters: { branches: { only: [ main, master, staging ] } }
+      - sam_deploy:
+          name: sam_deploy_staging
+          dc-environment: staging
+          vpc-id: vpc-69cef901
+          subnet-ids: "subnet-e2b4f198,subnet-5a911a16,subnet-818bb2e8"
+          ssl-certificate-arn: arn:aws:acm:eu-west-2:897471774344:certificate/a448e49a-5f47-41a3-a3d8-b6cc88781235
+          instance-type: t3.small
+          domain: "wcivf.club"
+          requires:
+          - build_and_test
+          # NB should this be dependent on successful sam_deploy_development job?
+          - sam_build
+          context: [ deployment-staging-wcivf ]
+          filters: { branches: { only: [ move-to-alb, main, master, staging ] } }
 
-      # - code_deploy:
-      #     name: code_deploy_staging
-      #     min-size: 1
-      #     max-size: 1
-      #     desired-capacity: 1
-      #     requires:
-      #     - build_and_test
-      #     - sam_deploy_staging
-      #     context: [ deployment-staging-wcivf ]
-      #     filters: { branches: { only: [ main, master, staging ] } }
+      - code_deploy:
+          name: code_deploy_staging
+          min-size: 1
+          max-size: 1
+          desired-capacity: 1
+          requires:
+          - build_and_test
+          - sam_deploy_staging
+          context: [ deployment-staging-wcivf ]
+          filters: { branches: { only: [ move-to-alb, main, master, staging ] } }
 
-      # - sam_deploy:
-      #     name: sam_deploy_production
-      #     dc-environment: production
-      #     vpc-id: vpc-0d23d243e8bff4415
-      #     ssl-certificate-arn: arn:aws:acm:eu-west-2:705594574410:certificate/4cee2a82-405a-42bd-b14a-4ea6bc63e36c
-      #     instance-type: t3.small
-      #     requires:
-      #     - build_and_test
-      #     # NB should this be dependent on successful sam_deploy_development job?
-      #     - sam_build
-      #     - code_deploy_staging
-      #     context: [ deployment-production-wcivf ]
-      #     filters: { branches: { only: [ main, master ] } }
+      - sam_deploy:
+          name: sam_deploy_production
+          dc-environment: production
+          vpc-id: vpc-0d23d243e8bff4415
+          subnet-ids: "subnet-04caf1309c0ab8f94,subnet-06475e48c36b4aece,subnet-0895b7d4795fbb1f4"
+          ssl-certificate-arn: arn:aws:acm:eu-west-2:705594574410:certificate/4cee2a82-405a-42bd-b14a-4ea6bc63e36c
+          instance-type: t3.small
+          domain: "whocanivotefor.co.uk"
+          requires:
+          - build_and_test
+          # NB should this be dependent on successful sam_deploy_development job?
+          - sam_build
+          - code_deploy_staging
+          context: [ deployment-production-wcivf ]
+          filters: { branches: { only: [ main, master ] } }
 
-      # - code_deploy:
-      #     name: code_deploy_production
-      #     min-size: 1
-      #     max-size: 1
-      #     desired-capacity: 1
-      #     requires:
-      #     - build_and_test
-      #     - sam_deploy_staging
-      #     - sam_deploy_production
-      #     context: [ deployment-production-wcivf ]
-      #     filters: { branches: { only: [ main, master ] } }
+      - code_deploy:
+          name: code_deploy_production
+          min-size: 1
+          max-size: 1
+          desired-capacity: 1
+          requires:
+          - build_and_test
+          - sam_deploy_staging
+          - sam_deploy_production
+          context: [ deployment-production-wcivf ]
+          filters: { branches: { only: [ main, master ] } }
