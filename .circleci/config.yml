@@ -95,6 +95,8 @@ jobs:
         type: string
       subnet-ids:
         type: string
+      domain:
+        type: string
     environment:
       DC_ENVIRONMENT: <<parameters.dc-environment>>
     steps:
@@ -130,7 +132,8 @@ jobs:
                    VpcIdParameter=<<parameters.vpc-id>> \
                    SubnetIdsParameter=<<parameters.subnet-ids>> \
                    SSLCertificateArn=<<parameters.ssl-certificate-arn>> \
-                   InstanceType='<<parameters.instance-type>>'
+                   InstanceType='<<parameters.instance-type>>' \
+                   Domain='<<parameters.domain>>'
                   "
       - run:
           name: post deploy tests
@@ -197,6 +200,7 @@ workflows:
           subnet-ids: "subnet-890877f3,subnet-be093ad7,subnet-3524a679"
           ssl-certificate-arn: arn:aws:acm:eu-west-2:061126312678:certificate/3ac6d121-aed6-48a7-af80-6a021e05167c
           instance-type: t3.small
+          domain: "dev.wcivf.club"
           requires:
           - build_and_test
           - sam_build
