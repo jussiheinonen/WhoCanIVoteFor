@@ -1,5 +1,6 @@
 import boto3
 from botocore.exceptions import ClientError
+import time
 
 session = boto3.Session()
 
@@ -126,6 +127,10 @@ def main():
     create_default_asg()
     # then create the default deployment group using that ASG
     create_deployment_group()
+    # as this is an initial deployment wait a minute before moving on to next
+    # step as the instance needs to have initialised and be in ready state
+    # before code deploy can create a start deployment
+    time.sleep(60)
 
 
 if __name__ == "__main__":
