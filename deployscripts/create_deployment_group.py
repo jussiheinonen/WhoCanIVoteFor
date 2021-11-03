@@ -25,12 +25,22 @@ def get_subnet_ids():
     return [subnet["SubnetId"] for subnet in response["Subnets"]]
 
 
+def get_target_group_arn():
+    """
+    Returns the arn of the ELB target group defined in sam-template.yaml
+    """
+    client = session.client("elbv2")
+    response = client.describe_target_groups(Names=["wcivf-alb-tg"])
+    return response["TargetGroups"][0]["TargetGroupArn"]
+
+
 def create_default_asg():
     """
     Get or create the default auto scaling group
     """
     client = session.client("autoscaling")
     subnet_ids = get_subnet_ids()
+    target_group_arn = get_target_group_arn()
 
     response = client.create_auto_scaling_group(
         AutoScalingGroupName="default",
@@ -45,8 +55,7 @@ def create_default_asg():
         DesiredCapacity=1,
         HealthCheckType="ELB",
         HealthCheckGracePeriod=300,
-        # hardcoded to value set in sam-template.yaml as shouldnt change
-        LoadBalancerNames=["wcivf-elb"],
+        TargetGroupARNs=[target_group_arn],
         Tags=[{"Key": "CodeDeploy"}],
         TerminationPolicies=[
             "OldestLaunchConfiguration",
@@ -99,7 +108,7 @@ def create_deployment_group():
         },
         # hardcoded to name in the sam-template.yaml
         loadBalancerInfo={
-            "elbInfoList": [{"name": "wcivf-elb"}],
+            "targetGroupInfoList": [{"name": "wcivf-alb-tg"}],
         },
     )
 
