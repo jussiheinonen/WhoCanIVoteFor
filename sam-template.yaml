@@ -44,6 +44,10 @@ Parameters:
     Description: "VPC ID"
     Type: String
 
+  SubnetIdsParameter:
+    Description: "List of subnet IDs"
+    Type: CommaDelimitedList
+
   SSLCertificateArn:
     Description: "SSL Certificate ARN"
     Type: String
@@ -182,9 +186,7 @@ Resources:
       SecurityGroups:
         - !Ref ElbHTTPSecurityGroup
       IpAddressType: "ipv4"
-      Subnets:
-        - "subnet-890877f3"
-        - "subnet-be093ad7"
+      Subnets: !Ref SubnetIdsParameter
 
   HTTPSListener:
     Type: "AWS::ElasticLoadBalancingV2::Listener"
