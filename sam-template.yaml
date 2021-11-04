@@ -223,6 +223,23 @@ Resources:
             StatusCode: "HTTP_301"
           Type: "redirect"
 
+  HTTPAPIredirect:
+    Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
+    Properties:
+      Conditions:
+        - Field: "path-pattern"
+          Values:
+            - "/api/*"
+            - "/api"
+      Actions:
+        - Type: "forward"
+          ForwardConfig:
+            TargetGroups:
+              - TargetGroupArn: !Ref WCIVFTargetGroup
+                Weight: 1
+      ListenerArn: !Ref HTTPListener
+      Priority: 1
+
   HTTPWWWredirect:
     Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
     Properties:
@@ -240,9 +257,8 @@ Resources:
             Path: "/#{path}"
             Query: "#{query}"
             StatusCode: "HTTP_301"
-
       ListenerArn: !Ref HTTPListener
-      Priority: 1
+      Priority: 2
 
   HTTPSWWWredirect:
     Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
@@ -261,7 +277,6 @@ Resources:
             Path: "/#{path}"
             Query: "#{query}"
             StatusCode: "HTTP_301"
-
       ListenerArn: !Ref HTTPSListener
       Priority: 2
 

@@ -205,7 +205,7 @@ workflows:
           - build_and_test
           - sam_build
           context: [ deployment-development-wcivf ]
-          filters: { branches: { only: [ main, master, staging ] } }
+          filters: { branches: { only: [ add-api-rule, main, master, staging ] } }
 
       - code_deploy:
           name: code_deploy_development
