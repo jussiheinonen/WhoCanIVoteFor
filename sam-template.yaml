@@ -238,7 +238,7 @@ Resources:
               - TargetGroupArn: !Ref WCIVFTargetGroup
                 Weight: 1
       ListenerArn: !Ref HTTPListener
-      Priority: 1
+      Priority: 2
 
   HTTPWWWredirect:
     Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
@@ -258,7 +258,7 @@ Resources:
             Query: "#{query}"
             StatusCode: "HTTP_301"
       ListenerArn: !Ref HTTPListener
-      Priority: 2
+      Priority: 1
 
   HTTPSWWWredirect:
     Type: 'AWS::ElasticLoadBalancingV2::ListenerRule'
