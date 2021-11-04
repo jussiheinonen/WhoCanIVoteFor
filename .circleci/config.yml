@@ -232,7 +232,7 @@ workflows:
           # NB should this be dependent on successful sam_deploy_development job?
           - sam_build
           context: [ deployment-staging-wcivf ]
-          filters: { branches: { only: [ move-to-alb, main, master, staging ] } }
+          filters: { branches: { only: [ main, master, staging ] } }
 
       - code_deploy:
           name: code_deploy_staging
@@ -243,7 +243,7 @@ workflows:
           - build_and_test
           - sam_deploy_staging
           context: [ deployment-staging-wcivf ]
-          filters: { branches: { only: [ move-to-alb, main, master, staging ] } }
+          filters: { branches: { only: [ main, master, staging ] } }
 
       - sam_deploy:
           name: sam_deploy_production
