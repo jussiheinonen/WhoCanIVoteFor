@@ -3,6 +3,7 @@ import abc
 from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from api import serializers
 from api.serializers import VotingSystemSerializer
 from core.helpers import clean_postcode
@@ -128,3 +129,23 @@ class CandidatesAndElectionsForBallots(BaseCandidatesAndElectionsViewSet):
             "election__election_date", "election__election_weight"
         )
         return pes
+
+
+class LastUpdatedView(APIView):
+    def get(self, request):
+        """
+        Returns the current timestamps used by the people and ballot recently
+        updated importers
+        """
+        try:
+            ballot_ts = PostElection.objects.last_updated_in_ynr().ynr_modified
+            ballot_ts = ballot_ts.isoformat()
+        except PostElection.DoesNotExist:
+            ballot_ts = None
+
+        return Response(
+            data={
+                "ballot_timestamp": ballot_ts,
+                "person_timestamp": Person.objects.latest().last_updated.isoformat(),
+            }
+        )

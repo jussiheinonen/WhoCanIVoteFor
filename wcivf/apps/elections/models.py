@@ -327,6 +327,14 @@ class Post(models.Model):
         return f"{self.label} {self.division_suffix}".strip()
 
 
+class PostElectionQuerySet(models.QuerySet):
+    def last_updated_in_ynr(self):
+        """
+        Returns the ballot with the most recent change made in YNR we know about
+        """
+        return self.filter(ynr_modified__isnull=False).latest("ynr_modified")
+
+
 class PostElection(TimeStampedModel):
     ballot_paper_id = models.CharField(blank=True, max_length=800, unique=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -353,6 +361,8 @@ class PostElection(TimeStampedModel):
         null=True,
         help_text="Timestamp of when this ballot was updated in the YNR",
     )
+
+    objects = PostElectionQuerySet.as_manager()
 
     class Meta:
         get_latest_by = "ynr_modified"

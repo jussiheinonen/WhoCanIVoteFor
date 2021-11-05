@@ -1,4 +1,4 @@
-from django.urls import re_path, include
+from django.urls import path, include
 
 from rest_framework import routers
 
@@ -18,4 +18,11 @@ router.register(
 )
 
 
-urlpatterns = [re_path(r"^", include(router.urls))]
+urlpatterns = [
+    path(r"", include(router.urls)),
+    path(
+        "last-updated-timestamps/",
+        views.LastUpdatedView.as_view(),
+        name="last-updated-timestamps",
+    ),
+]

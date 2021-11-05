@@ -185,11 +185,7 @@ class YNRBallotImporter:
 
     def get_last_updated(self):
         try:
-            return (
-                PostElection.objects.filter(ynr_modified__isnull=False)
-                .latest()
-                .ynr_modified
-            )
+            return PostElection.objects.last_updated_in_ynr().ynr_modified
         except PostElection.DoesNotExist:
             # default before changes were added to YNR
             return timezone.datetime(2021, 10, 27, tzinfo=timezone.utc)
