@@ -1,8 +1,8 @@
-from django.urls import include, re_path
+from django.urls import include, re_path, path
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
-from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps.views import sitemap, index
 from django.views.decorators.cache import cache_page
 
 from elections.sitemaps import ElectionSitemap, PostElectionSitemap
@@ -26,8 +26,13 @@ urlpatterns = (
         re_path(r"^person/", include("people.urls")),
         re_path(r"^feedback/", include("feedback.urls")),
         re_path(r"^api/", include(("api.urls", "api"), namespace="api")),
-        re_path(
-            r"^sitemap\.xml$",
+        path(
+            "sitemap.xml",
+            cache_page(86400)(index),
+            {"sitemaps": sitemaps},
+        ),
+        path(
+            "sitemap-<section>.xml",
             cache_page(86400)(sitemap),
             {"sitemaps": sitemaps},
             name="django.contrib.sitemaps.views.sitemap",

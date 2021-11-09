@@ -8,4 +8,4 @@ class PersonSitemap(Sitemap):
     protocol = "https"
 
     def items(self):
-        return Person.objects.all()
+        return Person.objects.all().order_by("pk")
