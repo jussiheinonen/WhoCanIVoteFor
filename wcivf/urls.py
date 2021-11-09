@@ -21,7 +21,6 @@ urlpatterns = (
         re_path(r"^admin/", admin.site.urls),
         re_path(r"^", include("core.urls")),
         re_path(r"^elections/", include("elections.urls")),
-        re_path(r"^results/", include("results.urls")),
         re_path(r"^parties/", include("parties.urls")),
         re_path(r"^person/", include("people.urls")),
         re_path(r"^feedback/", include("feedback.urls")),
