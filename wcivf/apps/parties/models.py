@@ -1,10 +1,3 @@
-import os
-
-import requests
-
-from django.conf import settings
-from django.core.files import File
-from django.core.files.temp import NamedTemporaryFile
 from django.urls import reverse
 from django.db import models
 from django.utils.text import slugify
@@ -16,33 +9,12 @@ class PartyManager(models.Manager):
     def update_or_create_from_ynr(self, party):
         defaults = {"party_name": party["name"]}
 
+        if party["default_emblem"]:
+            defaults["emblem_url"] = party["default_emblem"]["image"]
+
         party_obj, _ = self.update_or_create(
             party_id=party["legacy_slug"], defaults=defaults
         )
-        if party["emblems"]:
-            same_photo = False
-
-            selected_image = party["default_emblem"]
-            url = selected_image["image"]
-            photo_filename = url.split("/")[-1]
-
-            try:
-                file_path = party_obj.emblem.file.name
-            except:
-                file_path = None
-
-            # This party has an emblem already, check if it's the same
-            if file_path and os.path.exists(file_path):
-                if party_obj.emblem.name.endswith(photo_filename):
-                    same_photo = True
-
-            if not same_photo:
-                img_temp = NamedTemporaryFile(delete=True)
-                img_temp.write(requests.get(url).content)
-                img_temp.flush()
-
-                party_obj.emblem.save(photo_filename, File(img_temp))
-                party_obj.save()
 
         return (party_obj, _)
 
@@ -54,7 +26,7 @@ class Party(models.Model):
 
     party_id = models.CharField(blank=True, max_length=100, primary_key=True)
     party_name = models.CharField(max_length=765)
-    emblem = models.ImageField(upload_to="parties/emblems", null=True)
+    emblem_url = models.URLField(blank=True, null=True)
     wikipedia_url = models.URLField(blank=True)
     description = models.TextField(blank=True)
 
@@ -70,12 +42,6 @@ class Party(models.Model):
     def get_absolute_url(self):
         return reverse(
             "party_view", args=[str(self.pk), slugify(self.party_name)]
-        )
-
-    @property
-    def ynr_emblem_url(self):
-        return "{}/media/images/images/{}".format(
-            settings.YNR_BASE, self.emblem.path.split("/")[-1]
         )
 
     @property

@@ -16,9 +16,9 @@
                     {% endfor %}
                 </ul>
             </div>
-            {% if party.emblem %}
+            {% if party.emblem_url %}
                 <div class="ds-candidate-image">
-                    <img src="{{ party.emblem.url }}" alt="{{ party.name}} emblem">
+                    <img src="{{ party.emblem_url }}" alt="{{ party.name}} emblem">
                 </div>
             {% endif %}
         </section>

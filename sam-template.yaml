@@ -101,20 +101,13 @@ Resources:
             Name: import-ballots-recently-updated
             Description: Update all ballots updated in YNR recently
             Input: '{"command": "import_ballots", "args": ["--recently-updated"]}'
-        # ImportBallotsFull:
-        #   Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
-        #   Properties:
-        #     Schedule: rate(1 day)
-        #     Name: import-ballots
-        #     Description: Run a full import of ballots
-        #     Input: '{"command": "import_ballots"}'
-        # ImportParties:
-        #   Type: Schedule
-        #   Properties:
-        #     Schedule: rate(1 day)
-        #     Name: import-parties
-        #     Description: Import parties
-        #     Input: '{"command": "import_parties"}'
+        ImportParties:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 day)
+            Name: import-parties
+            Description: Import parties
+            Input: '{"command": "import_parties"}'
         # ImportReferendums:
         #   Type: Schedule
         #   Properties:
