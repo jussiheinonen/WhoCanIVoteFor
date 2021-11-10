@@ -25,4 +25,4 @@ class PostElectionSitemap(Sitemap):
             Q(election__election_type="parl")
             | Q(election__election_type="2010")
             | Q(election__election_type="2015")
-        )
+        ).order_by("-election__election_date")
