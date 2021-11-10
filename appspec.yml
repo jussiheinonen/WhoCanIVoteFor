@@ -61,14 +61,10 @@ hooks:
 # During the ApplicationStop deployment lifecycle event, run the commands 
 #   in the script specified in "location" starting from the root of the 
 #   revision's file bundle.
-  ApplicationStop:
-    - location: deployscripts/stop_application.sh
-      timeout: 300
-      runas: root
 # During the BeforeInstall deployment lifecycle event, run the commands 
 #   in the script specified in "location".
   BeforeInstall:
-    - location: deployscripts/clean_instance.sh
+    - location: deployscripts/stop_application.sh
       timeout: 300
       runas: root
   #   - location: 
@@ -81,9 +77,6 @@ hooks:
       timeout: 300
       runas: wcivf
     - location: deployscripts/write_envfile.sh
-      timeout: 300
-      runas: wcivf
-    - location: deployscripts/migrate.sh
       timeout: 300
       runas: wcivf
     - location: deployscripts/collectstatic.sh
