@@ -137,16 +137,21 @@ Resources:
           IpProtocol: tcp
           ToPort: 443
       VpcId: !Ref VpcIdParameter
-  InstanceSecurityGroup:
+  InstanceHTTPSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: 'Allow access for SSH and HTTP from the ELB'
-      GroupName: 'InstanceSecurityGroup'
+      GroupDescription: 'Allow HTTP and HTTPS access for an instance from the ALB security group'
+      GroupName: 'InstanceHTTPSecurityGroup'
       SecurityGroupIngress:
         - FromPort: 80
           IpProtocol: tcp
           SourceSecurityGroupId: !Ref ElbHTTPSecurityGroup
           ToPort: 80
+        - FromPort: 443
+          IpProtocol: tcp
+          SourceSecurityGroupId: !Ref ElbHTTPSecurityGroup
+          ToPort: 443
+      VpcId: !Ref VpcIdParameter
   WCIVFTargetGroup:
     Type: "AWS::ElasticLoadBalancingV2::TargetGroup"
     Properties:
@@ -266,7 +271,7 @@ Resources:
           - DeviceIndex: 0
             AssociatePublicIpAddress: true
             Groups:
-              - !Ref ElbHTTPSecurityGroup
+              - !Ref InstanceHTTPSecurityGroup
         # This is needed as it has permissions needed for the instance
         # TODO create new role without packer permissions
         IamInstanceProfile:
