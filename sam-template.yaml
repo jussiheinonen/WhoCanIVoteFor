@@ -166,7 +166,7 @@ Resources:
       TargetType: "instance"
       Matcher:
         HttpCode: "200"
-      HealthyThresholdCount: 5
+      HealthyThresholdCount: 2
       VpcId: !Ref VpcIdParameter
       Name: "wcivf-alb-tg"
       HealthCheckEnabled: true
