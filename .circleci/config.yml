@@ -205,7 +205,7 @@ workflows:
           - build_and_test
           - sam_build
           context: [ deployment-development-wcivf ]
-          filters: { branches: { only: [ main, master, staging ] } }
+          filters: { branches: { only: [ enable-dev-deploys, main, master, staging ] } }
 
       - code_deploy:
           name: code_deploy_development
@@ -217,7 +217,7 @@ workflows:
           - sam_build
           - sam_deploy_development
           context: [ deployment-development-wcivf ]
-          filters: { branches: { only: [ main, master, staging ] } }
+          filters: { branches: { only: [ enable-dev-deploys, main, master, staging ] } }
 
       - sam_deploy:
           name: sam_deploy_staging
