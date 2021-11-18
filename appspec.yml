@@ -82,9 +82,6 @@ hooks:
     - location: deployscripts/collectstatic.sh
       timeout: 300
       runas: wcivf
-    - location: deployscripts/setup_django_site.sh
-      timeout: 300
-      runas: wcivf
 # During the ApplicationStart deployment lifecycle event, run the commands 
 #   in the script specified in "location".
   ApplicationStart:
