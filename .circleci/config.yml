@@ -157,6 +157,11 @@ jobs:
         type: integer
       desired-capacity:
         type: integer
+      dc-environment:
+        type: enum
+        enum: [ development, staging, production ]
+    environment:
+      DC_ENVIRONMENT: <<parameters.dc-environment>>
     steps:
       - checkout
       - restore_cache:
@@ -164,6 +169,7 @@ jobs:
           - v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
       - attach_workspace:
           at: ~/repo/
+      - run: printenv DC_ENVIRONMENT
       - run:
           name: ensure the deployment group ready
           command: |
@@ -199,7 +205,7 @@ workflows:
           vpc-id: vpc-fa2e0792
           subnet-ids: "subnet-890877f3,subnet-be093ad7,subnet-3524a679"
           ssl-certificate-arn: arn:aws:acm:eu-west-2:061126312678:certificate/3ac6d121-aed6-48a7-af80-6a021e05167c
-          instance-type: t3.small
+          instance-type: t3a.small
           domain: "dev.wcivf.club"
           requires:
           - build_and_test
@@ -209,6 +215,7 @@ workflows:
 
       - code_deploy:
           name: code_deploy_development
+          dc-environment: development
           min-size: 1
           max-size: 1
           desired-capacity: 1
@@ -225,7 +232,7 @@ workflows:
           vpc-id: vpc-69cef901
           subnet-ids: "subnet-e2b4f198,subnet-5a911a16,subnet-818bb2e8"
           ssl-certificate-arn: arn:aws:acm:eu-west-2:897471774344:certificate/a448e49a-5f47-41a3-a3d8-b6cc88781235
-          instance-type: t3.small
+          instance-type: t3a.medium
           domain: "wcivf.club"
           requires:
           - build_and_test
@@ -236,6 +243,7 @@ workflows:
 
       - code_deploy:
           name: code_deploy_staging
+          dc-environment: staging
           min-size: 1
           max-size: 1
           desired-capacity: 1
@@ -251,7 +259,7 @@ workflows:
           vpc-id: vpc-0d23d243e8bff4415
           subnet-ids: "subnet-04caf1309c0ab8f94,subnet-06475e48c36b4aece,subnet-0895b7d4795fbb1f4"
           ssl-certificate-arn: arn:aws:acm:eu-west-2:705594574410:certificate/4cee2a82-405a-42bd-b14a-4ea6bc63e36c
-          instance-type: t3.small
+          instance-type: t3a.medium
           domain: "whocanivotefor.co.uk"
           requires:
           - build_and_test
@@ -263,6 +271,7 @@ workflows:
 
       - code_deploy:
           name: code_deploy_production
+          dc-environment: production
           min-size: 1
           max-size: 1
           desired-capacity: 1

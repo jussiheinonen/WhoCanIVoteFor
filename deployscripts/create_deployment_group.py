@@ -1,3 +1,4 @@
+import os
 import boto3
 from botocore.exceptions import ClientError
 import time
@@ -57,7 +58,14 @@ def create_default_asg():
         HealthCheckType="ELB",
         HealthCheckGracePeriod=300,
         TargetGroupARNs=[target_group_arn],
-        Tags=[{"Key": "CodeDeploy"}],
+        Tags=[
+            {"Key": "CodeDeploy"},
+            {"Key": "dc-product", "Value": "wcivf"},
+            {
+                "Key": "dc-environmnet",
+                "Value": os.environ.get("DC_ENVIRONMENT"),
+            },
+        ],
         TerminationPolicies=[
             "OldestLaunchConfiguration",
             "ClosestToNextInstanceHour",
