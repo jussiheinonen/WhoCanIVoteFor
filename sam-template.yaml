@@ -79,6 +79,10 @@ Resources:
           SENTRY_DSN: !Ref AppSentryDsn
           SECRET_KEY: !Ref AppSecretKey
           DC_ENVIRONMENT: !Ref AppDcEnvironment
+      Tags:
+        dc-environment: !Ref AppDcEnvironment
+        dc-product: wcivf
+        CreatedVia: CloudFormation
       Events:
         ImportPeopleRecentlyUpdated:
           Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
@@ -121,6 +125,7 @@ Resources:
     Properties:
       ApplicationName: WCIVFCodeDeploy
       ComputePlatform: Server
+      # cannot apply tags without recreating - applied in console
 
   ElbHTTPSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -137,6 +142,14 @@ Resources:
           IpProtocol: tcp
           ToPort: 443
       VpcId: !Ref VpcIdParameter
+      Tags:
+        - Key: dc-environment
+          Value: !Ref AppDcEnvironment
+        - Key: dc-product
+          Value: wcivf
+        - Key: CreatedVia
+          Value: CloudFormation
+
   InstanceHTTPSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -152,6 +165,14 @@ Resources:
           SourceSecurityGroupId: !Ref ElbHTTPSecurityGroup
           ToPort: 443
       VpcId: !Ref VpcIdParameter
+      Tags:
+        - Key: dc-environment
+          Value: !Ref AppDcEnvironment
+        - Key: dc-product
+          Value: wcivf
+        - Key: CreatedVia
+          Value: CloudFormation
+
   WCIVFTargetGroup:
     Type: "AWS::ElasticLoadBalancingV2::TargetGroup"
     Properties:
@@ -170,7 +191,13 @@ Resources:
       VpcId: !Ref VpcIdParameter
       Name: "wcivf-alb-tg"
       HealthCheckEnabled: true
-
+      Tags:
+        - Key: dc-environment
+          Value: !Ref AppDcEnvironment
+        - Key: dc-product
+          Value: wcivf
+        - Key: CreatedVia
+          Value: CloudFormation
 
   ApplicationLoadBalancer:
     Type: "AWS::ElasticLoadBalancingV2::LoadBalancer"
@@ -182,6 +209,14 @@ Resources:
         - !Ref ElbHTTPSecurityGroup
       IpAddressType: "ipv4"
       Subnets: !Ref SubnetIdsParameter
+      Tags:
+        - Key: dc-environment
+          Value: !Ref AppDcEnvironment
+        - Key: dc-product
+          Value: wcivf
+        - Key: CreatedVia
+          Value: CloudFormation
+
 
   HTTPSListener:
     Type: "AWS::ElasticLoadBalancingV2::Listener"
@@ -305,6 +340,15 @@ Resources:
           aAogICAgc3NoLWF1dGhvcml6ZWQta2V5czoKICAgICAgLSAic3NoLWVkMjU1MTkgQUFBQUMzTnph
           QzFsWkRJMU5URTVBQUFBSUxHenpBM1hIK1JNcUVlOGpEbnovVHZmRGRpY2QxdDJvQmVSUDBDQWV1
           Q1kgbWljaGFlbEBtYWNib29rcHJvMjAyMSIK
+      TagSpecifications:
+        - ResourceType: launch-template
+          Tags:
+            - Key: dc-environment
+              Value: !Ref AppDcEnvironment
+            - Key: dc-product
+              Value: wcivf
+            - Key: CreatedVia
+              Value: CloudFormation
 
 Outputs:
   WCIVFControllerFunctionArn:
