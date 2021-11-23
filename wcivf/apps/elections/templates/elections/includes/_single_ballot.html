@@ -99,8 +99,13 @@
 
                 {% if not postelection.contested %}
                     <div>
-                        This election isn't contested. That means that there are the same number of candidates nominated
-                        as there are seats up for election, so they all get positions without an election taking place.
+                        <p><b>Uncontested Election</b></p>
+
+                        <p>This election was uncontested because the number of candidates who stood was {% if postelection.party_ballot_count == postelection.people.count %}less than{% else %}equal to{%endif%} the number of available seats.
+                            There are {{ postelection.party_ballot_count }} seat{{ postelection.people|pluralize }} in this ward/division, and only {{ postelection.people.count|apnumber }} candidate{{ postelection.people|pluralize }}.</p>
+
+                        <p>No votes will be cast, and the candidate{{ postelection.people|pluralize }} below ha{{ postelection.people|pluralize:"s,ve" }} been automatically declared the winner{{ postelection.people|pluralize }}.
+                            A new election to fill the unclaimed seat{{ postelection.people|pluralize }} will be held within 35 working days of the original election date.</p>
                     </div>
                 {% endif %}
 
