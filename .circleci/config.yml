@@ -252,7 +252,7 @@ workflows:
           - build_and_test
           - sam_deploy_staging
           context: [ deployment-staging-wcivf ]
-          filters: { branches: { only: [ main, master, staging ] } }
+          filters: { branches: { only: [ main, master, staging, hotfix/uncontested-text ] } }
 
       - sam_deploy:
           name: sam_deploy_production
