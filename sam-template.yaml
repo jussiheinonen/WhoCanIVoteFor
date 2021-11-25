@@ -60,6 +60,10 @@ Parameters:
     Description: "The domain to be used"
     Type: String
 
+  AppSlackFeedbackWebhookUrl:
+    Description: "Webhook url used to send feeback entries to Slack"
+    Type: AWS::SSM::Parameter::Value<String>
+
 Resources:
   WCIVFControllerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
@@ -79,6 +83,7 @@ Resources:
           SENTRY_DSN: !Ref AppSentryDsn
           SECRET_KEY: !Ref AppSecretKey
           DC_ENVIRONMENT: !Ref AppDcEnvironment
+          SLACK_FEEDBACK_WEBHOOK_URL: !Ref AppSlackFeedbackWebhookUrl
       Tags:
         dc-environment: !Ref AppDcEnvironment
         dc-product: wcivf
@@ -112,13 +117,13 @@ Resources:
             Name: import-parties
             Description: Import parties
             Input: '{"command": "import_parties"}'
-        # ImportReferendums:
-        #   Type: Schedule
-        #   Properties:
-        #     Schedule: rate(1 day)
-        #     Name: import-referendums
-        #     Description: Update Referendums from google sheet
-        #     Input: '{"command": "import_referendums"}'
+        BatchFeedbackToSlack:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 9 * * 5)
+            Name: batch-feedback-to-slack
+            Description: Send feedback entries for the last week to slack
+            Input: '{"command": "batch_feedback_to_slack", "args": ["--hours=168"]}'
 
   WCIVFCodeDeployApp:
     Type: AWS::CodeDeploy::Application
