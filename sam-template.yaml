@@ -188,7 +188,7 @@ Resources:
       HealthCheckPort: "traffic-port"
       HealthCheckProtocol: "HTTP"
       HealthCheckTimeoutSeconds: 5
-      UnhealthyThresholdCount: 2
+      UnhealthyThresholdCount: 5
       TargetType: "instance"
       Matcher:
         HttpCode: "200"
