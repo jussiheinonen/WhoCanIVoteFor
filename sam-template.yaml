@@ -120,7 +120,7 @@ Resources:
         BatchFeedbackToSlack:
           Type: Schedule
           Properties:
-            Schedule: cron(0 9 ? * 5 *)
+            Schedule: cron(0 9 ? * 6 *)
             Name: batch-feedback-to-slack
             Description: Send feedback entries for the last week to slack
             Input: '{"command": "batch_feedback_to_slack", "args": ["--hours=168"]}'
