@@ -316,10 +316,7 @@ class YNRBallotImporter:
             }
 
             if ballot_dict["candidates_locked"] and ballot_dict["winner_count"]:
-                defaults["contested"] = (
-                    len(ballot_dict["candidacies"])
-                    > ballot_dict["winner_count"]
-                )
+                defaults["contested"] = not ballot_dict["uncontested"]
 
             # only update this when using the recently_updated flag as otherwise
             # the timestamp will only be the modifed timestamp on the ballot
