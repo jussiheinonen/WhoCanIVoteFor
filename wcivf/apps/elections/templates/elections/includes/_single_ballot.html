@@ -38,7 +38,7 @@
 
             <p>
                 {% if postelection.election.in_past %}
-                    <strong>{{ postelection.people|length }} candidates</strong> stood in the {{ postelection.friendly_name }}.
+                    <strong>{{ postelection.people|length }} candidate{{ postelection.people|pluralize }}</strong> stood in the {{ postelection.friendly_name }}.
                 {% else %}
                     {# Display different messages depending on the number of candidates #}
                     {# Case: No candidates for a contested election #}
