@@ -139,3 +139,27 @@ This is created using [`critical`](https://github.com/addyosmani/critical), and 
 ```
 curl localhost:8000 | critical --base wcivf -m > wcivf/templates/_compressed_css.html
 ```
+
+# Test Feedback Form changes to Slack Webhooks
+You will need access to incoming webhooks page in the DC Slack account.
+
+Once you have access, create a new webhook and select `slackbot` as the channel. 
+Add that URL to your `local.py`: 
+
+`SLACK_FEEDBACK_WEBHOOK_URL = "URL"`
+
+Then, have your local install post to your channel in Slack.
+
+Complete the feedback form on localhost, then run the management command `manage.py batch_feedback_to_slack --hours-ago=1`
+
+Feedback should appear in your Slack channel.
+
+
+# Deploy to dev.wcivf.club to test/view edits
+
+Once you have pushed your latest changes to your branch: 
+
+`git fetch origin` to get access to the development branch
+`git checkout development` 
+`git merge [YOUR BRANCH NAME]`
+`git push origin develop`

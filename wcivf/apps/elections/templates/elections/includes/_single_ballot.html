@@ -97,18 +97,6 @@
                     {% endif %}
                 </p>
 
-                {% if not postelection.contested %}
-                    <div>
-                        <p><b>Uncontested Election</b></p>
-
-                        <p>This election was uncontested because the number of candidates who stood was {% if postelection.party_ballot_count == postelection.people.count %}equal to{% else %}less than{%endif%} the number of available seats.
-                            There are {{ postelection.party_ballot_count }} seat{{ postelection.people|pluralize }} in this ward/division, and only {{ postelection.people.count|apnumber }} candidate{{ postelection.people|pluralize }}.</p>
-
-                        <p>No votes will be cast, and the candidate{{ postelection.people|pluralize }} below has/have been automatically declared the winner{{ postelection.people|pluralize }}.
-                            A new election to fill the unclaimed seat{{ postelection.people|pluralize }} will be held within 35 working days of the original election date.</p>
-                    </div>
-                {% endif %}
-
                 {% if postelection.people %}
                     {% if postelection.display_as_party_list %}
                         {% include "elections/includes/_people_list_with_lists.html" with people=postelection.people %}

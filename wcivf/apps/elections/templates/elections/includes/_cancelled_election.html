@@ -1,22 +1,46 @@
 {% load markdown_deux_tags %}
+{% load humanize %}
+{% load static %}
+
 {% if object.metadata.cancelled_election.title %}
     <h2>{{ object.metadata.cancelled_election.title }}</h2>
 {% else %}
-    <h2>Cancelled Election</h2>
+    <div>
+        {% if object.winner_count == object.people.count %}
+            <b>Uncontested Election</b>
+
+            <p>This election was uncontested because the number of candidates who stood was equal to the number of available seats.
+                There is{{ object.winner_count|pluralize:"are" }} {{ object.winner_count|apnumber }}
+                seat{{ object.winner_count|pluralize }} in this ward/division, and only
+                {{ object.people.count|apnumber }} candidate{{ object.people|pluralize }}.</p>
+
+            <p>No votes will be cast, and the candidate{{ object.people|pluralize }} below have been automatically declared
+                the winner{{ object.people|pluralize }}.
+        {% else %}
+            {% if object.people.count >= 1 %}
+                <b>Uncontested and Rescheduled Election</b>
+
+                <p>This election was uncontested because the number of candidates who stood was fewer than the number of available seats.
+                    There is{{ object.winner_count|pluralize:"are"}} {{ object.winner_count|apnumber }}
+                    seat{{ object.winner_count|pluralize }} in this ward/division, and only
+                    {{ object.people.count|apnumber }} candidate{{ object.people|pluralize }}.</p>
+
+                <p>No votes will be cast, and the candidate{{ object.people|pluralize }} below
+                    ha{{ object.people|pluralize:"s,ve" }} been automatically declared the
+                    winner{{ object.people|pluralize }}.
+                    A new election to fill the unclaimed seat{{ object.people|pluralize }}
+                    will be held within 35 working days of the original election date.</p>
+            {% else %}
+                <b>Rescheduled Election</b>
+
+                <p>This election will not take place because <a href="{{ object.ynr_link }}">no candidates have been nominated to stand</a>.
+                    A new election to fill the unclaimed seat{{ object.winner_count|pluralize }} will be held within 35 working days of the original election date.</p>
+            {% endif %}
+        {% endif %}
+    </div>
 {% endif %}
+
 <p>
-    The poll for {{ object.post.label }} in the {{ object.election.name }}
-    {% if object.election.in_past %}was{% else %}has been{% endif %}
-    {% if object.replaced_by %}rescheduled{% else %}cancelled{% endif %}.
-
-    {% if object.replaced_by %}
-        <p>This election {% if object.election.in_past %}will{% else %}did{% endif %}
-            not take place because <a href="{{ object.ynr_sopn_link }}">no candidates</a> have been
-            nominated to stand. A new election to fill the unclaimed seat{{ object.people|pluralize }}
-            {% if object.election.in_past %}will be{% else %}was{% endif %}
-            held within 35 working days of the original election date.
-    {% endif %}
-
     {% if object.replaced_by %}
         {% if object.election.in_past %}
             It was rescheduled for
@@ -24,13 +48,20 @@
             It will now take place on
         {% endif %}
         <a href="{{ object.replaced_by.get_absolute_url }}">
-            {{ object.replaced_by.election.election_date|date:"j F Y" }}
+            {{ object.replaced_by.election.election_date|date:"j F Y" }}.
         </a>
     {% endif %}
-    {% if object.metadata.cancelled_election.detail %}
-        {{ object.metadata.cancelled_election.detail }}
-    {% endif %}
+
+
     {% if object.metadata.cancelled_election.url %}
         <a href="{{ object.metadata.cancelled_election.url }}">Read more</a>
     {% endif %}
+
 </p>
+
+<p>
+    {% if object.metadata.cancelled_election.detail %}
+        {{ object.metadata.cancelled_election.detail }}
+    {% endif %}
+</p>
+

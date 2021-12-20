@@ -1,5 +1,9 @@
-{% if postelection.people|length %}
-    {{ object.election.name }}: The {{ postelection.people|length }} candidates in {{ object.post.label }}
+{% if postelection.cancelled %}
+    {{ object.election.name }}: This election has been cancelled.
 {% else %}
-    {{ object.election.name }}: No candidates known yet.
+    {% if postelection.people|length %}
+        {{ object.election.name }}: The {{ postelection.people|length }} candidates in {{ object.post.label }}
+    {% else %}
+        {{ object.election.name }}: No candidates known yet.
+    {% endif %}
 {% endif %}
