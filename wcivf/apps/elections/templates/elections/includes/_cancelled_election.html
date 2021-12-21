@@ -10,7 +10,7 @@
             <b>Uncontested Election</b>
 
             <p>This election was uncontested because the number of candidates who stood was equal to the number of available seats.
-                There is{{ object.winner_count|pluralize:"are" }} {{ object.winner_count|apnumber }}
+                There {{ object.winner_count|pluralize:"is,are" }} {{ object.winner_count|apnumber }}
                 seat{{ object.winner_count|pluralize }} in this ward/division, and only
                 {{ object.people.count|apnumber }} candidate{{ object.people|pluralize }}.</p>
 
@@ -21,7 +21,7 @@
                 <b>Uncontested and Rescheduled Election</b>
 
                 <p>This election was uncontested because the number of candidates who stood was fewer than the number of available seats.
-                    There is{{ object.winner_count|pluralize:"are"}} {{ object.winner_count|apnumber }}
+                    There {{ object.winner_count|pluralize:"is,are"}} {{ object.winner_count|apnumber }}
                     seat{{ object.winner_count|pluralize }} in this ward/division, and only
                     {{ object.people.count|apnumber }} candidate{{ object.people|pluralize }}.</p>
 
