@@ -15,7 +15,16 @@
                 {{ object.people.count|apnumber }} candidate{{ object.people|pluralize }}.</p>
 
             <p>No votes will be cast, and the candidate{{ object.people|pluralize }} below have been automatically declared
-                the winner{{ object.people|pluralize }}.
+                the winner{{ object.people|pluralize }}.</p>
+
+            {% if postelection.people %}
+                {% if postelection.display_as_party_list %}
+                    {% include "elections/includes/_people_list_with_lists.html" with people=postelection.people %}
+                {% else %}
+                    {% include "elections/includes/_people_list.html" with people=postelection.people %}
+                {% endif %}
+            {% endif %}
+
         {% else %}
             {% if object.people.count >= 1 %}
                 <b>Uncontested and Rescheduled Election</b>
@@ -30,6 +39,13 @@
                     winner{{ object.people|pluralize }}.
                     A new election to fill the unclaimed seat{{ object.people|pluralize }}
                     will be held within 35 working days of the original election date.</p>
+                {% if postelection.people %}
+                    {% if postelection.display_as_party_list %}
+                        {% include "elections/includes/_people_list_with_lists.html" with people=postelection.people %}
+                    {% else %}
+                        {% include "elections/includes/_people_list.html" with people=postelection.people %}
+                    {% endif %}
+                {% endif %}
             {% else %}
                 <b>Rescheduled Election</b>
 
