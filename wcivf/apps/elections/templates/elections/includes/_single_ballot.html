@@ -97,17 +97,6 @@
                     {% endif %}
                 </p>
 
-                {% if postelection.cancelled %}
-                    {% include "elections/includes/_cancelled_election.html" with object=postelection only %}
-                {% endif %}
-                {% if postelection.people %}
-                    {% if postelection.display_as_party_list %}
-                        {% include "elections/includes/_people_list_with_lists.html" with people=postelection.people %}
-                    {% else %}
-                        {% include "elections/includes/_people_list.html" with people=postelection.people %}
-                    {% endif %}
-                {% endif %}
-
 
                 {% if postelection.should_display_sopn_info %}
                     <p>
@@ -151,26 +140,26 @@
                         </li>
                     </ul>
                 {% endif %}
+            {% endif %}
 
 
-                {% if postelection.husting_set.displayable %}
-                    {% include "hustings/includes/_ballot.html" with hustings=postelection.husting_set.displayable %}
-                {% endif %}
+            {% if postelection.husting_set.displayable %}
+                {% include "hustings/includes/_ballot.html" with hustings=postelection.husting_set.displayable %}
+            {% endif %}
 
-                {% if postelection.ballotnewsarticle_set.exists %}
-                    {% include "news_mentions/news_articles.html" with news_articles=postelection.ballotnewsarticle_set.all %}
-                {% endif %}
+            {% if postelection.ballotnewsarticle_set.exists %}
+                {% include "news_mentions/news_articles.html" with news_articles=postelection.ballotnewsarticle_set.all %}
+            {% endif %}
 
-                {% if postelection.wikipedia_bio %}
-                    <div class="ds-card">
-                        <div class="ds-card-body">
-                            <h3>Wikipedia</h3>
-                            <p>{{ postelection.wikipedia_bio }}</p>
-                            <p><a href="{{ postelection.wikipedia_url }}">Read more on Wikipedia</a></p>
-                        </div>
+            {% if postelection.wikipedia_bio %}
+                <div class="ds-card">
+                    <div class="ds-card-body">
+                        <h3>Wikipedia</h3>
+                        <p>{{ postelection.wikipedia_bio }}</p>
+                        <p><a href="{{ postelection.wikipedia_url }}">Read more on Wikipedia</a></p>
                     </div>
-                {% endif %}
-                {% include "elections/includes/_ld_election.html" with election=postelection %}
-                </div>
-                </div>
-                </div>
+            {% endif %}
+            {% include "elections/includes/_ld_election.html" with election=postelection %}
+        </div>
+    </div>
+</div>
