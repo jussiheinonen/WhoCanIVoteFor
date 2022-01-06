@@ -17,6 +17,7 @@ from core.helpers import show_data_on_error
 from elections.import_helpers import YNRBallotImporter
 from people.models import Person
 from elections.models import PostElection
+from wcivf.apps.elections.import_helpers import time_function_length
 from wcivf.apps.people.import_helpers import YNRPersonImporter
 
 
@@ -132,6 +133,7 @@ class Command(BaseCommand):
             self.save_page(next_page, page)
             next_page = results.get("next")
 
+    @time_function_length
     @transaction.atomic
     def add_people(self, results):
         for person in results["results"]:
@@ -205,6 +207,7 @@ class Command(BaseCommand):
     def import_ballots_for_date(self, date):
         self.ballot_importer.do_import(params={"election_date": date})
 
+    @time_function_length
     def delete_merged_people(self):
         url = (
             settings.YNR_BASE
@@ -221,6 +224,7 @@ class Command(BaseCommand):
             url = page.get("next")
         Person.objects.filter(ynr_id__in=merged_ids).delete()
 
+    @time_function_length
     def delete_orphaned_people(self):
         """
         Delete all people without candidacies

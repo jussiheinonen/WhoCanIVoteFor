@@ -11,6 +11,23 @@ from elections.models import PostElection, Election, Post, VotingSystem
 from people.models import Person, PersonPost
 
 
+def time_function_length(func):
+    """
+    Decorator to time how long an import function takes. Intended to
+    help with debugging lambda timeouts.
+    """
+
+    def wraps(*args, **kwargs):
+        start = timezone.now()
+        sys.stdout.write(f"Starting {func.__name__}\n")
+        result = func(*args, **kwargs)
+        end = timezone.now()
+        sys.stdout.write(f"{func.__name__} took {end - start} to complete\n")
+        return result
+
+    return wraps
+
+
 class YNRElectionImporter:
     """
     Takes a JSON object from YNR and creates or updates an election object
@@ -180,9 +197,11 @@ class YNRBallotImporter:
         self.base_url = base_url or settings.YNR_BASE
         self.default_params = default_params or {"page_size": 200}
 
+    @time_function_length
     def get_paginator(self, page1):
         return JsonPaginator(page1, self.stdout)
 
+    @time_function_length
     def get_last_updated(self):
         try:
             return PostElection.objects.last_updated_in_ynr().ynr_modified
@@ -208,6 +227,7 @@ class YNRBallotImporter:
         """
         return not any([self.recently_updated, self.current_only, self.params])
 
+    @time_function_length
     def build_params(self, params):
         """
         Build up params based on flages initialised with or return an
@@ -252,6 +272,7 @@ class YNRBallotImporter:
 
     def do_import(self, params=None):
         self.params = self.build_params(params=params)
+
         if self.should_prewarm_ee_cache:
             self.ee_helper.prewarm_cache(current=not self.force_metadata)
 
@@ -264,6 +285,7 @@ class YNRBallotImporter:
 
         self.delete_orphan_posts()
 
+    @time_function_length
     def delete_orphan_posts(self):
         """
         This method cleans orphan posts.
@@ -291,6 +313,7 @@ class YNRBallotImporter:
         ballot.replaces.add(replaced_ballot)
         return True
 
+    @time_function_length
     @transaction.atomic()
     def add_ballots(self, results):
         for ballot_dict in results["results"]:

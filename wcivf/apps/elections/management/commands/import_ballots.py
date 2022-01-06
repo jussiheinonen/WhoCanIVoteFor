@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 
 from elections.import_helpers import YNRBallotImporter, EEHelper
 from elections.models import Election
+from wcivf.apps.elections.import_helpers import time_function_length
 
 
 class Command(BaseCommand):
@@ -34,6 +35,7 @@ class Command(BaseCommand):
             help="Only import ballots updated since the last known update",
         )
 
+    @time_function_length
     def populate_any_non_by_elections_field(self):
         qs = Election.objects.all().prefetch_related("postelection_set")
         for election in qs:
@@ -45,6 +47,7 @@ class Command(BaseCommand):
             election.any_non_by_elections = any_non_by_elections
             election.save()
 
+    @time_function_length
     def delete_deleted_elections(self):
         """
         Deletes elections that are marked as deleted in Every Election and any

@@ -17,11 +17,11 @@
             <p>No votes will be cast, and the candidate{{ object.people|pluralize }} below have been automatically declared
                 the winner{{ object.people|pluralize }}.</p>
 
-            {% if postelection.people %}
-                {% if postelection.display_as_party_list %}
-                    {% include "elections/includes/_people_list_with_lists.html" with people=postelection.people %}
+            {% if object.people %}
+                {% if object.display_as_party_list %}
+                    {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
                 {% else %}
-                    {% include "elections/includes/_people_list.html" with people=postelection.people %}
+                    {% include "elections/includes/_people_list.html" with people=object.people %}
                 {% endif %}
             {% endif %}
 
@@ -39,11 +39,11 @@
                     winner{{ object.people|pluralize }}.
                     A new election to fill the unclaimed seat{{ object.people|pluralize }}
                     will be held within 35 working days of the original election date.</p>
-                {% if postelection.people %}
-                    {% if postelection.display_as_party_list %}
-                        {% include "elections/includes/_people_list_with_lists.html" with people=postelection.people %}
+                {% if object.people %}
+                    {% if object.display_as_party_list %}
+                        {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
                     {% else %}
-                        {% include "elections/includes/_people_list.html" with people=postelection.people %}
+                        {% include "elections/includes/_people_list.html" with people=object.people %}
                     {% endif %}
                 {% endif %}
             {% else %}
