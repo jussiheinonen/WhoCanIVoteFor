@@ -6,14 +6,15 @@
     <div class="ds-card" id="election_{{ postelection.election.slug }}">
         <div class="ds-card-body">
 
+            <h2>
+                <span aria-hidden="true">🗳️</span>
+                {{ postelection.election.name_without_brackets }}
+            </h2>
+
+
             {% if postelection.cancelled %}
                 {% include "elections/includes/_cancelled_election.html" with object=postelection only %}
             {% else %}
-
-                <h2>
-                    <span aria-hidden="true">🗳️</span>
-                    {{ postelection.election.name_without_brackets }}
-                </h2>
 
                 {% if not postelection.is_pcc and not postelection.is_mayoral %}
                     <h3>{% if postelection.is_london_assembly_additional %}Additional members{% else %}{{ postelection.friendly_name }}{% endif %}</h3>
