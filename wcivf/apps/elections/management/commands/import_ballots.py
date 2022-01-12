@@ -2,7 +2,8 @@ from django.core.management.base import BaseCommand
 
 from elections.import_helpers import YNRBallotImporter, EEHelper
 from elections.models import Election
-from wcivf.apps.elections.import_helpers import time_function_length
+from elections.import_helpers import time_function_length
+from elections.models import PostElection
 
 
 class Command(BaseCommand):
@@ -37,15 +38,21 @@ class Command(BaseCommand):
 
     @time_function_length
     def populate_any_non_by_elections_field(self):
-        qs = Election.objects.all().prefetch_related("postelection_set")
-        for election in qs:
-            any_non_by_elections = any(
-                b.ballot_paper_id
-                for b in election.postelection_set.all()
-                if ".by." not in b.ballot_paper_id
+        """
+        Finds all current non by-election ballots and makes sure that
+        their parent Election objects have the any_non_by_elections
+        field set
+        """
+        any_non_by_election_ballots = (
+            PostElection.objects.filter(
+                election__current=True,
             )
-            election.any_non_by_elections = any_non_by_elections
-            election.save()
+            .exclude(ballot_paper_id__contains=".by.")
+            .distinct()
+        )
+        Election.objects.filter(
+            postelection__in=any_non_by_election_ballots
+        ).update(any_non_by_elections=True)
 
     @time_function_length
     def delete_deleted_elections(self):
