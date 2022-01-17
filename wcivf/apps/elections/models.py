@@ -220,7 +220,7 @@ class Election(models.Model):
     @cached_property
     def pluralized_division_name(self):
         """
-        Returns a string for the pluarlized divison name for the posts in the
+        Returns a string for the pluralised divison name for the posts in the
         election
         """
         pluralise = {

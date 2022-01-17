@@ -98,10 +98,12 @@
                     {% endif %}
                 </p>
 
-                {% if object.display_as_party_list %}
-                    {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
-                {% else %}
-                    {% include "elections/includes/_people_list.html" with people=object.people %}
+                {% if postelection.people %}
+                    {% if object.display_as_party_list %}
+                        {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
+                    {% else %}
+                        {% include "elections/includes/_people_list.html" with people=object.people %}
+                    {% endif %}
                 {% endif %}
 
                 {% if postelection.should_display_sopn_info %}
