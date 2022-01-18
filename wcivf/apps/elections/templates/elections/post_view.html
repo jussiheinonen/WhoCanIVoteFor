@@ -23,8 +23,8 @@
                 <div class="ds-card-body">
                     <h3>Next election</h3>
                     <p>
-                        The <a href="{{ postelection.next_ballot.get_absolute_url }}">next election for {{ postelection.friendly_name
-                            }}</a> is
+                        The <a href="{{ postelection.next_ballot.get_absolute_url }}">next election for
+                            {{ postelection.friendly_name}}</a> is
                         {% if postelection.next_ballot.election.is_election_day %}
                             <strong>being held today</strong>.
                         {% else %}
