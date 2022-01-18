@@ -5,37 +5,17 @@
 {% if object.metadata.cancelled_election.title %}
     <h4>{{ object.metadata.cancelled_election.title }}</h4>
 {% else %}
-    {% if object.winner_count == object.people.count %}
-        <h4>Uncontested Election</h4>
+    {% if not object.contested %}
+        {% if object.winner_count == object.people.count %}
+            <h4>Uncontested Election</h4>
 
-        <p>This election was uncontested because the number of candidates who stood was equal to the number of available seats.
-            There {{ object.winner_count|pluralize:"is,are" }} {{ object.winner_count|apnumber }}
-            seat{{ object.winner_count|pluralize }} in {{ object.post.full_label }}, and only
-            {{ object.people.count|apnumber }} candidate{{ object.people|pluralize }}.</p>
-
-        <p>No votes will be cast, and the candidate{{ object.people|pluralize }} below ha{{ object.winner_count|pluralize:"s,ve" }} been automatically declared
-            the winner{{ object.people|pluralize }}.</p>
-
-        {% if object.display_as_party_list %}
-            {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
-        {% else %}
-            {% include "elections/includes/_people_list.html" with people=object.people %}
-        {% endif %}
-
-    {% else %}
-        {% if object.people %}
-            <h4>Uncontested and Rescheduled Election</h4>
-
-            <p>This election was uncontested because the number of candidates who stood was fewer than the number of available seats.
-                There {{ object.winner_count|pluralize:"is,are"}} {{ object.winner_count|apnumber }}
+            <p>This election was uncontested because the number of candidates who stood was equal to the number of available seats.
+                There {{ object.winner_count|pluralize:"is,are" }} {{ object.winner_count|apnumber }}
                 seat{{ object.winner_count|pluralize }} in {{ object.post.full_label }}, and only
                 {{ object.people.count|apnumber }} candidate{{ object.people|pluralize }}.</p>
 
-            <p>No votes will be cast, and the candidate{{ object.people|pluralize }} below
-                ha{{ object.people|pluralize:"s,ve" }} been automatically declared the
-                winner{{ object.people|pluralize }}.
-                A new election to fill the unclaimed seat{{ object.people|pluralize }}
-                will be held within 35 working days of the original election date.</p>
+            <p>No votes will be cast, and the candidate{{ object.people|pluralize }} below ha{{ object.winner_count|pluralize:"s,ve" }} been automatically declared
+                the winner{{ object.people|pluralize }}.</p>
 
             {% if object.display_as_party_list %}
                 {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
@@ -43,12 +23,34 @@
                 {% include "elections/includes/_people_list.html" with people=object.people %}
             {% endif %}
 
-        {% else %}
-            <h4>Rescheduled Election</h4>
+        {% elif object.winner_count > object.people.count %}
+            {% if object.people %}
+                <h4>Uncontested and Rescheduled Election</h4>
 
-            <p>This election will not take place because <a href="{{ object.ynr_link }}">no candidates have been nominated to stand</a>.
-                A new election to fill the unclaimed seat{{ object.winner_count|pluralize }} will be held within 35 working days of the original election date.</p>
+                <p>This election was uncontested because the number of candidates who stood was fewer than the number of available seats.
+                    There {{ object.winner_count|pluralize:"is,are"}} {{ object.winner_count|apnumber }}
+                    seat{{ object.winner_count|pluralize }} in {{ object.post.full_label }}, and only
+                    {{ object.people.count|apnumber }} candidate{{ object.people|pluralize }}.</p>
+
+                <p>No votes will be cast, and the candidate{{ object.people|pluralize }} below
+                    ha{{ object.people|pluralize:"s,ve" }} been automatically declared the
+                    winner{{ object.people|pluralize }}.
+                    A new election to fill the unclaimed seat{{ object.people|pluralize }}
+                    will be held within 35 working days of the original election date.</p>
+
+                {% if object.display_as_party_list %}
+                    {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
+                {% else %}
+                    {% include "elections/includes/_people_list.html" with people=object.people %}
+                {% endif %}
+            {% elif object.people.count > object.winner_count %}
+                <h4>Cancelled Election</h4>
+                <p>This election was cancelled.</p>
+            {% endif %}
         {% endif %}
+    {% else %}
+        <h4>Cancelled Election</h4>
+        <p>This election was cancelled.</p>
     {% endif %}
 {% endif %}
 
