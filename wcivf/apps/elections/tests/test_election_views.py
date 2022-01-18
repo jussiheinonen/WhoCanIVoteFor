@@ -264,15 +264,7 @@ class ElectionPostViewTests(TestCase):
         self.assertTemplateUsed(
             response, "elections/includes/_cancelled_election.html"
         )
-        self.assertContains(
-            response,
-            "Rescheduled Election",
-        )
-        self.assertContains(response, "This election will not take place")
-        self.assertContains(
-            response,
-            "A new election to fill the unclaimed seats will be held within 35 working days of the original election date.",
-        )
+        self.assertContains(response, "This election has been cancelled")
 
 
 @pytest.mark.django_db
