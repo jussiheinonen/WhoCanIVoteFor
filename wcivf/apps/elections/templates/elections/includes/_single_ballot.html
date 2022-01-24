@@ -6,14 +6,15 @@
     <div class="ds-card" id="election_{{ postelection.election.slug }}">
         <div class="ds-card-body">
 
+            <h2>
+                <span aria-hidden="true">🗳️</span>
+                {{ postelection.election.name_without_brackets }}
+            </h2>
+
+
             {% if postelection.cancelled %}
                 {% include "elections/includes/_cancelled_election.html" with object=postelection only %}
             {% else %}
-
-                <h2>
-                    <span aria-hidden="true">🗳️</span>
-                    {{ postelection.election.name_without_brackets }}
-                </h2>
 
                 {% if not postelection.is_pcc and not postelection.is_mayoral %}
                     <h3>{% if postelection.is_london_assembly_additional %}Additional members{% else %}{{ postelection.friendly_name }}{% endif %}</h3>
@@ -42,7 +43,7 @@
 
                 <p>
                     {% if postelection.election.in_past %}
-                        <strong>{{ postelection.people|length }} candidates</strong> stood in the {{ postelection.friendly_name }}.
+                        <strong>{{ postelection.people|length }} candidate{{ postelection.people|pluralize }}</strong> stood in the {{ postelection.friendly_name }}.
                     {% else %}
                         {# Display different messages depending on the number of candidates #}
                         {# Case: No candidates for a contested election #}
@@ -97,21 +98,13 @@
                     {% endif %}
                 </p>
 
-                {% if not postelection.contested %}
-                    <div>
-                        This election isn't contested. That means that there are the same number of candidates nominated
-                        as there are seats up for election, so they all get positions without an election taking place.
-                    </div>
-                {% endif %}
-
                 {% if postelection.people %}
-                    {% if postelection.display_as_party_list %}
-                        {% include "elections/includes/_people_list_with_lists.html" with people=postelection.people %}
+                    {% if object.display_as_party_list %}
+                        {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
                     {% else %}
-                        {% include "elections/includes/_people_list.html" with people=postelection.people %}
+                        {% include "elections/includes/_people_list.html" with people=object.people %}
                     {% endif %}
                 {% endif %}
-
 
                 {% if postelection.should_display_sopn_info %}
                     <p>

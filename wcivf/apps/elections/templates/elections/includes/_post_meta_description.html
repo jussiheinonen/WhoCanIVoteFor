@@ -1,4 +1,6 @@
-{% if postelection.people|length %}
+{% if postelection.cancelled %}
+    {{ object.election.name }}: This election has been cancelled.
+{% elif postelection.people|length %}
     {% autoescape off %}
         See all {{ postelection.people|length }} candidates in the {{ object.election.name }} on {{ object.election.election_date }}:
         {% for pp in postelection.people %}

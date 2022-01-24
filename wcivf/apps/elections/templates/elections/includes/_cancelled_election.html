@@ -1,13 +1,62 @@
 {% load markdown_deux_tags %}
+{% load humanize %}
+{% load static %}
+
+{% comment %}Case 1: Cancelled election and Metadata is set in EE {% endcomment %}
 {% if object.metadata.cancelled_election.title %}
-    <h2>{{ object.metadata.cancelled_election.title }}</h2>
+    <h4>{{ object.metadata.cancelled_election.title }}</h4>
 {% else %}
-    <h2>Cancelled Election</h2>
+    {% if not object.contested %}
+        {% comment %} Case 2: Election cancelled, uncontested, number of candidates equal seats, no metadata{% endcomment %}
+        {% if object.winner_count == object.people.count %}
+            <h4>Uncontested Election</h4>
+
+            <p>This election was uncontested because the number of candidates who stood was equal to the number of available seats.
+                There {{ object.winner_count|pluralize:"is,are" }} {{ object.winner_count|apnumber }}
+                seat{{ object.winner_count|pluralize }} in {{ object.post.full_label }}, and only
+                {{ object.people.count|apnumber }} candidate{{ object.people|pluralize }}.</p>
+
+            <p>No votes will be cast, and the candidate{{ object.people|pluralize }} below ha{{ object.winner_count|pluralize:"s,ve" }} been automatically declared
+                the winner{{ object.people|pluralize }}.</p>
+
+            {% if object.display_as_party_list %}
+                {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
+            {% else %}
+                {% include "elections/includes/_people_list.html" with people=object.people %}
+            {% endif %}
+            {% comment %} Case 3: Election cancelled, uncontested and there are fewer candidates than seats, no metadata {% endcomment %}
+        {% elif object.winner_count > object.people.count %}
+
+            <h4>Uncontested and Rescheduled Election</h4>
+
+            <p>This election was uncontested because the number of candidates who stood was fewer than the number of available seats.
+                There {{ object.winner_count|pluralize:"is,are"}} {{ object.winner_count|apnumber }}
+                seat{{ object.winner_count|pluralize }} in {{ object.post.full_label }}, and
+                {{ object.people.count|apnumber }} candidate{{ object.people|pluralize }}.</p>
+            {% comment %} Case 4: Election cancelled, uncontested and zero candidates, no metadata {% endcomment %}
+            {% if object.people %}
+                <p>No votes will be cast, and the candidate{{ object.people|pluralize }} below
+                    ha{{ object.people|pluralize:"s,ve" }} been automatically declared the
+                    winner{{ object.people|pluralize }}.
+
+                    A new election to fill the unclaimed seat{{ object.people|pluralize }}
+                    will be held within 35 working days of the original election date.</p>
+
+                {% if object.display_as_party_list %}
+                    {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
+                {% else %}
+                    {% include "elections/includes/_people_list.html" with people=object.people %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        {% comment %} Case 5: Contested but cancelled for other reasons {% endcomment %}
+    {% else %}
+        <h4>Cancelled Election</h4>
+        <p>This election was cancelled.</p>
+    {% endif %}
 {% endif %}
+
 <p>
-    The poll for {{ object.post.label }} in the {{ object.election.name }}
-    {% if object.election.in_past %}was{% else %}has been{% endif %}
-    {% if object.replaced_by %}rescheduled{% else %}cancelled{% endif %}.
     {% if object.replaced_by %}
         {% if object.election.in_past %}
             It was rescheduled for
@@ -15,13 +64,19 @@
             It will now take place on
         {% endif %}
         <a href="{{ object.replaced_by.get_absolute_url }}">
-            {{ object.replaced_by.election.election_date|date:"j F Y" }}
+            {{ object.replaced_by.election.election_date|date:"j F Y" }}.
         </a>
     {% endif %}
-    {% if object.metadata.cancelled_election.detail %}
-        {{ object.metadata.cancelled_election.detail }}
-    {% endif %}
+
+
     {% if object.metadata.cancelled_election.url %}
         <a href="{{ object.metadata.cancelled_election.url }}">Read more</a>
     {% endif %}
 </p>
+
+<p>
+    {% if object.metadata.cancelled_election.detail %}
+        {{ object.metadata.cancelled_election.detail }}
+    {% endif %}
+</p>
+
