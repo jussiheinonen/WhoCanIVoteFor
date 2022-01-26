@@ -12,6 +12,7 @@ VALUE_TYPES_TO_IMPORT = [
     "facebook_personal_url",
     "linkedin_url",
     "homepage_url",
+    "blog_url",
     "party_ppc_page_url",
     "wikipedia_url",
     "theyworkforyou",

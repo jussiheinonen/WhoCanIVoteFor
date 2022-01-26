@@ -287,6 +287,20 @@ class PersonViewTests(TestCase):
         self.assertEqual(response.template_name, ["people/person_detail.html"])
         self.assertNotContains(response, "Instagram")
 
+    def test_no_blog_url(self):
+        PersonPostFactory(person=self.person, election=ElectionFactory())
+        response = self.client.get(self.person_url, follow=True)
+        self.assertEqual(response.template_name, ["people/person_detail.html"])
+        self.assertNotContains(response, f"{ self.person.name }'s Blog")
+
+    def test_blog_url(self):
+        self.person.blog_url = "https://www.bloglovin.com/john"
+        self.person.save()
+        PersonPostFactory(person=self.person, election=ElectionFactory())
+        response = self.client.get(self.person_url, follow=True)
+        self.assertEqual(response.template_name, ["people/person_detail.html"])
+        self.assertContains(response, f"{ self.person.name }'s Blog")
+
     def test_party_page(self):
         self.person.party_ppc_page_url = "https://www.voteforme.com/bob"
         self.person.save()
