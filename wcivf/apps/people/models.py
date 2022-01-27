@@ -73,6 +73,7 @@ class Person(models.Model):
     )
     linkedin_url = models.CharField(blank=True, null=True, max_length=800)
     homepage_url = models.CharField(blank=True, null=True, max_length=800)
+    blog_url = models.CharField(blank=True, null=True, max_length=800)
     party_ppc_page_url = models.CharField(blank=True, null=True, max_length=800)
     instagram_url = models.CharField(blank=True, null=True, max_length=800)
     instagram_id = models.CharField(blank=True, null=True, max_length=800)

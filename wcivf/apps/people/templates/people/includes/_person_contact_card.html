@@ -48,6 +48,17 @@
                 </div>
             {% endif %}
 
+            {% if object.blog_url %}
+                <div>
+                    <dt>Blog</dt>
+                    <dd>
+                        <a href="{{ object.blog_url }}" title="{{ object.name }}'s Blog">
+                            {{ object.blog_url }}
+                        </a>
+                    </dd>
+                </div>
+            {% endif %}
+
             {% if object.instagram_url %}
                 <div>
                     <dt>Instagram</dt>
