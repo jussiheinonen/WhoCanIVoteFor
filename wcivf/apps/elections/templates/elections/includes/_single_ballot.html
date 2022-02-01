@@ -99,10 +99,10 @@
                 </p>
 
                 {% if postelection.people %}
-                    {% if object.display_as_party_list %}
-                        {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
+                    {% if postelection.display_as_party_list %}
+                        {% include "elections/includes/_people_list_with_lists.html" with people=postelection.people %}
                     {% else %}
-                        {% include "elections/includes/_people_list.html" with people=object.people %}
+                        {% include "elections/includes/_people_list.html" with people=postelection.people %}
                     {% endif %}
                 {% endif %}
 
