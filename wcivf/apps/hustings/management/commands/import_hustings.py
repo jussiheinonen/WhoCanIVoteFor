@@ -57,14 +57,19 @@ def set_time_string_on_datetime(dt, time_string):
 
 class Command(BaseCommand):
 
-    GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQIvJtlR9j6BaOuLjd501W4mPznJX41k1LalgkXvwRLj0d90lyFaW3PoVLzLvw5K4Kvv4lETQIJyzdL/"
     URLS = [
-        f"{GOOGLE_SHEET_URL}pub?gid=0&single=true&output=csv",
-        f"{GOOGLE_SHEET_URL}pub?gid=742711428&single=true&output=csv",
-        f"{GOOGLE_SHEET_URL}pub?gid=908428564&single=true&output=csv",
-        f"{GOOGLE_SHEET_URL}pub?gid=1265695055&single=true&output=csv",
-        f"{GOOGLE_SHEET_URL}pub?gid=668485812&single=true&output=csv",
-        f"{GOOGLE_SHEET_URL}pub?gid=1596983142&single=true&output=csv",
+        # NI
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vT_VvyPiJA75yOCv7j_E0PjZe3yFy77C9RH9ucb1bM2_QBhSIWSRKsF3_qhcukrxQsRMu9SRyNXWX05/pub?gid=372490874&single=true&output=csv",
+        # ENG MAYORS
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vT_VvyPiJA75yOCv7j_E0PjZe3yFy77C9RH9ucb1bM2_QBhSIWSRKsF3_qhcukrxQsRMu9SRyNXWX05/pub?gid=1086162179&single=true&output=csv",
+        # ENG LOCALS
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vT_VvyPiJA75yOCv7j_E0PjZe3yFy77C9RH9ucb1bM2_QBhSIWSRKsF3_qhcukrxQsRMu9SRyNXWX05/pub?gid=1180606386&single=true&output=csv",
+        # SCOT LOCALS
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vT_VvyPiJA75yOCv7j_E0PjZe3yFy77C9RH9ucb1bM2_QBhSIWSRKsF3_qhcukrxQsRMu9SRyNXWX05/pub?gid=976193034&single=true&output=csv",
+        # WALES LOCALS
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vT_VvyPiJA75yOCv7j_E0PjZe3yFy77C9RH9ucb1bM2_QBhSIWSRKsF3_qhcukrxQsRMu9SRyNXWX05/pub?gid=2061283903&single=true&output=csv",
+        # BY-ELECTIONS
+        "https://docs.google.com/spreadsheets/d/e/2PACX-1vT_VvyPiJA75yOCv7j_E0PjZe3yFy77C9RH9ucb1bM2_QBhSIWSRKsF3_qhcukrxQsRMu9SRyNXWX05/pub?gid=1279122722&single=true&output=csv",
     ]
 
     def add_arguments(self, parser):
@@ -79,6 +84,14 @@ class Command(BaseCommand):
             dest="quiet",
             default=False,
             help="Only output errors",
+        )
+        parser.add_argument(
+            "--urls",
+            "-u",
+            dest="urls",
+            nargs="+",
+            required=False,
+            help="Specify a URLs to a google sheet to import from",
         )
 
     def create_husting(self, row):
@@ -136,7 +149,7 @@ class Command(BaseCommand):
             self.hustings_counter += 1
             self.stdout.write(
                 "Created husting {0} <{1}>".format(
-                    self.hustings_counter, husting
+                    self.hustings_counter, husting.post_election.ballot_paper_id
                 )
             )
 
@@ -164,6 +177,7 @@ class Command(BaseCommand):
             self.importer = HustingImporter(file_path=options["filename"])
             return self.import_hustings()
 
-        for url in self.URLS:
+        urls = options["urls"] or self.URLS
+        for url in urls:
             self.importer = HustingImporter(url=url)
             self.import_hustings()
