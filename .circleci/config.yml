@@ -130,6 +130,8 @@ jobs:
                    AppSecretKey='$SECRET_KEY' \
                    AppSlackFeedbackWebhookUrl='$SLACK_FEEDBACK_WEBHOOK_URL' \
                    AppDcEnvironment='$DC_ENVIRONMENT' \
+                   AppLoggerDbPassword='$LOGGER_DB_PASSWORD' \
+                   AppLoggerDbHost='$LOGGER_DB_HOST' \
                    VpcIdParameter=<<parameters.vpc-id>> \
                    SubnetIdsParameter=<<parameters.subnet-ids>> \
                    SSLCertificateArn=<<parameters.ssl-certificate-arn>> \

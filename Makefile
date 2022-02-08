@@ -22,3 +22,7 @@ lambda-migrate:  ## Invoke lambda to migrate the database
 	--function-name WCIVFControllerFunction \
 	--payload '{ "command": "migrate" }' \
 	/dev/stdout
+	aws lambda invoke \
+	--function-name WCIVFControllerFunction \
+	--payload '{ "command": "migrate", "args": ["--database=logger"] }' \
+	/dev/stdout

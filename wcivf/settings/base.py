@@ -135,13 +135,14 @@ DATABASES = {
 
 if os.environ.get("LOGGER_DB_PASSWORD") and os.environ.get("LOGGER_DB_HOST"):
     DATABASES["logger"] = {
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "wcivf_logger",
         "USER": "wcivf",
         "PASSWORD": os.environ.get("LOGGER_DB_PASSWORD"),
         "HOST": os.environ.get("LOGGER_DB_HOST"),
         "PORT": "",
     }
+    DATABASE_ROUTERS = ["core.db_routers.LoggerRouter"]
 
 
 # Internationalization
