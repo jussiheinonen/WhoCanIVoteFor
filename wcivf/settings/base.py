@@ -142,8 +142,9 @@ if os.environ.get("LOGGER_DB_PASSWORD") and os.environ.get("LOGGER_DB_HOST"):
         "HOST": os.environ.get("LOGGER_DB_HOST"),
         "PORT": "",
     }
-    DATABASE_ROUTERS = ["core.db_routers.LoggerRouter"]
 
+if os.environ.get("DC_ENVIRONMENT") in ["production"]:
+    DATABASE_ROUTERS = ["core.db_routers.LoggerRouter"]
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
