@@ -8,7 +8,7 @@ jobs:
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
-      - image: circleci/python:3.6-jessie-node
+      - image: cimg/python:3.8.12
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
@@ -23,17 +23,17 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
+          - v5-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
       - run:
           name: install Tox
           command: |
-            python3 -m venv .venv
+            python -m venv .venv
             . .venv/bin/activate
             pip install tox coveralls
       - run:
           name: install dependencies
           command: |
-            python3 -m venv .venv
+            python -m venv .venv
             . .venv/bin/activate
             pip install --upgrade pip
             pip install -r requirements.txt
@@ -42,7 +42,7 @@ jobs:
           paths:
             - ./.venv
             - /home/circleci/repo/.tox/
-          key: v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
+          key: v5-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
 
       - run:
           name: Install HTML Tidy
@@ -52,7 +52,7 @@ jobs:
       - run:
           name: run tests
           command: |
-            python3 -m venv .venv
+            python -m venv .venv
             . .venv/bin/activate
             tox --workdir /home/circleci/repo/.tox/
       - run:
@@ -66,13 +66,15 @@ jobs:
 
   sam_build:
     docker:
-      - image: amazon/aws-sam-cli-build-image-python3.6:latest
+      - image: amazon/aws-sam-cli-build-image-python3.8:latest
     working_directory: ~/repo
     steps:
       - checkout
       - run:
           name: sam build
           command: |
+            python -m venv .venv
+            . .venv/bin/activate
             pip install --upgrade pip aws-sam-cli
             make build clean
       - persist_to_workspace:
@@ -81,7 +83,7 @@ jobs:
 
   sam_deploy:
     docker:
-      - image: circleci/python:3.6-jessie-node
+      - image: cimg/python:3.8.12
     working_directory: ~/repo
     parameters:
       dc-environment:
@@ -103,14 +105,14 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
+          - v5-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
       - attach_workspace:
           at: ~/repo/
       - run: echo <<parameters.instance-type>>
       - run:
           name: install sam-cli
           command: |
-            python3 -m venv .venv
+            python -m venv .venv
             . .venv/bin/activate
       - run:
           name: deploy
@@ -149,7 +151,7 @@ jobs:
 
   code_deploy:
     docker:
-      - image: circleci/python:3.6-jessie-node
+      - image: cimg/python:3.8.12
     working_directory: ~/repo
     parameters:
       min-size:
@@ -167,7 +169,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v4-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
+          - v5-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
       - attach_workspace:
           at: ~/repo/
       - run: printenv DC_ENVIRONMENT
