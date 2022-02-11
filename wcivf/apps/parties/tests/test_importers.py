@@ -170,6 +170,8 @@ class TestLocalPartyImporter:
                 "homepage": row["Website"],
                 "email": row["Email"],
                 "is_local": True,
+                "youtube_profile_url": "",
+                "contact_page_url": "",
             },
         )
 

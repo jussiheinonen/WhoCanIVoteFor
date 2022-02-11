@@ -150,6 +150,10 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
                     "homepage": row["Website"],
                     "email": row["Email"],
                     "is_local": country == "Local",
+                    "youtube_profile_url": row.get(
+                        "Youtube profile", ""
+                    ).strip(),
+                    "contact_page_url": row.get("Contact page", "").strip(),
                 },
             )
 
