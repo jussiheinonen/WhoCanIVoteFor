@@ -133,6 +133,9 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         """
         twitter = twitter_username(url=row["Twitter"] or "")
         name = self.get_name(row=row)
+        # only create local parties for ballots where a candidate is standing
+        # for the parent party
+        ballots = ballots.filter(personpost__party=party)
         for post_election in ballots:
             country = self.get_country(
                 election_type=post_election.election.election_type

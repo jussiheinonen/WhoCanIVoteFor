@@ -155,9 +155,11 @@ class TestLocalPartyImporter:
         party = mocker.MagicMock()
         post_election = mocker.MagicMock()
         ballots = mocker.MagicMock()
-        ballots.__iter__.return_value = [post_election]
+        ballots.filter.return_value = [post_election]
 
         importer.add_local_party(row=row, party=party, ballots=ballots)
+
+        ballots.filter.assert_called_once_with(personpost__party=party)
         LocalParty.objects.update_or_create.assert_called_once_with(
             parent=party,
             post_election=post_election,
