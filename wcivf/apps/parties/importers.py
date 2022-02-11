@@ -193,8 +193,8 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         return country_mapping.get(election_type, "UK")
 
     def add_manifesto(self, row, party, election):
-        manifesto_web = row["Manifesto Website URL"].strip()
-        manifesto_pdf = row["Manifesto PDF URL"].strip()
+        manifesto_web = row.get("Manifesto Website URL", "").strip()
+        manifesto_pdf = row.get("Manifesto PDF URL", "").strip()
         if not any([manifesto_web, manifesto_pdf]):
             return self.write("No links to create Manifesto, skipping")
 
