@@ -80,7 +80,7 @@ Resources:
       CodeUri: .
       Handler: wcivf.lambda_handler.handler
       MemorySize: 256
-      Runtime: python3.6
+      Runtime: python3.8
       Environment:
         Variables:
           DJANGO_SETTINGS_MODULE: !Ref AppDjangoSettingsModule
@@ -332,7 +332,7 @@ Resources:
         # TODO create new role without packer permissions
         IamInstanceProfile:
           Name: 'CodeDeploy-EC2-Instance-Profile'
-        ImageId: 'ami-08e5184df40ad86ba' # AMI number
+        ImageId: 'ami-06968105430435c87' # AMI number
         InstanceType: !Ref InstanceType
         UserData: |
           I2Nsb3VkLWNvbmZpZwp1c2VyczoKICAtIG5hbWU6IGFzaAogICAgc3VkbzogQUxMPShBTEwpIE5P
