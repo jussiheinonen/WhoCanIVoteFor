@@ -140,6 +140,13 @@ Resources:
             Name: import-hustings
             Description: Import hustings from google spreadsheets
             Input: '{"command": "import_hustings"}'
+        ImportLocalParties:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 hour)
+            Name: import-local-parties
+            Description: Import LocalParty objects from google spreadsheets
+            Input: '{"command": "import_local_parties"}'
 
   WCIVFCodeDeployApp:
     Type: AWS::CodeDeploy::Application
