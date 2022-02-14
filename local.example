@@ -27,3 +27,5 @@ INTERNAL_IPS = ['127.0.0.1']
 SECRET_KEY = "not_for_production"
 
 DEBUG = True
+
+EMAIL_SIGNUP_BACKEND = "local_db"

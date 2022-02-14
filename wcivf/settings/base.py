@@ -203,6 +203,7 @@ EMAIL_SIGNUP_ENDPOINT = (
     "https://democracyclub.org.uk/mailing_list/api_signup/v1/"
 )
 EMAIL_SIGNUP_API_KEY = os.environ.get("EMAIL_SIGNUP_API_KEY", "")
+EMAIL_SIGNUP_BACKEND = "remote_db"
 
 # DC Base Theme settings
 SITE_TITLE = "Who Can I Vote For?"

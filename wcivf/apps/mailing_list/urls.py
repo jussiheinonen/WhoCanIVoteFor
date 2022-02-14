@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from dc_signup_form.forms import MailingListSignupForm
 from dc_signup_form.views import SignupFormView
+from django.conf import settings
 
 app_name = "mailing_list"
 
@@ -14,7 +15,7 @@ urlpatterns = [
             SignupFormView.as_view(
                 template_name="base.html",
                 form_class=MailingListSignupForm,
-                backend="local_db",
+                backend=settings.EMAIL_SIGNUP_BACKEND,
             )
         ),
         name="mailing_list_signup_view",
