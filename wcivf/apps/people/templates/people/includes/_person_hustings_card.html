@@ -1,3 +1,6 @@
-{% if object.featured_candidacy.post_election.husting_set.displayable and object.current_or_future_candidacies %}
-    {% include "hustings/includes/_person.html" with hustings=object.postelection.husting_set.displayable person=object %}
-{% endif %}
+
+{% with hustings=object.featured_candidacy.post_election.husting_set.displayable %}
+    {% if hustings and object.current_or_future_candidacies %}
+        {% include "hustings/includes/_person.html" with hustings=hustings person=object %}
+    {% endif %}
+{% endwith %}
