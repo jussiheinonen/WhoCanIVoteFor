@@ -6,7 +6,7 @@
                 {% if person.local_party.is_local %}
                     {{ person.name }}'s local party is {{ person.local_party.label }}.
                 {% else %}
-                    {{ person.name }} is a {{ person.local_party.label }} candidate.
+                    {{ person.name }} is a {{ person.local_party.name }} candidate.
                 {% endif %}
             </p>
             <dl class="ds-descriptions">
@@ -37,8 +37,24 @@
                 {% if person.local_party.email %}
                     <div>
                         <dt>Email</dt>
-                        <a href="{{ person.local_party.email }}">
+                        <a href="mailto:{{ person.local_party.email }}">
                             {{ person.local_party.name }}'s email
+                        </a>
+                    </div>
+                {% endif %}
+                {% if person.local_party.contact_page_url %}
+                    <div>
+                        <dt>Contact page</dt>
+                        <a href="{{ person.local_party.contact_page_url }}">
+                            {{ person.local_party.name }}'s contact page
+                        </a>
+                    </div>
+                {% endif %}
+                {% if person.local_party.youtube_profile_url %}
+                    <div>
+                        <dt>Youtube page</dt>
+                        <a href="{{ person.local_party.youtube_profile_url }}">
+                            {{ person.local_party.name }}'s Youtube profile
                         </a>
                     </div>
                 {% endif %}

@@ -74,6 +74,8 @@ class LocalParty(models.Model):
         default=True,
         help_text="Used to identify if obj is related to a local election",
     )
+    youtube_profile_url = models.URLField(blank=True, max_length=800)
+    contact_page_url = models.URLField(blank=True, max_length=800)
 
     def __str__(self):
         return self.name

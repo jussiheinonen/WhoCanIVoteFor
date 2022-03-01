@@ -79,8 +79,7 @@ class TestLocalPartyImporter:
 
     def test_get_ballots_filters_by_ballot_paper_id(self, importer, mocker):
         mocker.patch.object(PostElection.objects, "filter", return_value=True)
-        parties = mocker.MagicMock()
-        result = importer.get_ballots(election_id="Foo", parties=parties)
+        result = importer.get_ballots(election_id="Foo")
         assert result is True
         PostElection.objects.filter.assert_called_once()
         PostElection.objects.filter.assert_called_once_with(
@@ -91,13 +90,9 @@ class TestLocalPartyImporter:
         mock = mocker.MagicMock()
         mock.__bool__.return_value = False
         mocker.patch.object(PostElection.objects, "filter", return_value=mock)
-        parties = mocker.MagicMock()
-        importer.get_ballots(election_id="Foo", parties=parties)
+        importer.get_ballots(election_id="Foo")
         PostElection.objects.filter.assert_called_with(
             election__slug="Foo",
-        )
-        mock.exclude.assert_called_once_with(
-            localparty__parent__in=parties,
         )
 
     def test_import_parties_no_current_elections(self, importer, mocker):
@@ -160,9 +155,11 @@ class TestLocalPartyImporter:
         party = mocker.MagicMock()
         post_election = mocker.MagicMock()
         ballots = mocker.MagicMock()
-        ballots.__iter__.return_value = [post_election]
+        ballots.filter.return_value = [post_election]
 
         importer.add_local_party(row=row, party=party, ballots=ballots)
+
+        ballots.filter.assert_called_once_with(personpost__party=party)
         LocalParty.objects.update_or_create.assert_called_once_with(
             parent=party,
             post_election=post_election,
@@ -173,6 +170,8 @@ class TestLocalPartyImporter:
                 "homepage": row["Website"],
                 "email": row["Email"],
                 "is_local": True,
+                "youtube_profile_url": "",
+                "contact_page_url": "",
             },
         )
 
@@ -203,3 +202,19 @@ class TestLocalPartyImporter:
             expected = case[1]
             with subtests.test(msg=case[0]):
                 assert importer.get_country(election_slug) == expected
+
+    def test_ordered_rows(self, importer, mocker):
+        rows = [
+            {"election_id": ""},
+            {"election_id": "local.foo.bar.2022-05-05"},
+            {"election_id": "local.foo.2022-05-05"},
+            {"election_id": "local.2022-05-05"},
+        ]
+        mocker.patch.object(importer, "all_rows", return_value=rows)
+
+        ordered_rows = importer.ordered_rows()
+        # row without id should be removed
+        assert len(ordered_rows) == 3
+        assert ordered_rows[0]["election_id"] == "local.2022-05-05"
+        assert ordered_rows[1]["election_id"] == "local.foo.2022-05-05"
+        assert ordered_rows[2]["election_id"] == "local.foo.bar.2022-05-05"

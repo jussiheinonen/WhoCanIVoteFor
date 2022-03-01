@@ -73,15 +73,19 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         party_list = self.get_party_list_from_party_id(party_id)
         return Party.objects.filter(party_id__in=party_list)
 
-    def get_ballots(self, election_id, parties):
+    def get_ballots(self, election_id):
         """
-        Attempts to find a single PostElection object for the election_id. If
-        this does not exist, it may be that the ID is for an Election object, so
-        we return all ballots for that election ID.
+        First checks if the election_id is a special case or is not a full
+        election ID e.g. it is made of only two parts such as local.2022-05-05.
+        In this case we return all ballots for the type of election and the
+        date. Otherwise attempts to find a single PostElection object for the
+        election_id. If this does not exist it may be that the ID is the slug
+        of an Election object so we return all ballots related to the Election.
         """
         special_cases = ["senedd", "sp", "gla"]
-        election_type = election_id.split(".")[0]
-        if election_type in special_cases:
+        election_id_list = election_id.split(".")
+        election_type = election_id_list[0]
+        if len(election_id_list) == 2 or election_type in special_cases:
             return PostElection.objects.filter(
                 ballot_paper_id__startswith=f"{election_type}.",
                 election__election_date=self.election.date,
@@ -93,9 +97,7 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
             # This might be an election ID, in that case,
             # apply thie row to all post elections without
             # info already
-            ballots = PostElection.objects.filter(
-                election__slug=election_id
-            ).exclude(localparty__parent__in=parties)
+            ballots = PostElection.objects.filter(election__slug=election_id)
 
         return ballots
 
@@ -106,6 +108,24 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         for file in self.election.csv_files:
             yield from self.read_from(file)
 
+    def ordered_rows(self):
+        """
+        Filters out all rows that have no election_id, and then orders remaining
+        rows by the number of parts to the ID e.g. local.2022-05-05 would appear
+        first, then local.foo.2022-05-05, then local.foo.ward.2022-05-05.
+        The reason for this is that we only create one LocalParty for each Party
+        and PostElection combination. So if we have a general LocalParty that
+        should cover a large set of ballots, we should create these first so
+        that if there is a row later on in the spreadsheet with more specific
+        details for a LocalParty relating to a PostElection, this will supersede
+        the more general one covering the wider range of PostElections.
+        """
+        rows = filter(lambda row: row["election_id"].strip(), self.all_rows())
+        rows = sorted(
+            rows, key=lambda row: len(row["election_id"].strip().split("."))
+        )
+        return rows
+
     def add_local_party(self, row, party, ballots):
         """
         Takes a row of data, a Party, and a QuerySet of at least one
@@ -113,6 +133,9 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         """
         twitter = twitter_username(url=row["Twitter"] or "")
         name = self.get_name(row=row)
+        # only create local parties for ballots where a candidate is standing
+        # for the parent party
+        ballots = ballots.filter(personpost__party=party)
         for post_election in ballots:
             country = self.get_country(
                 election_type=post_election.election.election_type
@@ -127,6 +150,10 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
                     "homepage": row["Website"],
                     "email": row["Email"],
                     "is_local": country == "Local",
+                    "youtube_profile_url": row.get(
+                        "Youtube profile", ""
+                    ).strip(),
+                    "contact_page_url": row.get("Contact page", "").strip(),
                 },
             )
 
@@ -155,7 +182,7 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
             )
             return
 
-        for row in self.all_rows():
+        for row in self.ordered_rows():
             name = self.get_name(row=row)
             party_id = (row["party_id"] or "").strip()
             if not party_id or not name:
@@ -169,7 +196,6 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
 
             ballots = self.get_ballots(
                 election_id=row["election_id"].strip(),
-                parties=parties,
             )
             if not ballots:
                 self.write("Skipping as no ballots to use")
@@ -193,8 +219,8 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         return country_mapping.get(election_type, "UK")
 
     def add_manifesto(self, row, party, election):
-        manifesto_web = row["Manifesto Website URL"].strip()
-        manifesto_pdf = row["Manifesto PDF URL"].strip()
+        manifesto_web = row.get("Manifesto Website URL", "").strip()
+        manifesto_pdf = row.get("Manifesto PDF URL", "").strip()
         if not any([manifesto_web, manifesto_pdf]):
             return self.write("No links to create Manifesto, skipping")
 
