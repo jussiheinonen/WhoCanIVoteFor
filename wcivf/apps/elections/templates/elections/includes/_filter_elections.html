@@ -1,0 +1,14 @@
+
+<aside class="ds-filter" aria-labelledby="filter-label">
+    <div class="ds-filter-cluster">
+
+        <ul>
+            <li id="filter-label" class="ds-filter-label" aria-hidden="true">Filter:</li>
+            {% url 'elections_view' as election_view_url %}
+            <li><a href="{{ election_view_url  }}" aria-current="true">All</a></li>
+            {% for year in years_with_elections %}
+                <li><a href="">{{ year.year }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</aside>

@@ -31,6 +31,13 @@ class ElectionsView(TemplateView):
             "current_or_future_elections"
         ] = all_elections.current_or_future()
 
+        # create a qs of election years
+        context["election_years"] = all_elections.dates("election_date", "year")
+        # create a qs of years with elections
+        context["years_with_elections"] = all_elections.dates(
+            "election_date", "year", order="DESC"
+        )
+
         return context
 
 
