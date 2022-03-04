@@ -18,6 +18,10 @@ def use_compress_css(request):
     }
 
 
+def use_i18n(request):
+    return {"USE_I18N": getattr(settings, "USE_I18N", False)}
+
+
 def postcode_form(request):
     return {"postcode_form": PostcodeLookupForm()}
 

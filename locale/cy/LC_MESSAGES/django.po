@@ -1,0 +1,146 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-03-04 12:28+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != "
+"11) ? 2 : 3;\n"
+
+#: wcivf/apps/core/forms.py:8
+msgid "Enter your postcode"
+msgstr "Rhowch eich cod post"
+
+#: wcivf/templates/base.html:104
+msgid "Language:"
+msgstr "Iaith:"
+
+#: wcivf/templates/base.html:127 wcivf/templates/base.html:175
+#: wcivf/templates/home.html:5 wcivf/templates/home.html:6
+msgid "Who Can I Vote For?"
+msgstr "Pwy alla i bleidleisio ar gyfer?"
+
+#: wcivf/templates/base.html:154
+msgid "Home"
+msgstr "Cartref"
+
+#: wcivf/templates/base.html:155
+msgid "All Elections"
+msgstr "Pob Etholiad"
+
+#: wcivf/templates/base.html:156
+msgid "Standing as a candidate?"
+msgstr "Sefyll fel ymgeisydd?"
+
+#: wcivf/templates/base.html:157
+#, python-format
+msgid "About %(SITE_TITLE)s"
+msgstr "Ynglŷn %(SITE_TITLE)s"
+
+#: wcivf/templates/base.html:158
+msgid "Privacy"
+msgstr "Preifatrwydd"
+
+#: wcivf/templates/base.html:159
+msgid "Source code"
+msgstr "Cod ffynhonnell"
+
+#: wcivf/templates/base.html:160
+msgid "About Democracy Club"
+msgstr "Ynglŷn â'r Clwb Democratiaeth"
+
+#: wcivf/templates/base.html:161
+msgid "Contact Us"
+msgstr "Cysylltwch â Ni"
+
+#: wcivf/templates/base.html:162
+msgid "Blog"
+msgstr "Blog"
+
+#: wcivf/templates/base.html:163
+msgid "Twitter"
+msgstr "Trydar"
+
+#: wcivf/templates/base.html:164
+msgid "Facebook"
+msgstr "Facebook"
+
+#: wcivf/templates/base.html:165
+msgid "GitHub"
+msgstr "GitHub"
+
+#: wcivf/templates/base.html:172
+msgid "democracy"
+msgstr "democratiaeth"
+
+#: wcivf/templates/base.html:172
+msgid "club"
+msgstr "clwb"
+
+#: wcivf/templates/base.html:180
+#, python-format
+msgid "Copyright &copy; %(current_year)s"
+msgstr "Hawlfraint © %(current_year)s"
+
+#: wcivf/templates/base.html:181
+msgid "Democracy Club Community Interest Company"
+msgstr "Cwmni Buddiannau Cymunedol y Clwb Democratiaeth"
+
+#: wcivf/templates/base.html:182
+msgid ""
+"Company No: <a href=\"https://beta.companieshouse.gov.uk/"
+"company/09461226\">09461226</a>"
+msgstr ""
+"Rhif y Cwmni: <a href=\"https://beta.companieshouse.gov.uk/"
+"company/09461226\">09461226</a>"
+
+#: wcivf/templates/base.html:184
+msgid ""
+"\n"
+"                                    Democracy Club is a UK-based Community "
+"Interest Company that builds\n"
+"                                    the digital infrastructure needed for a "
+"21st century democracy\n"
+"                                "
+msgstr ""
+"\n"
+"                                    Mae Democracy Club yn Gwmni Buddiannau "
+"Cymunedol yn y DU sy'n adeiladu\n"
+" yr isadeiledd digidol sydd ei angen ar gyfer democratiaeth yr 21ain ganrif\n"
+"                                "
+
+#: wcivf/templates/home.html:12
+msgid "Find out about candidates in your area"
+msgstr "Cael gwybod am ymgeiswyr yn eich ardal chi"
+
+#: wcivf/templates/home.html:19
+#, fuzzy, python-format
+#| msgid ""
+#| "Sorry, we don't know the postcode %(request.GET.postcode)s.\n"
+#| "                                Is there another one you can try?"
+msgid ""
+"Sorry, we don't know the postcode %(postcode)s.\n"
+"                                Is there another one you can try?"
+msgstr ""
+"Mae'n ddrwg gennym, nid ydym yn gwybod y cod post %(postcode)s.\n"
+" A oes un arall y gallwch chi roi cynnig arni?"
+
+#: wcivf/templates/home.html:23
+msgid "Find your candidates"
+msgstr "Dod o hyd i'ch ymgeiswyr"
+
+#: wcivf/templates/home.html:32
+msgid "Upcoming Elections"
+msgstr "Etholiadau i ddod"

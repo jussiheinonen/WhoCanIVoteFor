@@ -62,3 +62,30 @@ Both workflow should consoder the following:
 ## Getting started
 
 See [INSTALL.md](INSTALL.md) for setup instructions.
+
+# Translations
+
+This application can be translated in to differnet languages.
+
+This is done using [Django's standard translation system](https://docs.djangoproject.com/en/3.2/topics/i18n/translation/).
+
+## TranslatedTemplateView
+
+There are some templates in the system that are mainly text and that rarely
+change. For example, the election explainers.
+
+Rather than wrapping this complex document in `trans` tags, we can translate
+the entire template as a single file.
+
+To do this, we can use `TranslatedTemplateView`. This extends Django's
+`TemplateView` but attempts to load a template relating to the current
+language, falling back to the one specified in `template_name`.
+
+For example if the curent language is `cy` (Welsh):
+
+```python
+TranslatedTemplateView.as_view(template_name="foo.html")
+```
+
+Will try to render `foo_cy.html` first and if that doesn't exist it will
+render `foo.html`

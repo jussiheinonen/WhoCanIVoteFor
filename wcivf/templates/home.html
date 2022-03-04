@@ -1,25 +1,26 @@
 {% extends "base.html" %}
 {% load dc_forms %}
+{% load i18n %}
 
-{% block base_title %}Who Can I Vote For?{% endblock base_title %}
-{% block og_title %}Who Can I Vote For?{% endblock og_title %}
+{% block base_title %}{% trans "Who Can I Vote For?" %}{% endblock base_title %}
+{% block og_title %}{% trans "Who Can I Vote For?" %}{% endblock og_title %}
 
 {% block content %}
 
     <div class="ds-card">
         <div class="ds-card-body ds-text-centered">
-            <h4>Find out about candidates in your area</h4>
+            <h4>{% trans "Find out about candidates in your area" %}</h4>
             <div class="ds-field">
                 <form method="post">
                     {% csrf_token %}
                     {{ form|dc_form }}
                     {% if request.GET.invalid_postcode %}
                         <p>
-                            <strong>Sorry, we don't know the postcode {{ request.GET.postcode }}.
-                                Is there another one you can try?</strong>
+                            <strong>{% blocktrans with postcode=request.GET.postcode %}Sorry, we don't know the postcode {{ postcode }}.
+                                Is there another one you can try?{% endblocktrans %}</strong>
                         </p>
                     {% endif %}
-                    <button class="ds-button-pink" type="submit">Find your candidates</button>
+                    <button class="ds-button-pink" type="submit">{% trans "Find your candidates" %}</button>
                 </form>
             </div>
         </div>
@@ -28,7 +29,7 @@
     {% if upcoming_elections %}
         <div class="ds-card">
             <div class="ds-card-body">
-                <h2>Upcoming Elections</h2>
+                <h2>{% trans "Upcoming Elections" %}</h2>
                 {% regroup upcoming_elections by election.election_date as elections_by_date %}
 
                 {% for election_group in elections_by_date %}

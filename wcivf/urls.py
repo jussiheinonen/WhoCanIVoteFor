@@ -1,4 +1,4 @@
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
@@ -19,6 +19,7 @@ sitemaps = {
 urlpatterns = (
     [
         path("admin/", admin.site.urls),
+        re_path(r"^i18n/", include("django.conf.urls.i18n")),
         path("", include("core.urls")),
         path("elections/", include("elections.urls")),
         path("parties/", include("parties.urls")),
