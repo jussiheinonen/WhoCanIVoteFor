@@ -9,6 +9,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 here = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
 PROJECT_ROOT = here("..")
 root = lambda *x: os.path.join(os.path.abspath(PROJECT_ROOT), *x)
+repo_root = lambda *x: os.path.join(os.path.abspath(here("../..")), *x)
 
 # Add apps to the PYTHON PATH
 sys.path.insert(0, root("apps"))
@@ -74,6 +75,7 @@ MIDDLEWARE = (
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -151,6 +153,11 @@ if os.environ.get("DC_ENVIRONMENT") in ["production"]:
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
 LANGUAGE_CODE = "en-gb"
+LANGUAGES = [
+    ("en", "English"),
+    ("cy", "Welsh"),
+]
+LOCALE_PATHS = (repo_root("locale"),)
 
 TIME_ZONE = "UTC"
 
