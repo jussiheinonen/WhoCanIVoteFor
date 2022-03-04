@@ -1,16 +1,29 @@
-import os
 import datetime
+import os
 
 from django import http
 from django.conf import settings
-from django.utils import timezone
-from django.views.generic import View, FormView, TemplateView
 from django.urls import reverse
+from django.utils import timezone
+from django.utils import translation
+from django.views.generic import View, FormView, TemplateView
 
+from core.helpers import may_election_day_this_year
+from elections.models import PostElection
 from .forms import PostcodeLookupForm
 
-from elections.models import PostElection
-from core.helpers import may_election_day_this_year
+
+class TranslatedTemplateView(TemplateView):
+    def get_template_names(self):
+
+        templates = super().get_template_names()
+        base_template_name, ext = self.template_name.rsplit(".", 1)
+        current_language = translation.get_language()
+        if current_language != "en":
+            templates.insert(
+                0, f"{base_template_name}_{current_language}.{ext}"
+            )
+        return templates
 
 
 class PostcodeFormView(FormView):

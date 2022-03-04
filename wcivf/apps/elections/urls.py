@@ -1,5 +1,4 @@
 from django.urls import re_path
-from django.views.generic import TemplateView
 
 from .views import (
     PostcodeView,
@@ -11,6 +10,7 @@ from .views import (
     PartyListVew,
 )
 from .helpers import ElectionIDSwitcher
+from core.views import TranslatedTemplateView
 
 urlpatterns = [
     re_path(r"^$", ElectionsView.as_view(), name="elections_view"),
@@ -45,7 +45,7 @@ urlpatterns = [
     ),
     re_path(
         r"^voting_system/fptp/",
-        TemplateView.as_view(
+        TranslatedTemplateView.as_view(
             template_name="elections/fptp.html",
             extra_context={"voting_system": "First-past-the-post"},
         ),
@@ -53,7 +53,7 @@ urlpatterns = [
     ),
     re_path(
         r"^voting_system/ams/",
-        TemplateView.as_view(
+        TranslatedTemplateView.as_view(
             template_name="elections/ams.html",
             extra_context={"voting_sytem": "Additional Member System"},
         ),
@@ -61,7 +61,7 @@ urlpatterns = [
     ),
     re_path(
         r"^voting_system/sv/",
-        TemplateView.as_view(
+        TranslatedTemplateView.as_view(
             template_name="elections/sv.html",
             extra_context={"voting_sytem": "Supplementary Vote"},
         ),
