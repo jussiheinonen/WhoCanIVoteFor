@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load markdown_deux_tags %}
 {% load humanize %}
 {% load static %}
@@ -17,7 +18,8 @@
             {% else %}
 
                 {% if not postelection.is_pcc and not postelection.is_mayoral %}
-                    <h3>{% if postelection.is_london_assembly_additional %}Additional members{% else %}{{ postelection.friendly_name }}{% endif %}</h3>
+                    {# Translators: The title of the London assembly members  #}
+                    <h3>{% if postelection.is_london_assembly_additional %}{% trans "Additional members" %}{% else %}{{ postelection.friendly_name }}{% endif %}</h3>
                 {% endif %}
 
                 {% if postelection.metadata.coronavirus_message %}
@@ -27,13 +29,19 @@
                 {% endif %}
 
                 <p>
-                    This election
+
                     {% if postelection.election.is_election_day %}
-                        <strong>is being held today</strong>.
-                        Polls are open from {{ postelection.election.polls_open|time:"ga" }} till {{ postelection.election.polls_close|time:"ga" }}
+                        {% blocktrans trimmed %}This election <strong>is being held today</strong>.{% endblocktrans %}
+                        {% with postelection.election.polls_open|time:"ga" as poll_open_time and postelection.election.polls_close|time:"ga" as poll_close_time %}
+                            {% blocktrans trimmed %}Polls are open from {{ poll_open_time }} till {{ poll_close_time }}{% endblocktrans %}
+                        {% endwith %}
                     {% else %}
-                        {{ postelection.election.in_past|yesno:"was,will be" }} held
-                        <strong>{{ postelection.election.election_date|naturalday:"\o\n l j F Y" }}</strong>.
+                        {% with postelection.election.election_date|naturalday:"\o\n l j F Y" as poll_date %}
+                            {% blocktrans trimmed with was_will_be_in_past=postelection.election.in_past|yesno:_("was,will be") %}
+                                This election {{ was_will_be_in_past }} held
+                                <strong>{{ poll_date }}</strong>.
+                            {% endblocktrans %}
+                        {% endwith %}
                     {% endif %}
                 </p>
 
@@ -43,41 +51,56 @@
 
                 <p>
                     {% if postelection.election.in_past %}
-                        <strong>{{ postelection.people|length }} candidate{{ postelection.people|pluralize }}</strong> stood in the {{ postelection.friendly_name }}.
+                        {% blocktrans count num_candidates=postelection.people.count trimmed with num_people=postelection.people|length election_name=postelection.friendly_name %}
+                            <strong>{{ num_people }} candidate</strong> stood in the {{ election_name }}.
+                        {% plural %}
+                            <strong>{{ num_people }} candidates</strong> stood in the {{ election_name }}.
+                        {% endblocktrans %}
                     {% else %}
-                        {# Display different messages depending on the number of candidates #}
-                        {# Case: No candidates for a contested election #}
                         {% if not postelection.people and postelection.contested %}
-                            We don't know of any candidates standing yet.
-                            You can help improve this page: <a href="{{ postelection.ynr_link }}">
-                                add information about candidates to our database</a>.
-                        {% else %}
                             {# Display different messages depending on the number of candidates #}
-                            {# Case: No candidates for a contested election #}
+                            {# Translators: Case: No candidates for a contested election #}
+                            {% blocktrans with ynr_link=postelection.ynr_link%}We don't know of any candidates standing yet.
+                                You can help improve this page: <a href="{{ ynr_link }}">
+                                    add information about candidates to our database</a>.{% endblocktrans %}
+                        {% else %}
                             {% if not postelection.people and postelection.contested %}
-                                We don't know of any candidates standing yet.
-                                You can help improve this page: <a href="{{ postelection.ynr_link }}">
-                                    add information about candidates to our database</a>.
+                                {# Display different messages depending on the number of candidates #}
+                                {# Translators: Case: No candidates for an uncontested election #}
+                                {% blocktrans with ynr_link=postelection.ynr_link %}We don't know of any candidates standing yet.
+                                    You can help improve this page: <a href="{{ ynr_link }}">
+                                        add information about candidates to our database</a>.{% endblocktrans %}
                             {% else %}
                                 {% if postelection.locked %}
-                                    {# Case: Candidates and the post is locked #}
                                     {% if postelection.get_voting_system.slug == "PR-CL" %}
-                                        You will have one vote, and can vote for a single party list or independent candidate.
+                                        {# Translators: Case: Candidates and the post is locked #}
+                                        {% blocktrans %}You will have one vote, and can vote for a single party list or independent candidate.{% endblocktrans %}
                                     {% else %}
                                         {% if postelection.winner_count and postelection.get_voting_system.slug == 'FPTP' %}
-                                            You will have {{ postelection.winner_count|apnumber }} vote{{ postelection.winner_count|pluralize }},
-                                            and can choose from <strong>{{ postelection.people.count|apnumber }} candidate{{ postelection.people|pluralize }}</strong>.
+                                            {% blocktrans trimmed count winner_count_number=postelection.winner_count with winner_count=postelection.winner_count|apnumber%}
+                                                You will have {{ winner_count }} vote,
+                                            {% plural %}
+                                                You will have {{ winner_count }} votes,
+                                            {% endblocktrans %}
+                                            {% blocktrans count people_count_n=postelection.people.count with people_count=postelection.people.count|apnumber %}
+                                                and can choose from <strong>{{ people_count }} candidate</strong>.
+                                            {% plural %}
+                                                and can choose from <strong>{{ people_count }} candidates</strong>.
+                                            {% endblocktrans %}
                                         {% endif %}
                                         {% if postelection.winner_count and postelection.get_voting_system.slug == 'AMS' %}
-                                            You will have one vote, and can choose from <strong>{{ postelection.party_ballot_count }}</strong>
-                                            in the {{ postelection.friendly_name }}.
+                                            {# Translators: AMS voting system #}
+                                            {% blocktrans trimmed %}You will have one vote, and can choose from <strong>{{ postelection.party_ballot_count }}</strong>
+                                                in the {{ postelection.friendly_name }}.{% endblocktrans %}
                                         {% endif %}
                                         {% if postelection.winner_count and postelection.get_voting_system.slug == 'sv' %}
-                                            You will have two votes, and can choose from <strong>{{ postelection.party_ballot_count }}</strong>
-                                            in the {{ postelection.friendly_name }}.
+                                            {# Translators: Supplementary voting #}
+                                            {% blocktrans trimmed %}You will have two votes, and can choose from <strong>{{ postelection.party_ballot_count }}</strong>
+                                                in the {{ postelection.friendly_name }}.{% endblocktrans %}
                                         {% endif %}
                                         {% if postelection.winner_count and postelection.get_voting_system.slug == 'STV' %}
-                                            You can choose from <strong>{{ postelection.party_ballot_count }}</strong>.
+                                            {# Translators: Single Transferable Vote #}
+                                            {% blocktrans %}You can choose from <strong>{{ postelection.party_ballot_count }}</strong>.{% endblocktrans %}
                                         {% endif %}
                                     {% endif %}
 
