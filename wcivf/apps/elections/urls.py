@@ -1,6 +1,8 @@
 from django.urls import re_path
 from django.views.generic import TemplateView
 
+from elections.views.postcode_view import DummyPostcodeView
+
 from .views import (
     PostcodeView,
     ElectionsView,
@@ -34,6 +36,11 @@ urlpatterns = [
         "^(?P<election>[a-z\-]+\.[^/]+)(?:/(?P<ignored_slug>[^/]+))?/$",
         ElectionIDSwitcher(election_view=ElectionView, ballot_view=PostView),
         name="election_view",
+    ),
+    re_path(
+        r"^dummy/(?P<postcode>[^/]+)/$",
+        DummyPostcodeView.as_view(),
+        name="dummy_postcode_view",
     ),
     re_path(
         r"^(?P<postcode>[^/]+)/$", PostcodeView.as_view(), name="postcode_view"

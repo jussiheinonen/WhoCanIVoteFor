@@ -1,4 +1,5 @@
 from datetime import date
+from django.shortcuts import redirect
 
 import requests
 from django.db.models import F
@@ -24,6 +25,9 @@ from elections.constants import (
 class PostcodeToPostsMixin(object):
     def get(self, request, *args, **kwargs):
         from ..models import InvalidPostcodeError
+
+        if kwargs["postcode"] in settings.DUMMY_POSTCODES:
+            return redirect("dummy_postcode_view", postcode=kwargs["postcode"])
 
         try:
             context = self.get_context_data(**kwargs)

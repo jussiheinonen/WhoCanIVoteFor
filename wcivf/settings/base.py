@@ -238,6 +238,8 @@ SLACK_FEEDBACK_WEBHOOK_URL = os.environ.get(
 CHECK_HOST_DIRTY = False
 DIRTY_FILE_PATH = "~/server_dirty"
 
+DUMMY_POSTCODES = ["TE1 1ST"]
+
 if os.environ.get("DC_ENVIRONMENT"):
     CHECK_HOST_DIRTY = True
 
