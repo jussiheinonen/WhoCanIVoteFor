@@ -9,7 +9,7 @@ class DummyPostElection(PostElection):
     display_as_party_list = False
 
     election = Election(
-        name="Faketown local election",
+        name="Llantalbot local election",
         election_date=date(2022, 5, 5),
         any_non_by_elections=True,
     )
