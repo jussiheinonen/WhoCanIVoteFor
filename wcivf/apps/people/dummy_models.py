@@ -30,6 +30,24 @@ class DummyPerson(Person):
             template_name=f"people/dummy_statements/{self.name_slug}.txt"
         )
         self.photo_url = static(f"images/{self.name_slug}.png")
+        self.email = f"{self.name_slug}@example.com"
+        self.facebook_page_url = "#"
+        self.linkedin_url = "#"
+        self.homepage_url = f"https://example.com/{self.name_slug}/"
+        self.blog_url = f"https://example.com/{self.name_slug}/blog/"
+        self.youtube_profile = "#"
+
+    @property
+    def facebook_username(self):
+        return self.name_slug
+
+    @property
+    def linkedin_username(self):
+        return self.name_slug
+
+    @property
+    def youtube_username(self):
+        return f"{self.name_slug}-youtube"
 
     @property
     def name_slug(self):

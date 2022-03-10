@@ -29,27 +29,39 @@ class DummyPostElection(PostElection):
     def people(self):
         return [
             DummyCandidacy(
-                person=DummyPerson(name="Jimmy Jordan"),
+                person=DummyPerson(
+                    name="Jimmy Jordan", favourite_biscuit="Jaffa cake"
+                ),
                 election=self.election,
                 party_name="Yellow Party",
             ),
             DummyCandidacy(
-                person=DummyPerson(name="Rhuanedd Llewelyn"),
+                person=DummyPerson(
+                    name="Rhuanedd Llewelyn",
+                    favourite_biscuit="Chocolate digestive",
+                ),
                 election=self.election,
                 party_name="Independent",
             ),
             DummyCandidacy(
-                person=DummyPerson(name="Ryan Evans"),
+                person=DummyPerson(
+                    name="Ryan Evans", favourite_biscuit="Party ring"
+                ),
                 election=self.election,
                 party_name="Lilac Party",
             ),
             DummyCandidacy(
-                person=DummyPerson(name="Sarah Jarman"),
+                person=DummyPerson(
+                    name="Sarah Jarman", favourite_biscuit="Hobnob"
+                ),
                 election=self.election,
                 party_name="Purple Party",
             ),
             DummyCandidacy(
-                person=DummyPerson(name="Sofia Williamson"),
+                person=DummyPerson(
+                    name="Sofia Williamson",
+                    favourite_biscuit="Custard cream",
+                ),
                 election=self.election,
                 party_name="Independent",
             ),
