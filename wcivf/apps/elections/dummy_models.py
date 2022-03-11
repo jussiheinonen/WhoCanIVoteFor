@@ -12,6 +12,7 @@ class DummyPostElection(PostElection):
         name="Llantalbot local election",
         election_date=date(2022, 5, 5),
         any_non_by_elections=True,
+        slug="local.faketown.2022-05-05",
     )
     post = Post(label="Made-Up-Ward")
 
