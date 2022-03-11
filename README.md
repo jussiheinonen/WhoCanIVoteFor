@@ -59,6 +59,16 @@ Both workflow should consoder the following:
 
 * There are different voting systems – for example [Single Transferable Vote](https://en.m.wikipedia.org/wiki/Single_transferable_vote), as used in Northern Ireland.  This could be out of scope for this initial phase of work – more research time is needed to see how complex this will be to model.
 
+## Dummy ballots and profiles
+
+There is a dummy ballot with dummy candidate profiles, that was produced for
+[The Children's Commissioner for Wales](https://www.childcomwales.org.uk).
+These are defined in the [elections URL file](wcivf/apps/elections/urls.py)
+(at time of writing this is "TE1 1ST").
+
+From the resulting dummy ballot page, you can click the candidates to see their
+dummy profiles. All links on the page are intended to be "dead" links.
+
 ## Getting started
 
 See [INSTALL.md](INSTALL.md) for setup instructions.

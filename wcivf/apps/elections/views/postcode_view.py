@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView, View
 
 from core.helpers import clean_postcode
+from elections.dummy_models import DummyPostElection
 from parishes.models import ParishCouncilElection
 from .mixins import (
     LogLookUpMixin,
@@ -236,3 +237,26 @@ class PostcodeiCalView(
                 cal.add_component(event)
 
         return HttpResponse(cal.to_ical(), content_type="text/calendar")
+
+
+class DummyPostcodeView(PostcodeView):
+    postcode = None
+
+    def get(self, request, *args, **kwargs):
+        kwargs["postcode"] = self.postcode
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        context = kwargs
+        self.postcode = clean_postcode(kwargs["postcode"])
+        context["postcode"] = self.postcode
+        context["postelections"] = self.get_ballots()
+        context["show_polling_card"] = True
+        context["polling_station"] = {}
+        context["num_ballots"] = 1
+
+        return context
+
+    def get_ballots(self):
+        return [DummyPostElection()]

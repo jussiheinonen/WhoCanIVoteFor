@@ -2,6 +2,8 @@ from django.views.generic import DetailView
 from django.http import Http404
 from django.db.models import Prefetch, Q
 
+from elections.dummy_models import DummyPostElection
+
 from .models import Person, PersonPost
 from parties.models import Manifesto
 
@@ -109,6 +111,23 @@ class PersonView(DetailView, PersonMixin):
             title += " for " + person.featured_candidacy.post.label + " in the "
             title += person.featured_candidacy.election.name
         return title
+
+
+class DummyPersonView(PersonView):
+    def get_template_names(self):
+        return ["people/person_detail.html"]
+
+    def get_object(self):
+        candidate = self.candidates().get(self.kwargs["name"])
+        if not candidate:
+            raise Http404()
+        return candidate.person
+
+    def candidates(self):
+        return {
+            candidate.person.name_slug: candidate
+            for candidate in DummyPostElection().people()
+        }
 
 
 class EmailPersonView(PersonMixin, DetailView):
