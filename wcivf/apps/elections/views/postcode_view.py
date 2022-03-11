@@ -240,7 +240,10 @@ class PostcodeiCalView(
 
 
 class DummyPostcodeView(PostcodeView):
+    postcode = None
+
     def get(self, request, *args, **kwargs):
+        kwargs["postcode"] = self.postcode
         context = self.get_context_data(**kwargs)
         return self.render_to_response(context)
 

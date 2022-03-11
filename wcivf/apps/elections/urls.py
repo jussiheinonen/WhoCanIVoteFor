@@ -38,8 +38,8 @@ urlpatterns = [
         name="election_view",
     ),
     re_path(
-        r"^dummy/(?P<postcode>[^/]+)/$",
-        DummyPostcodeView.as_view(),
+        r"^TE1 1ST/$",
+        DummyPostcodeView.as_view(postcode="TE1 1ST"),
         name="dummy_postcode_view",
     ),
     re_path(
