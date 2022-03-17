@@ -119,6 +119,7 @@ class Command(BaseCommand):
         if not pes.exists():
             # This might be a parent election ID
             pes = PostElection.objects.filter(election__slug=row["Election ID"])
+        husting = None
         for pe in pes:
             husting = Husting.objects.create(
                 post_election=pe,
@@ -133,7 +134,7 @@ class Command(BaseCommand):
                     "Link to post-event information (e.g. blog post, video)"
                 ],
             )
-            return husting
+        return husting
 
     def import_hustings(self):
         for row in self.importer.rows:
