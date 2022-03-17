@@ -15,6 +15,7 @@ import requests
 
 from core.helpers import show_data_on_error
 from elections.import_helpers import YNRBallotImporter
+from parties.models import Party
 from people.models import Person
 from elections.models import PostElection
 from wcivf.apps.elections.import_helpers import time_function_length
@@ -216,6 +217,12 @@ class Command(BaseCommand):
                 election=ballot.election,
                 defaults=defaults,
             )
+            for party in candidacy.get("previous_party_affiliations", []):
+                try:
+                    party = Party.objects.get(party_id=party["legacy_slug"])
+                except Party.DoesNotExist:
+                    continue
+                obj.previous_party_affiliations.add(party)
 
             msg = f"{obj} was {'created' if created else 'updated'}"
             self.stdout.write(msg=msg)
