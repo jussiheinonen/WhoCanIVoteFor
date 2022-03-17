@@ -33,6 +33,10 @@ class PersonPost(models.Model):
     list_position = models.IntegerField(blank=True, null=True)
     elected = models.BooleanField(null=True)
     votes_cast = models.PositiveIntegerField(null=True)
+    previous_party_affiliations = models.ManyToManyField(
+        Party, related_name="alliated_memberships", blank=True
+    )
+
     objects = PersonPostManager()
 
     def __str__(self):
