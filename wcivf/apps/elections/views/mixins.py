@@ -110,10 +110,9 @@ class PostelectionsToPeopleMixin(object):
         people_for_post = people_for_post.select_related(
             "post", "election", "person", "party"
         )
-        if not compact:
 
+        if not compact:
             people_for_post = people_for_post.prefetch_related(
-                # "person__leaflet_set",
                 "person__pledges"
             )
         cache.set(key, people_for_post)
