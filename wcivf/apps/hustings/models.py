@@ -36,8 +36,7 @@ class Husting(models.Model):
     url = models.URLField(max_length=800)
     starts = models.DateTimeField()
     ends = models.DateTimeField(blank=True, null=True)
-    location = models.CharField(max_length=250, blank=True, null=True)
-    postcode = models.CharField(max_length=10, blank=True, null=True)
+    location = models.CharField(max_length=250, blank=True, default="")
     postevent_url = models.URLField(blank=True, max_length=800)
 
     objects = HustingQueryset.as_manager()

@@ -32,7 +32,6 @@ class TestHustings(TestCase):
             starts=datetime(2017, 3, 23, 19, 00, tzinfo=utc),
             ends=datetime(2017, 3, 23, 21, 00, tzinfo=utc),
             location="St George's Church",
-            postcode="BN2 1DW",
         )
 
     @freeze_time("2017-3-22")
@@ -43,7 +42,6 @@ class TestHustings(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.hust.title)
         self.assertContains(response, self.hust.url)
-        self.assertContains(response, self.hust.postcode)
 
     @freeze_time("2017-3-22")
     def test_hustings_display_on_ballot_page(self):
@@ -51,7 +49,6 @@ class TestHustings(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.hust.title)
         self.assertContains(response, self.hust.url)
-        self.assertContains(response, self.hust.postcode)
 
     @freeze_time("2021-4-1")
     def test_displayable_in_past_not_returned(self):

@@ -126,8 +126,9 @@ class Command(BaseCommand):
                 url=row["Link to event information"],
                 starts=starts,
                 ends=ends,
-                location=row.get("Name of event location (e.g. Church hall)"),
-                postcode=row.get("Postcode of event location"),
+                location=row.get(
+                    "Location (if online only please leave blank)", ""
+                ),
                 postevent_url=row[
                     "Link to post-event information (e.g. blog post, video)"
                 ],
@@ -143,7 +144,11 @@ class Command(BaseCommand):
                 husting = None
 
             if not husting:
-                self.stdout.write(f"Couldn't create {row['Title of event']}")
+                title = row.get("Tilte of event", None)
+                if title:
+                    self.stdout.write(f"Couldn't create {title}")
+                else:
+                    self.stdout.write(f"Something went wrong with {row}")
                 continue
 
             self.hustings_counter += 1
