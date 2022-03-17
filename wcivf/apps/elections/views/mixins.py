@@ -76,8 +76,7 @@ class PostcodeToPostsMixin(object):
         pes = pes.select_related("election__voting_system")
         pes = pes.select_related("referendum")
 
-        if not compact:
-            pes = pes.prefetch_related("husting_set")
+        pes = pes.prefetch_related("husting_set")
         pes = pes.order_by(
             "past_date", "election__election_date", "-election__election_weight"
         )
