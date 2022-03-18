@@ -30,8 +30,7 @@ class PersonSerializer(serializers.ModelSerializer):
     leaflets = serializers.SerializerMethodField(allow_null=True)
 
     def get_leaflets(self, obj: Person):
-        # TODO: prefetch this somehow
-        leaflets = obj.leaflet_set.latest_four()
+        leaflets = obj.ordered_leaflets[:4]
         if leaflets:
             return LeafletSerializer(leaflets, many=True, read_only=True).data
 
