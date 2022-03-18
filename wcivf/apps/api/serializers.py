@@ -44,11 +44,17 @@ class PartySerializer(serializers.HyperlinkedModelSerializer):
 class PersonPostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PersonPost
-        fields = ("list_position", "party", "person")
+        fields = (
+            "list_position",
+            "party",
+            "person",
+            "previous_party_affiliations",
+        )
 
     person = PersonSerializer(many=False, read_only=True)
     party = PartySerializer(many=False, read_only=True)
     list_position = serializers.SerializerMethodField(allow_null=True)
+    previous_party_affiliations = PartySerializer(many=True, read_only=True)
 
     def get_list_position(self, obj):
         """

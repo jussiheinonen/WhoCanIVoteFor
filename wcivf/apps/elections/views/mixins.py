@@ -111,7 +111,13 @@ class PostelectionsToPeopleMixin(object):
             F("elected").desc(nulls_last=True), *order_by
         )
         people_for_post = people_for_post.select_related(
-            "post", "election", "person", "party"
+            "post",
+            "election",
+            "person",
+            "party",
+        )
+        people_for_post = people_for_post.prefetch_related(
+            "previous_party_affiliations"
         )
         people_for_post = people_for_post.prefetch_related(
             Prefetch(
