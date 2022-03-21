@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 240
+    Timeout: 150
 
 Parameters:
 
@@ -118,7 +118,7 @@ Resources:
             Schedule: rate(5 minutes)
             Name: import-ballots-recently-updated
             Description: Update all ballots updated in YNR recently
-            Input: '{"command": "import_ballots", "args": ["--recently-updated"]}'
+            Input: '{"command": "import_ballots", "args": ["--recently-updated", "--exclude-candidacies"]}'
         ImportParties:
           Type: Schedule
           Properties:

@@ -19,6 +19,8 @@ class TestUpdateCandidacies:
                         "name": "Labour Party",
                         "legacy_slug": "party:53",
                     },
+                    "party_name": "Labour Party",
+                    "party_description_text": "Labour Party",
                     "ballot": {
                         "url": "http://candidates.democracyclub.org.uk/api/next/ballots/parl.romsey-and-southampton-north.2010-05-06/",
                         "ballot_paper_id": "parl.romsey-and-southampton-north.2010-05-06",
@@ -50,6 +52,8 @@ class TestUpdateCandidacies:
                 "party_id": "party:53",
                 "list_position": 1,
                 "elected": False,
+                "party_name": "Labour Party",
+                "party_description_text": "Labour Party",
             },
         )
 
