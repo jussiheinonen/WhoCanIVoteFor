@@ -1,3 +1,4 @@
+{% load i18n %}
 <style>
     #email p,
     #headers {
@@ -21,80 +22,126 @@
     }
 </style>
 
-<p>This page generates a customised email for {{ object.name }}
+<p>{% blocktrans with person_name=object.name %}
+    This page generates a customised email for {{ person_name }}
     to ask them to provide missing data
-    for the Democracy Club dataset. </p>
+    for the Democracy Club dataset.{% endblocktrans %}
+</p>
 
 
-<p>Add your name, check the box if you live in {{ object.current_or_future_candidacies.0.post.label }},
-    and then press 'open email in email program'.</p>
+<p>{% blocktrans with object.current_or_future_candidacies.0.post.label=place_name %}
+    Add your name, check the box if you live in
+    {{ place_name }},
+    and then press 'open email in email program'.{% endblocktrans %}
+</p>
 
 <form>
     <div class="form-group">
-        <label for="name" class="form-label-bold">Your Name</label>
-        <input type="text" id="name" onkeyup="nameChange()" class=" form-control">
+        <label for="name" class="form-label-bold">{% trans "Your Name" %}</label>
+        <input type="text" id="name" onkeyup="nameChange()" class="form-control">
     </div>
     <div class="form-group">
-        <label for="constituent" class="form-label-bold">I live in {{ object.current_or_future_candidacies.0.post.label }}</label>
+        <label for="constituent" class="form-label-bold">#
+            {% blocktrans with object.current_or_future_candidacies.0.post.label=place_name%}I live in {{ place_name }}{% endblocktrans %}
+        </label>
         <input type="checkbox" id="constituent" onchange="constituentChange()" value="1" class=" form-control">
     </div>
 </form>
 
-<p>Here's the email text we've generated for you to send to <span class="candidatename">{{ object.name }}</span>.</p>
+<p>
+    {% blocktrans with object.name=person_name %}
+        Here's the email text we've generated for you to send to <span class="candidatename">{{ person_name }}</span>.
+    {% endblocktrans %}
+</p>
 
 <p id="headers">
-    To: <span id="candidateemail" class="candidateemail">{{ object.email }}</span><br>
-    Subject: <span id="subject">Candidate information request for national database used by Google and others</span>
+    {% trans "To:" %} <span id="candidateemail" class="candidateemail">{{ object.email }}</span><br>
+    {% trans "Subject:" %}
+    <span id="subject">
+        {% trans "Candidate information request for national database used by Google and others" %}
+    </span>
 </p>
 
 <div id="email">
-    <p>Hi,</p>
+    <p>{% trans "Hi," %}</p>
 
-    <p>My name is <span class="name">TYPE YOUR NAME IN THE BOX</span><span class="constituent">, I live in {{ object.current_or_future_candidacies.0.post.label }} </span> and I'm working with a non-partisan, non-profit organisation called Democracy Club, which gathers information on election candidates in order to help voters. Your page is here:
-        https://candidates.democracyclub.org.uk/person/{{ object.ynr_id }}/</p>
+    <p>
+        {% blocktrans with object.current_or_future_candidacies.0.post.label=place_name objecy.ynr_id=person_id%}
+            My name is <span class="name">TYPE YOUR NAME IN THE BOX</span><span class="constituent">, I live in {{ place_name }} </span> and I'm working with a non-partisan, non-profit organisation called Democracy Club, which gathers information on election candidates in order to help voters. Your page is here:
+            https://candidates.democracyclub.org.uk/person/{{ person_id }}/
+        {% endblocktrans %}
+    </p>
 
-    <p>At the last election, Democracy Club's data was used by a number of national and local websites and social media platforms. So it's worth taking the time to make it complete.</p>
+    <p>
+        {% blocktrans %}
+            At the last election, Democracy Club's data was used by a number of national and local websites
+            and social media platforms. So it's worth taking the time to make it complete.
+        {% endblocktrans %}
+    </p>
 
-    <p>Fortunately, I'm able to help you with this. If you or your team could send me (or, even better, send me links to public statements of) any of the missing items of information on the page given above, I would be most grateful.<p>
+    <p>
+        {% blocktrans %}
+            Fortunately, I'm able to help you with this. If you or your team could send me (or, even better,
+            send me links to public statements of) any of the missing items of information on the page given
+            above, I would be most grateful.
+        {% endblocktrans %}
+        <p>
 
-        {% if not object.photo_url %}
-            <p>In particular, it would be great if you provided a photo which met the guidelines below.</p>
-        {% endif %}
+            {% if not object.photo_url %}
+                <p>
+                    {% blocktrans %}
+                        In particular, it would be great if you provided a photo which met the guidelines below.
+                    {% endblocktrans %}
+                </p>
+            {% endif %}
 
-        {% if not object.statement_to_voters %}
-            <p>You may wish to take advantage of the opportunity to provide a plain text
-                "statement to voters" setting out your platform. If you'd like to do this,
-                we recommend about 600 words.</p>
-        {% endif %}
+            {% if not object.statement_to_voters %}
+                <p>
+                    {% blocktrans %}
+                        You may wish to take advantage of the opportunity to provide a plain text
+                        "statement to voters" setting out your platform. If you'd like to do this,
+                        we recommend about 600 words.
+                    {% endblocktrans %}
+                </p>
+            {% endif %}
 
 
-        <p>I can update the database for you.</p>
-        <p>I look forward to hearing from you.</p>
+            <p>{% trans "I can update the database for you." %}</p>
+            <p>{% trans "I look forward to hearing from you." %}</p>
 
-        <p>With best wishes,</p>
+            <p>{% trans "With best wishes," %}</p>
 
-        <p><span class="name">TYPE YOUR NAME IN THE BOX</span></p>
+            <p><span class="name">{% trans "TYPE YOUR NAME IN THE BOX" %}</span></p>
 
-        <p>&nbsp;</p>
+            <p>&nbsp;</p>
 
-        {% if not object.photo_url %}
-            <div class="ifnophoto">
-                <p>Photo Guidelines<br>
-                    ----------------</p>
+            {% if not object.photo_url %}
+                <div class="ifnophoto">
+                    <p>{% blocktrans %}Photo Guidelines{% endblocktrans %}<br>
+                        ----------------</p>
 
-                <p>* The photo must be a clear, recent, colour headshot of you.</p>
+                    <p>{% trans "* The photo must be a clear, recent, colour headshot of you." %}</p>
 
-                <p>* No text or party logos may be included in the photo, unless an unavoidable part of the background or a small rosette/badge that doesn't interfere with the rule above.</p>
+                    <p>
+                        {% blocktrans %}
+                            * No text or party logos may be included in the photo, unless an unavoidable part of
+                            the background or a small rosette/badge that doesn't interfere with the rule above."
+                        {% endblocktrans %}
+                    </p>
 
-                <p>* It must be either free of copyright restrictions, or you must provide it along with confirmation that Democracy Club has rights to use it.</p>
+                    <p>
+                        {% blocktrans %}
+                            * It must be either free of copyright restrictions, or you must provide it along with confirmation that Democracy Club has rights to use it.
+                        {% endblocktrans %}
+                    </p>
 
-                <p>* The photo will be displayed on the site as a square.</p>
-            </div>
-        {% endif %}
+                    <p>{% trans "* The photo will be displayed on the site as a square." %}</p>
+                </div>
+            {% endif %}
 
-    </div>
+        </div>
 
-        <p><button onclick="openEmail();">Open Email in Email Program</button></p>
+        <p><button onclick="openEmail();">{% trans "Open Email in Email Program" %}</button></p>
 
 
 

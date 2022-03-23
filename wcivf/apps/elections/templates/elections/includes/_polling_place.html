@@ -1,3 +1,4 @@
+{% load i18n %}
 {# TODO this is a mess! Clean it up somehow #}
 {% load postcode_tags %}
 {% load humanize %}
@@ -7,15 +8,28 @@
 
         <h2 id='where'>
             <span aria-hidden="true">📍</span>
-            Where to vote
+            {% trans "Where to vote" %}
         </h2>
 
         {% if polling_station.polling_station_known %}
             <p>
-                Your polling station is <strong>{{ polling_station.polling_station.properties.address }}</strong>.
-                It will be open from <strong>7am to 10pm</strong>
+                {% trans "Your polling station is" %} <strong>
+
+                    {{ polling_station.polling_station.properties.address }}</strong>.
+                {% blocktrans %}It will be open from <strong>7am to 10pm</strong>{% endblocktrans %}
+
                 <strong>
-                    {% for election in elections_by_date %}{{ election.grouper|naturalday:"\o\n l j F Y" }}{% if not forloop.last %}{% if forloop.revcounter == 2 %} and {% else %}, {% endif %}{% endif %}{% endfor %}</strong>.
+                    {% for election in elections_by_date %}
+                        {{ election.grouper|naturalday:"\o\n l j F Y" }}
+
+                        {% if not forloop.last %}
+                            {% if forloop.revcounter == 2 %}
+                                and
+                            {% else %},
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </strong>.
 
 
                 {% if not voter_id_required %}
