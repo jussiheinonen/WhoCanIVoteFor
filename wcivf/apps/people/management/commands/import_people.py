@@ -38,6 +38,13 @@ class Command(BaseCommand):
             type=self.valid_date,
             help="Import changes since [datetime]",
         )
+        parser.add_argument(
+            "--exclude-candidacies",
+            action="store_true",
+            dest="exclude_candidacies",
+            default=False,
+            help="Ignore candidacies when importing people",
+        )
 
     def valid_date(self, value):
         return parse(value)
@@ -145,9 +152,10 @@ class Command(BaseCommand):
                         person_data=person,
                         person_obj=person_obj,
                     )
-                    self.update_candidacies(
-                        person_data=person, person_obj=person_obj
-                    )
+                    if not self.options["exclude_candidacies"]:
+                        self.update_candidacies(
+                            person_data=person, person_obj=person_obj
+                        )
                     # dont keep track of seen people in a recent update
                     continue
 

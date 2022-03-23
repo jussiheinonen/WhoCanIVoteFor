@@ -104,7 +104,7 @@ Resources:
             Schedule: cron(2-57/5 * ? * * *)
             Name: import-people-recently-updated
             Description: Update all people updated in YNR recently
-            Input: '{"command": "import_people", "args": ["--recently-updated"]}'
+            Input: '{"command": "import_people", "args": ["--recently-updated", "--exclude-candidacies"]}'
         DeleteDeletedPeople:
           Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
           Properties:
@@ -118,7 +118,7 @@ Resources:
             Schedule: cron(*/5 * ? * * *)
             Name: import-ballots-recently-updated
             Description: Update all ballots updated in YNR recently
-            Input: '{"command": "import_ballots", "args": ["--recently-updated", "--exclude-candidacies"]}'
+            Input: '{"command": "import_ballots", "args": ["--recently-updated"]}'
         ImportParties:
           Type: Schedule
           Properties:
