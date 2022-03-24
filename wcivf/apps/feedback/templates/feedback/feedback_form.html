@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <div class="ds-card">
     <form id="feedback_form" method="post" action="{% url 'feedback_form_view' %}" novalidate>
         {% csrf_token %}
@@ -5,34 +7,34 @@
         {{ feedback_form.source_url }}
         <h5>
             <span aria-hidden="true">🔎</span>
-            Did you find what you were looking for?
+            {% trans "Did you find what you were looking for?" %}
         </h5>
         {% for choice in feedback_form.found_useful %}
-            {{ choice.tag }}
-            <label class="link-button" for="{{ choice.id_for_label }}"> {{ choice.choice_label }}</label>
+            {% blocktrans %}{{ choice.tag }}{% endblocktrans %}
+            <label class="link-button" for="{{ choice.id_for_label }}">{% blocktrans %}{{ choice.choice_label }}{% endblocktrans %}</label>
         {% endfor %}
 
         <h5>
             <span aria-hidden="true">🗳️</span>
-            Has this information made you more likely to vote?
+            {% trans "Has this information made you more likely to vote?" %}
         </h5>
         {% for choice in feedback_form.vote %}
-            {{ choice.tag }}
-            <label class="link-button" for="{{ choice.id_for_label }}"> {{ choice.choice_label }}</label>
+            {% blocktrans %}{{ choice.tag }}{% endblocktrans %}
+            <label class="link-button" for="{{ choice.id_for_label }}">{% blocktrans %}{{ choice.choice_label }}{% endblocktrans %}</label>
         {% endfor %}
 
         <div>
             <p>
-                What other websites/sources have you used to
-                research the election?
+                {% trans "What other websites/sources have you used to
+                research the election?" %}
             </p>
-            {{ feedback_form.sources }}
+            {% blocktrans %}{{ feedback_form.sources }}{% endblocktrans %}
         </div>
 
         <div>
-            <p>Can you tell us anything more?</p>
-            {{ feedback_form.comments }}
+            <p>{% trans "Can you tell us anything more?" %}</p>
+            {% blocktrans %}{{ feedback_form.comments }}{% endblocktrans %}
         </div>
-        <button type="submit" class="ds-button-pink">Send feedback</button>
+        <button type="submit" class="ds-button-pink">{% trans "Send feedback" %}</button>
     </form>
 </div>
