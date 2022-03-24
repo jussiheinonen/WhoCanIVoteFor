@@ -1,0 +1,9 @@
+git:
+  filters:
+  - filter_type: file
+    file_format: PO
+    source_file: locale/en/LC_MESSAGES/django.po
+    source_language: en
+    translation_files_expression: 'locale/<lang>/LC_MESSAGES/django.po'
+
+
