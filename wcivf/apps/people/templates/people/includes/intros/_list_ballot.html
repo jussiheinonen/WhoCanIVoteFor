@@ -1,13 +1,20 @@
 {% extends "people/includes/intros/base.html" %}
+{% load i18n %}
 
 {% load humanize %}
 
 {% block intro_line %}
-    {{ person.name }} {{ verb }} the
-    {{ person.featured_candidacy.list_position|ordinal }} place
+    {% blocktrans
+    person=person.name
+    postion=person.featured_candidacy.list_position|ordinal
+    party_name=candidacy.party_name
+    election_name=candidacy.election.name %}
+    {{ person }} {{ verb }} the
+    {{ position }} place
     candidate for the <a href="{{ candidacy.party.get_absolute_url }}"
-        title="{{ candidacy.party_name }}">{{ candidacy.party_name }}</a>
+        title="{{ party_name }}">{{ party_name }}</a>
     in the <a href="{{ candidacy.election.get_absolute_url }}"
-        title="{{ candidacy.election.name }}">
-        {{ candidacy.election.name }}</a>.
+        title="{{ election_name }}">
+        {{ election_name }}</a>.
+{% endblocktrans %}
 {% endblock %}

@@ -1,17 +1,22 @@
+{% load i18n %}
+
 <li>
     <a href="{{ manifesto.canonical_url }}" rel="noopener noreferrer">
-        {{ manifesto.country }} manifesto {% if manifesto.canonical_url != manifesto.pdf_url %}website{% endif %}
-        {% if manifesto.language != "English" %} in {{ manifesto.language }}{% endif %}
-        {% if manifesto.canonical_url == manifesto.pdf_url %}(PDF){% endif %}
+        {% blocktrans %}
+            {{ manifesto.country }} manifesto {% if manifesto.canonical_url != manifesto.pdf_url %}website{% endif %}
+            {% if manifesto.language != "English" %} in {{ manifesto.language }}{% endif %}
+            {% if manifesto.canonical_url == manifesto.pdf_url %}(PDF){% endif %}
+        {% endblocktrans %}
     </a>
+
 </li>
 {% if manifesto.pdf_url and manifesto.canonical_url != manifesto.pdf_url %}
     <li>
-        <a href="{{ manifesto.pdf_url }}" rel="noopener noreferrer">PDF Version</a>
+        <a href="{{ manifesto.pdf_url }}" rel="noopener noreferrer">{% trans "PDF Version" %}</a>
     </li>
 {% endif %}
 {% if manifesto.easy_read_url %}
     <li>
-        <a href="{{ manifesto.easy_read_url }}">Easy Read version</a>
+        <a href="{{ manifesto.easy_read_url }}">{% trans "Easy Read version" %}</a>
     </li>
 {% endif %}

@@ -1,17 +1,20 @@
+{% load i18n %}
 {% if object.wikipedia_bio or object.favourite_biscuit %}
     <div class="ds-card">
         <div class="ds-card-body">
             <h2 class="ds-candidate-name ds-h3">
-                About {{ object.name }}
+                {% blocktrans with name=object.name %}About {{ name }}{% endblocktrans %}
             </h2>
             {% if object.wikipedia_bio %}
-                <h4>Wikipedia</h4>
-                <p>{{ object.wikipedia_bio }}</p>
-                <a href="{{ object.wikipedia_url }}" class="link-button">Read more on Wikipedia</a>
+                <h4>{% trans "Wikipedia" %}</h4>
+                <p>{% blocktrans with bio=object.wikipedia_bio %}{{ bio }}{% endblocktrans %}</p>
+                <a href="{{ object.wikipedia_url }}" class="link-button">{% trans "Read more on Wikipedia" %}</a>
             {% endif %}
             {% if object.favourite_biscuit %}
-                <h4>Favourite Biscuit?</h4>
-                <p>{{ object.favourite_biscuit }}</p>
+                {% blocktrans with biscuit=object.favourite_biscuit%}
+                    <h4>Favourite Biscuit"</h4>
+                    <p>{{ biscuit }}</p>
+                {% endblocktrans %}
             {% endif %}
         </div>
     </div>

@@ -1,7 +1,8 @@
+{% load i18n %}
 <section class="ds-card">
     <div class="ds-card-body ds-stack-smaller">
         <h2 class="ds-candidate-name ds-h3">
-            {{ object.name }} online
+            {{ object.name }} {% trans "online" %}
         </h2>
         <dl class="ds-descriptions">
             {% if object.facebook_page_url or object.facebook_personal_url %}
@@ -10,14 +11,14 @@
                     <div>
                         {% if object.facebook_personal_url %}
                             <dd>
-                                <a href="{{ object.facebook_personal_url }}" title="{{ object.name }}'s Facebook personal page">
+                                <a href="{{ object.facebook_personal_url }}" title="{{ object.name }}'s {% trans 'Facebook personal page' %}">
                                     {{ object.facebook_personal_username }}
                                 </a><br />
                             </dd>
                         {% endif %}
                         {% if object.facebook_page_url %}
                             <dd>
-                                <a href="{{ object.facebook_page_url }}" title="{{ object.name }}'s Facebook page">
+                                <a href="{{ object.facebook_page_url }}" title="{{ object.name }}'s {% trans 'Facebook page' %}">
                                     {{ object.facebook_username}}
                                 </a>
                             </dd>
@@ -30,7 +31,7 @@
                 <div>
                     <dt>LinkedIn</dt>
                     <dd>
-                        <a href="{{ object.linkedin_url }}" title="{{ object.name }}'s LinkedIn profile">
+                        <a href="{{ object.linkedin_url }}" title="{{ object.name }}'s {% trans 'LinkedIn profile' %}">
                             {{ object.linkedin_username}}
                         </a>
                     </dd>
@@ -39,9 +40,9 @@
 
             {% if object.homepage_url %}
                 <div>
-                    <dt>Home page</dt>
+                    <dt>{% trans "Home page" %}</dt>
                     <dd>
-                        <a href="{{ object.homepage_url }}" title="{{ object.name }}'s home page">
+                        <a href="{{ object.homepage_url }}" title="{{ object.name }}'s {% trans 'home page' %}">
                             {{ object.homepage_url }}
                         </a>
                     </dd>
@@ -50,9 +51,9 @@
 
             {% if object.blog_url %}
                 <div>
-                    <dt>Blog</dt>
+                    <dt>{% trans "Blog" %}</dt>
                     <dd>
-                        <a href="{{ object.blog_url }}" title="{{ object.name }}'s Blog">
+                        <a href="{{ object.blog_url }}" title="{{ object.name }}'s {% trans 'Blog' %}">
                             {{ object.blog_url }}
                         </a>
                     </dd>
@@ -83,9 +84,9 @@
 
             {% if object.party_ppc_page_url %}
                 <div>
-                    <dt>The party's candidate page for this person</dt>
+                    <dt>{% trans "The party's candidate page for this person" %}</dt>
                     <dd>
-                        <a href="{{ object.party_ppc_page_url }}" title="Party page for {{ object.name }}">
+                        <a href="{{ object.party_ppc_page_url }}" title="{% trans 'Party page for' %} {{ object.name }}">
                             {{ object.party_ppc_page_url }}
                         </a>
                     </dd>
@@ -101,18 +102,18 @@
                 </div>
             {% else %}
                 <div>
-                    <dt>We don't know {{ object.name }}'s email address.</dt>
+                    {% blocktrans with person=object.name %}<dt>We don't know {{ person }}'s email address.</dt>{% endblocktrans %}
                     <dd>
-                        <a href="{{ object.get_ynr_url }}">Can you add it?</a>
+                        <a href="{{ object.get_ynr_url }}">{% trans "Can you add it?" %}</a>
                     </dd>
                 </div>
             {% endif %}
         </dl>
         {% if object.twitter_username %}
-            <h3>Latest tweets</h3>
+            <h3>{% trans "Latest tweets" %}</h3>
             <div class="twitter_container">
                 <a data-width="100%" data-height="500" class="twitter-timeline" href="https://twitter.com/{{ object.twitter_username }}">
-                    Tweets by @{{ object.twitter_username }}</a>
+                    {% blocktrans with twitter_name=object.twitter_username %}Tweets by @{{ twitter_name }}{% endblocktrans %}</a>
                 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
             </div>
         {% endif %}

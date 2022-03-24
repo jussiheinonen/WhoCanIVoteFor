@@ -1,14 +1,23 @@
+{% load i18n %}
 {% if object.manifestos %}
     {% with object.featured_candidacy.party as party %}
         <section class="ds-party">
             <div class="ds-party-body ds-stack-smaller">
                 <h2 class="ds-party-name ds-h3">
-                    Party manifesto
+                    {% trans 'Party manifesto' %}
                 </h2>
                 <p>
-                    {{ object.name }} {{ object.featured_candidacy.election.in_past|yesno:"was,is" }} the {{ party.party_name }}
-                    candidate.
-                    Find out more about their policies in the {{ party.party_name }} manifesto.
+                    {% if object.featured_candidacy.election.in_past %}
+                        {% blocktrans with person_name=object.name party_name=object.featured_candidacy.party_name %}
+                            {{ person_name }} was the {{ party_name }} candidate.
+                            Find out more about their policies in the {{ party_name }} manifesto.
+                        {% endblocktrans %}
+                    {% else %}
+                        {% blocktrans with person_name=object.name party_name=object.featured_candidacy.party_name %}
+                            {{ person_name }} is the {{ party_name }} candidate.
+                            Find out more about their policies in the {{ party_name }} manifesto.
+                        {% endblocktrans %}
+                    {% endif %}
                 </p>
                 <ul>
                     {% for manifesto in object.manifestos %}
@@ -18,7 +27,7 @@
             </div>
             {% if party.emblem_url %}
                 <div class="ds-party-image">
-                    <img src="{{ party.emblem_url }}" alt="{{ party.name}} emblem">
+                    <img src="{{ party.emblem_url }}" alt="{% blocktrans %}'{{ party_name}}' emblem {% endblocktrans %}">
                 </div>
             {% endif %}
         </section>

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load markdown_deux_tags %}
 {% load humanize %}
+{% load i18n %}
 
 {% block page_title %}{% include "people/includes/_person_meta_title.html" %}{% endblock page_title %}
 {% block page_description %}{% include "people/includes/_person_meta_description.html" %}{% endblock page_description %}
@@ -15,12 +16,12 @@
         {% include 'elections/includes/_postcode_breadcrumbs.html' %}
     {% elif object.featured_candidacy %}
         {# There's a current post #}
-        <nav class="ds-breadcrumbs ds-stack" aria-label="You are here: {{ request.path }}">
+        <nav class="ds-breadcrumbs ds-stack" aria-label="{% trans 'You are here:'%}{{ request.path }}">
             <ol>
                 <li>
-                    <a href="{% url 'home_view' %}">Home</a>
+                    <a href="{% url 'home_view' %}">{% trans "Home" %}</a>
                 </li>
-                <li>Current: {{ object.name }}</li>
+                <li>{{ object.name }}</li>
             </ol>
         </nav>
     {% endif %}
@@ -32,13 +33,13 @@
 
         {% include "people/includes/_person_policy_card.html" %}
 
-        {% include "people/includes/_person_manifesto_card.html" %}
+        {% include "people/includes/_person_manifesto_card.html" with party=object.featured_candidacy.party party_name=object.featured_candidacy.party.name %}
 
         {% include "people/includes/_person_about_card.html" %}
 
         {% include "people/includes/_person_contact_card.html" %}
 
-        {% include "people/includes/_person_local_party_card.html" %}
+        {% include "people/includes/_person_local_party_card.html" with party=person.local_party.name %}
 
         {% include "people/includes/_person_hustings_card.html" %}
 
@@ -49,7 +50,7 @@
         {% if referer_postcode %}
             <div class="back">
                 <p>
-                    <a href="{% url 'postcode_view' referer_postcode %}">&laquo; Back to candidates in {{ referer_postcode }}</a>
+                    <a href="{% url 'postcode_view' referer_postcode %}">&laquo; {% trans "Back to candidates in"%} {{ referer_postcode }}</a>
                 </p>
             </div>
         {% endif %}
