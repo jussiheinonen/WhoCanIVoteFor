@@ -1,14 +1,14 @@
 {% load dc_forms %}
+{% load i18n %}
 
 <div class="ds-card">
     <div class="ds-card-body">
-        <h3>All elections where you live</h3>
-        <p>Enter your postcode to get information about elections,
-            your candidates and where to vote.</p>
+        <h3>{% trans "All elections where you live" %}</h3>
+        <p>{% trans "Enter your postcode to get information about elections, your candidates and where to vote." %}</p>
         <form method="post" action="/">
             {% csrf_token %}
             {{ postcode_form|dc_form }}
-            <button type="submit" class="ds-button">Find your candidates</button>
+            <button type="submit" class="ds-button">{% trans "Find your candidates" %}</button>
         </form>
     </div>
 </div>

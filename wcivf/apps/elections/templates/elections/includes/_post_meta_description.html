@@ -1,12 +1,15 @@
+{% load i18n %}
+
 {% if postelection.cancelled %}
-    {{ object.election.name }}: This election has been cancelled.
+    {% blocktrans with election_name=object.election.name %}{{ election_name }}: This election has been cancelled. {% endblocktrans %}
 {% elif postelection.people|length %}
     {% autoescape off %}
-        See all {{ postelection.people|length }} candidates in the {{ object.election.name }} on {{ object.election.election_date }}:
+        {% blocktrans with election_name=object.election.name num_candidates=postelection.people|length election_date=object.election.election_date %}
+            See all {{ num_candidates }} candidates in the {{ election_name }} on {{ election_date }}:{% endblocktrans %}
         {% for pp in postelection.people %}
             {{ pp.person.name|safe }} ({{ pp.party_name }})
         {% endfor %}
     {% endautoescape %}
 {% else %}
-    {{ object.election.name }}: No candidates known yet.
+    {% blocktrans with election_name=object.election.name %} {{ election_name }}: No candidates known yet.{% endblocktrans %}
 {% endif %}

@@ -2,6 +2,7 @@
 {% load markdown_deux_tags %}
 {% load static %}
 {% load humanize %}
+{% load i18n %}
 
 {% block page_title %}{% include "elections/includes/_postcode_meta_title.html" %}{% endblock page_title %}
 {% block page_description %}{% include "elections/includes/_postcode_meta_description.html" %}{% endblock page_description %}
@@ -49,20 +50,20 @@
                 <div class="ds-card-body">
                     <h4>
                         <span aria-hidden="true">⏰</span>
-                        Add future elections in {{ postcode }} to your calendar
+                        {% blocktrans %}Add future elections in {{ postcode }} to your calendar{% endblocktrans %}
                     </h4>
                     <p>
-                        <a href="webcal://whocanivotefor.co.uk{% url 'postcode_ical_view' postcode %}">Subscribe to the iCal feed</a>
-                        <p>Or manually subscribe by following these simple steps for your chosen calendar tool:</p>
+                        <a href="webcal://whocanivotefor.co.uk{% url 'postcode_ical_view' postcode %}">{% trans "Subscribe to the iCal feed" %}</a>
+                        <p>{% trans "Or manually subscribe by following these simple steps for your chosen calendar tool:" %}</p>
                         <ol>
                             <li>
-                                In your calendar app settings, choose the option for adding a new calendar.
+                                {% trans "In your calendar app settings, choose the option for adding a new calendar." %}
                             </li>
                             <li>
-                                If presented with the option to choose a calendar type, choose web calendar.
+                                {% trans "If presented with the option to choose a calendar type, choose web calendar." %}
                             </li>
                             <li>
-                                Enter <a href="https://calendar.google.com/calendar/u/0/embed?src=tm55j9m2lict2h021b3479gpntshunvd@import.calendar.google.com&ctz=Europe/London">this URL</a> and save.
+                                {% blocktrans %}Enter <a href="https://calendar.google.com/calendar/u/0/embed?src=tm55j9m2lict2h021b3479gpntshunvd@import.calendar.google.com&ctz=Europe/London">this URL</a> and save{% endblocktrans %}.
                             </li>
                         </ol>
                     </p>

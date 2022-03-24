@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 {% load humanize %}
+{% load i18n %}
 
 {% block page_title %}{{ object.name }}{% endblock page_title %}
 {% block og_title %}{{ object.name }}{% endblock og_title %}
-{% block og_description %}The {{ object.name }} {% if object.in_past %}was{% else %}will be{% endif %} held on {{ object.election_date }}.{% endblock og_description %}
+{% block og_description %}
+    {% blocktrans trimmed with was_or_will_be=object.in_past|yesno:"was, will be" election=object.name date=object.election_date %}The {{ election }} {{ was_or_will_be }} held on {{ date }}.{% endblocktrans %}{% endblock og_description %}
 
 {% block content %}
 
@@ -14,36 +16,45 @@
             <div class="ds-card-body">
                 <h3>{{ object.nice_election_name }}</h3>
 
-                <p>The {{ object.nice_election_name }}
+                <p>
                     {% if object.is_election_day %}
-                        <strong>is being held today</strong>.
-                        Polls are open from {{ object.polls_open|time:"ga" }} till {{ object.polls_close|time:"ga" }}
+                        {% blocktrans with election=object.nice_election_name %}The {{ election }}
+                            <strong>is being held today</strong>. Polls are open from{% endblocktrans %} {{ object.polls_open|time:"ga" }} {% trans "till" %} {{ object.polls_close|time:"ga" }}
                     {% else %}
-                        {% if object.in_past %}was{% else %}will be{% endif %} held <strong>{{ object.election_date|naturalday:"\o\n l j F Y" }}</strong>.
+                        {% comment %} TO DO: Change text when the election is "tomorrow" {% endcomment %}
+                        {% blocktrans trimmed with was_will_be_in_past=postelection.election.in_past|yesno:"was,will be" election_date=object.election_date|naturalday:"\o\n l j F Y" %} {{ was_will_be_in_past }} held <strong>{{ election_date }}</strong>.{% endblocktrans %}
                     {% endif %}
                 </p>
 
                 {% if object.election_type != "ref" %}
                     {% if election.person_set.count %}
-                        <p>{% if object.locked %}There are {% else %}We know about {% endif %}<strong>{{ election.person_set.count
-                            }}</strong> candidates
-                            {% if object.in_past %}that stood{% else %}standing{% endif %} for this election,
-                            in <strong>{{ object.post_set.count }}</strong> posts.</p>
+                        <p>
+                            {% if object.locked %}
+                                There are <strong>{{election.person_set.count}} candidates
+                            {% else %}
+                                We know about <strong>{{election.person_set.count}} candidates</strong>
+                            {% endif %}
+                            {% blocktrans trimmed with stood_or_standing=object.in_past|yesno:"that stood,standing" post_count=object.post_set.count %}{{ stood_or_standing }} for this election, in <strong>{{ post_count }}</strong> posts.{% endblocktrans %}
+                        </p>
+
                         {% if not object.in_past and not object.locked %}
-                            <p><a href="{{ object.ynr_link }}">Add more at our candidate crowd-sourcing site</a></p>
+                            <p><a href="{{ object.ynr_link }}">{% trans "Add more at our candidate crowd-sourcing site" %}</a></p>
                         {% endif %}
+
                     {% else %}
                         {% if not object.in_past and not election.slug == 'parl.2017-06-08' %}
-                            <p><a href="{{ object.ynr_link }}">Add some candidates at our candidate crowd-sourcing site</a></p>
+                            <p><a href="{{ object.ynr_link }}">{% trans "Add some candidates at our candidate crowd-sourcing site" %}</a></p>
                         {% endif %}
                     {% endif %}
 
-                    <h3>{{ object.pluralized_division_name|title }}</h3>
+                    <h3>{% blocktrans with title=object.pluralized_division_name|title %} {{ title }}{% endblocktrans %}</h3>
                     <ul>
                         {% for postelection in object.postelection_set.all %}
                             <li>
-                                <a href="{{ postelection.get_absolute_url }}">{{ postelection.post.label }}</a>
-                                {{ postelection.short_cancelled_message_html }}
+                                {% blocktrans with post_label=postelection.post.label cancelled_message=postelection.short_cancelled_message_html %}
+                                    <a href="{{ postelection.get_absolute_url }}">{{ post_label }}</a>
+                                    {{ cancelled_message }}
+                                {% endblocktrans %}
                             </li>
                         {% endfor %}
                     </ul>

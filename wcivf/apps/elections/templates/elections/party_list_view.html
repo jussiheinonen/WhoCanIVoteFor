@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+    {% load i18n %}
 
     <div class="ds-stack-smaller">
         <div class="ds-card">
@@ -8,83 +9,84 @@
                     <div>
                         <div class="ds-sidebar" style="flex-basis: 10rem">
                             {% if party.emblem_url %}
-                                <img src="{{ party.emblem_url }}" alt="{{ party_name }} emblem">
+                                <img src="{{ party.emblem_url }}" alt="{{ party_name }} {% trans 'emblem' %}">
                             {% endif %}
                         </div>
                         <div class="ds-not-sidebar">
 
                             <h2>{{ party_name }}</h2>
-                            <h4>{{ ballot.election.nice_election_name }}{% if not ballot.is_pcc and not ballot.is_mayoral %}: {{ ballot.friendly_name }}{% endif %}</h4>
+                            <h4>{% blocktrans with election_name=ballot.election.nice_election_name %} {{ election_name }}{% endblocktrans %}</h4>
+                            {% if not ballot.is_pcc and not ballot.is_mayoral %}: {% blocktrans with ballot_name=ballot.friendly_name %} {{ ballot_name }} }}{% endif %}</h4>
 
-                            <dl class="ds-descriptions" style="border-style:none;">
-                                <div>
-                                    {% if local_party.facebook_page %}
-                                        <dt>Facebook</dt>
-                                        <dd>
-                                            {% if local_party.facebook_page %}
-                                                <a href="{{ local_party.facebook_page }}" title="{{ local_party.name }}'s Facebook profile">
-                                                    {{ local_party.facebook_page }}
+                                <dl class="ds-descriptions" style="border-style:none;">
+                                    <div>
+                                        {% if local_party.facebook_page %}
+                                            <dt>Facebook</dt>
+                                            <dd>
+                                                {% if local_party.facebook_page %}
+                                                    <a href="{{ local_party.facebook_page }}" title="{% blocktrans party_name=local_party.name %}{{ party_name }}'s Facebook profile{% endblocktrans %}">
+                                                        {{ local_party.facebook_page }}
+                                                    </a>
+                                                {% endif %}
+                                            </dd>
+                                        {% endif %}
+
+                                        {% if local_party.homepage %}
+                                            <dt>{% trans "Home page" %}</dt>
+                                            <dd>
+                                                <a href="{{ local_party.homepage }}" title="{% blocktrans party_name=local_party.name %}{{ party_name }}'s home page{% endblocktrans %}">
+                                                    {{ local_party.homepage }}
                                                 </a>
-                                            {% endif %}
-                                        </dd>
-                                    {% endif %}
+                                            </dd>
+                                        {% endif %}
 
-                                    {% if local_party.homepage %}
-                                        <dt>Home page</dt>
-                                        <dd>
-                                            <a href="{{ local_party.homepage }}" title="{{ local_party.name }}'s home page">
-                                                {{ local_party.homepage }}
-                                            </a>
-                                        </dd>
-                                    {% endif %}
-
-                                    {% if local_party.email %}
-                                        <dt>Email</dt>
-                                        <dd><a href="mailto:{{ local_party.email }}">{{ local_party.email }}</a></dd>
-                                    {% endif %}
+                                        {% if local_party.email %}
+                                            <dt>{% trans "Email" %}</dt>
+                                            <dd><a href="mailto:{{ local_party.email }}">{{ local_party.email }}</a></dd>
+                                        {% endif %}
+                                    </div>
+                                </dl>
                                 </div>
-                            </dl>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                                </div>
+                                </div>
+                                </div>
+                                </div>
 
-        {% if manifesto %}
-            <div class="ds-card">
-                <div class="ds-card-body">
-                    <h3>Party manifesto</h3>
-                    <p>
+                                {% if manifesto %}
+                                    <div class="ds-card">
+                                        <div class="ds-card-body">
+                                            <h3>{% trans "Party manifesto" %}</h3>
+                                            <p>
 
-                        Find out more about the {{ party.party_name }} in their {{ manifesto|safe }}.
-                    </p>
-                </div>
-            </div>
-        {% endif %}
+                                                {% blocktrans party_name=party.party_name manifesto=manifesto|safe %}Find out more about the {{ party_name }} in their {{ manifesto }}.{% endblocktrans %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                {% endif %}
 
-        {% if local_party.twitter %}
-            <div class="ds-card">
-                <div class="ds-card-body">
-                    <h3>Latest tweets</h3>
-                    <div class="twitter_container">
-                        <a data-width="100%" data-height="500" class="twitter-timeline" href="https://twitter.com/{{ object.twitter_username }}">
-                            Tweets by @{{ object.twitter_username }}</a>
-                        <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
+                                {% if local_party.twitter %}
+                                    <div class="ds-card">
+                                        <div class="ds-card-body">
+                                            <h3>{% trans "Latest tweets" %}</h3>
+                                            <div class="twitter_container">
+                                                <a data-width="100%" data-height="500" class="twitter-timeline" href="https://twitter.com/{{ object.twitter_username }}">
+                                                    {% trans "Tweets by" %} @{{ object.twitter_username }}</a>
+                                                <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
 
-        <div class="ds-card">
-            <div class="ds-card-body">
-                <h3>Candidates</h3>
-                <ul class="ds-grid" style="--gridCellMin: 25ch">
-                    {% for person in person_posts %}
-                        {% include "elections/includes/_person_card.html" with person_post=person lists=True %}
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
-    </div>
+                                <div class="ds-card">
+                                    <div class="ds-card-body">
+                                        <h3>{% trans "Candidates" %}</h3>
+                                        <ul class="ds-grid" style="--gridCellMin: 25ch">
+                                            {% for person in person_posts %}
+                                                {% include "elections/includes/_person_card.html" with person_post=person lists=True %}
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                </div>
 
-{% endblock %}
+                            {% endblock %}

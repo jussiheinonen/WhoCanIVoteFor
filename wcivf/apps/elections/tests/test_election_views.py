@@ -337,7 +337,7 @@ class TestPostViewNextElection:
         assertContains(response, "<h3>Next election</h3>")
         assertContains(
             response,
-            "due to take place <strong>on Thursday 6 May 2021</strong>.",
+            "due to take place on <strong>Thursday 6 May 2021</strong>.",
         )
 
     @pytest.mark.django_db

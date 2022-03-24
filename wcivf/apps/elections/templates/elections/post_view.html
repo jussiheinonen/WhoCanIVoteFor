@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load i18n %}
 {% load humanize %}
 
 {% block page_title %}{% include "elections/includes/_post_meta_title.html" %}{% endblock page_title %}
@@ -21,14 +21,13 @@
         {% if postelection.next_ballot %}
             <div class="ds-card">
                 <div class="ds-card-body">
-                    <h3>Next election</h3>
+                    <h3>{% trans "Next election" %}</h3>
                     <p>
-                        The <a href="{{ postelection.next_ballot.get_absolute_url }}">next election for
-                            {{ postelection.friendly_name}}</a> is
+                        {% blocktrans with postelection=postelection.friendly_name %}The <a href="{{ postelection.next_ballot.get_absolute_url }}">next election for {{ postelection }}</a> is{% endblocktrans %}
                         {% if postelection.next_ballot.election.is_election_day %}
-                            <strong>being held today</strong>.
+                            <strong>{% trans "being held today" %}</strong>.
                         {% else %}
-                            due to take place <strong>on {{ postelection.next_ballot.election.election_date|date:"l j F Y"}}</strong>.
+                            {% trans "due to take place on" %} <strong>{{ postelection.next_ballot.election.election_date|date:"l j F Y"}}</strong>.
                         {% endif %}
                     </p>
                 </div>

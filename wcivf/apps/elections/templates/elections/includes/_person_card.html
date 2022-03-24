@@ -24,9 +24,9 @@
         {% endif %}
 
         {% if not person_post.list_position or not postelection.display_as_party_list %}
-            <p>{{ person_post.party_name }}
+            <p>{{ party }}
                 {% if person_post.votes_cast %}
-                    <br><strong>{{ person_post.votes_cast|intcomma }} votes</strong>
+                    <br><strong>{{ person_post.votes_cast|intcomma }} {% trans "votes" %}</strong>
                 {% endif %}
             </p>
         {% endif %}
@@ -34,7 +34,7 @@
 
     <div class="ds-candidate-image">
         {% if person_post.person.photo_url %}
-            <img src="{{ person_post.person.photo_url }}" alt="Photo of {{ person_post.person.name }}">
+            <img src="{{ person_post.person.photo_url }}" alt="{% blocktrans trimmed with person_name=person_post.person.name%}Photo of {{ person_name }}{% endblocktrans %}">
         {% elif person_post.person.gender|lower == 'male' %}
             <img src="{% static 'people/images/blank-man.png' %}" style="background-color: #ddd;">
         {% else %}
