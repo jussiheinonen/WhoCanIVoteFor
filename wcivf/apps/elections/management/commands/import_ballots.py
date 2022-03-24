@@ -35,6 +35,13 @@ class Command(BaseCommand):
             dest="recently_updated",
             help="Only import ballots updated since the last known update",
         )
+        parser.add_argument(
+            "--exclude-candidacies",
+            action="store_true",
+            dest="exclude_candidacies",
+            default=False,
+            help="Ignore candidacies when importing ballots",
+        )
 
     @time_function_length
     def populate_any_non_by_elections_field(self):
@@ -76,6 +83,7 @@ class Command(BaseCommand):
             force_metadata=options["force_metadata"],
             force_current_metadata=options["force_current_metadata"],
             recently_updated=options["recently_updated"],
+            exclude_candidacies=options["exclude_candidacies"],
         )
         importer.do_import()
         self.populate_any_non_by_elections_field()

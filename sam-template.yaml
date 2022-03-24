@@ -8,7 +8,7 @@ Description: >
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 240
+    Timeout: 150
 
 Parameters:
 
@@ -101,10 +101,10 @@ Resources:
         ImportPeopleRecentlyUpdated:
           Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
           Properties:
-            Schedule: rate(5 minutes)
+            Schedule: cron(2-57/5 * ? * * *) # using the ? as you cannot use * wildcard for both day-of-month and day-of-week field. See https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions
             Name: import-people-recently-updated
             Description: Update all people updated in YNR recently
-            Input: '{"command": "import_people", "args": ["--recently-updated"]}'
+            Input: '{"command": "import_people", "args": ["--recently-updated", "--exclude-candidacies"]}'
         DeleteDeletedPeople:
           Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
           Properties:
@@ -115,7 +115,7 @@ Resources:
         ImportBallotsRecentlyUpdated:
           Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
           Properties:
-            Schedule: rate(5 minutes)
+            Schedule: cron(*/5 * ? * * *) # using the ? as you cannot use * wildcard for both day-of-month and day-of-week field. See https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions
             Name: import-ballots-recently-updated
             Description: Update all ballots updated in YNR recently
             Input: '{"command": "import_ballots", "args": ["--recently-updated"]}'
@@ -129,7 +129,7 @@ Resources:
         BatchFeedbackToSlack:
           Type: Schedule
           Properties:
-            Schedule: cron(0 9 ? * 6 *)
+            Schedule: cron(0 9 ? * * *) # using the ? as you cannot use * wildcard for both day-of-month and day-of-week field. See https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions
             Name: batch-feedback-to-slack
             Description: Send feedback entries for the last week to slack
             Input: '{"command": "batch_feedback_to_slack", "args": ["--hours=168"]}'

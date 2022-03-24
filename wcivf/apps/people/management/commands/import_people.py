@@ -38,6 +38,13 @@ class Command(BaseCommand):
             type=self.valid_date,
             help="Import changes since [datetime]",
         )
+        parser.add_argument(
+            "--exclude-candidacies",
+            action="store_true",
+            dest="exclude_candidacies",
+            default=False,
+            help="Ignore candidacies when importing people",
+        )
 
     def valid_date(self, value):
         return parse(value)
@@ -145,9 +152,10 @@ class Command(BaseCommand):
                         person_data=person,
                         person_obj=person_obj,
                     )
-                    self.update_candidacies(
-                        person_data=person, person_obj=person_obj
-                    )
+                    if not self.options["exclude_candidacies"]:
+                        self.update_candidacies(
+                            person_data=person, person_obj=person_obj
+                        )
                     # dont keep track of seen people in a recent update
                     continue
 
@@ -190,15 +198,23 @@ class Command(BaseCommand):
 
             # TODO check if the post/election could have changed and should be
             # used in defaults dict
+            defaults = {
+                "party_id": candidacy["party"]["legacy_slug"],
+                "list_position": candidacy["party_list_position"],
+                "elected": candidacy["elected"],
+                "party_name": candidacy["party_name"],
+                "party_description_text": candidacy["party_description_text"],
+            }
+            # TODO add this to YNR CandidacyOnPersonSerializer
+            if candidacy.get("result"):
+                num_ballots = candidacy["result"].get("num_ballots", None)
+                defaults["votes_cast"] = num_ballots
+
             obj, created = person_obj.personpost_set.update_or_create(
                 post_election=ballot,
                 post=ballot.post,
                 election=ballot.election,
-                defaults={
-                    "party_id": candidacy["party"]["legacy_slug"],
-                    "list_position": candidacy["party_list_position"],
-                    "elected": candidacy["elected"],
-                },
+                defaults=defaults,
             )
 
             msg = f"{obj} was {'created' if created else 'updated'}"

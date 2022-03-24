@@ -4,14 +4,17 @@ from rest_framework import viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from django.conf import settings
+from django.utils.http import urlencode
+
 from api import serializers
 from api.serializers import VotingSystemSerializer
 from core.helpers import clean_postcode
-from hustings.api.serializers import HustingSerializer
-
-from people.models import Person
 from elections.views import mixins
 from elections.models import PostElection, InvalidPostcodeError
+from hustings.api.serializers import HustingSerializer
+from people.models import Person
 
 
 class PostcodeNotProvided(APIException):
@@ -148,15 +151,27 @@ class LastUpdatedView(APIView):
         Returns the current timestamps used by the people and ballot recently
         updated importers
         """
+        data = {
+            "ballot_timestamp": None,
+            "person_timestamp": None,
+            "ballot_last_updated_url": None,
+            "person_last_updated_url": None,
+        }
+        api_base_url = f"{settings.YNR_BASE}/api/next/"
         try:
-            ballot_ts = PostElection.objects.last_updated_in_ynr().ynr_modified
-            ballot_ts = ballot_ts.isoformat()
+            ts = PostElection.objects.last_updated_in_ynr().ynr_modified
+            data["ballot_timestamp"] = ts.isoformat()
+            qs = urlencode({"last_updated": ts.isoformat()})
+            data["ballot_last_updated_url"] = f"{api_base_url}ballots/?{qs}"
         except PostElection.DoesNotExist:
-            ballot_ts = None
+            pass
 
-        return Response(
-            data={
-                "ballot_timestamp": ballot_ts,
-                "person_timestamp": Person.objects.latest().last_updated.isoformat(),
-            }
-        )
+        try:
+            ts = Person.objects.latest().last_updated.isoformat()
+            data["person_timestamp"] = ts
+            qs = urlencode({"last_updated": ts})
+            data["person_last_updated_url"] = f"{api_base_url}people/?{qs}"
+        except Person.DoesNotExist:
+            pass
+
+        return Response(data=data)
