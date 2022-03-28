@@ -1,6 +1,5 @@
 from django.urls import re_path
-
-from .views import TranslatedTemplateView, RecordJsonFeedback
+from .views import RecordJsonFeedback, FeedbackFormView
 
 urlpatterns = [
     re_path(
@@ -8,5 +7,5 @@ urlpatterns = [
         RecordJsonFeedback.as_view(),
         name="json_feedback_view",
     ),
-    re_path(r"^$", TranslatedTemplateView.as_view(), name="feedback_form_view"),
+    re_path(r"^$", FeedbackFormView.as_view(), name="feedback_form_view"),
 ]
