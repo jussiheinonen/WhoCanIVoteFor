@@ -1,0 +1,12 @@
+{% load static %}
+{% load humanize %}
+{% load i18n %}
+
+{% trans "Previous Party Affiliations" %}
+<ul>
+    {% for previous_party in person.previous_party_affiliations.all %}
+        {% blocktrans trimmed with previous_party=previous_party %}}
+            <li>{{ previous_party }}</li>
+        {% endblocktrans %}
+    {% endfor %}
+</ul>
