@@ -8,7 +8,6 @@ from django.utils.timezone import now
 from django.utils.functional import cached_property
 from elections.models import Election, Post
 from parties.models import Party
-from django.utils.translation import gettext_lazy as _
 
 from wcivf import settings
 from .managers import PersonPostManager, PersonManager, VALUE_TYPES_TO_IMPORT

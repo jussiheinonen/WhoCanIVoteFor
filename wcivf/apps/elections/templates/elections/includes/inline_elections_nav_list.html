@@ -42,7 +42,7 @@
                                 {% endif %}
                             </a>
                             {% blocktrans with short_cancelled_message=ballot.short_cancelled_message_html %}
-                                {{ short_cancelled_message } }
+                                {{ ballot.short_cancelled_message_html }}
                             {% endblocktrans %}
                         </li>
                     {% endfor %}
