@@ -2,6 +2,7 @@ import pytest
 from django.shortcuts import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
+from random import shuffle
 from elections.models import Post
 from elections.tests.factories import (
     ElectionFactory,
@@ -10,6 +11,7 @@ from elections.tests.factories import (
     PostElectionFactory,
     PostFactory,
 )
+from elections.views.mixins import PostelectionsToPeopleMixin
 from people.tests.factories import PersonFactory, PersonPostFactory
 from pytest_django.asserts import assertContains, assertNotContains
 from elections.views import PostView
@@ -430,3 +432,28 @@ class TestPostViewTemplateName:
     def test_get_template_names(self, boolean, template, view_obj, mocker):
         view_obj.object = mocker.Mock(is_referendum=boolean)
         assert view_obj.get_template_names() == [template]
+
+
+class TestPostElectionsToPeopleMixin(TestCase):
+    def test_people_for_ballot_ordered_alphabetically(self):
+        people = [
+            {"name": "Jane Adams", "sort_name": "Adams"},
+            {"name": "John Middle", "sort_name": None},
+            {"name": "Jane Smith", "sort_name": "Smith"},
+        ]
+        post_election = PostElectionFactory()
+        shuffle(people)
+        for person in people:
+            PersonPostFactory(
+                post_election=post_election,
+                election=post_election.election,
+                post=post_election.post,
+                person__name=person["name"],
+                person__sort_name=person["sort_name"],
+            )
+        candidates = list(
+            PostelectionsToPeopleMixin().people_for_ballot(post_election)
+        )
+        self.assertEqual(candidates[0].person.name, "Jane Adams")
+        self.assertEqual(candidates[1].person.name, "John Middle")
+        self.assertEqual(candidates[2].person.name, "Jane Smith")
