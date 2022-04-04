@@ -1,8 +1,8 @@
 {% if object.manifestos %}
     {% with object.featured_candidacy.party as party %}
-        <section class="ds-candidate">
-            <div class="ds-candidate-body ds-stack-smaller">
-                <h2 class="ds-candidate-name ds-h3">
+        <section class="ds-party">
+            <div class="ds-party-body ds-stack-smaller">
+                <h2 class="ds-party-name ds-h3">
                     Party manifesto
                 </h2>
                 <p>
@@ -16,6 +16,11 @@
                     {% endfor %}
                 </ul>
             </div>
+            {% if party.emblem_url %}
+                <div class="ds-party-image">
+                    <img src="{{ party.emblem_url }}" alt="{{ party.name}} emblem">
+                </div>
+            {% endif %}
         </section>
     {% endwith %}
 {% endif %}
