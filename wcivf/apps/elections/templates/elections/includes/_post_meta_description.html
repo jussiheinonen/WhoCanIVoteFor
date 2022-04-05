@@ -4,7 +4,7 @@
     {% blocktrans with election_name=object.election.name %}{{ election_name }}: This election has been cancelled. {% endblocktrans %}
 {% elif postelection.people|length %}
     {% autoescape off %}
-        {% blocktrans with election_name=object.election.name num_candidates=postelection.people|length election_date=object.election.election_date %}
+        {% blocktrans trimmed with election_name=object.election.name num_candidates=postelection.people|length election_date=object.election.election_date %}
             See all {{ num_candidates }} candidates in the {{ election_name }} on {{ election_date }}:{% endblocktrans %}
         {% for pp in postelection.people %}
             {{ pp.person.name|safe }} ({{ pp.party_name }})

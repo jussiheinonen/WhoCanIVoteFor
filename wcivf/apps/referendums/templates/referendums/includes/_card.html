@@ -5,7 +5,7 @@
 
         <h1>
             <span aria-hidden="true">🗳️</span>
-            {% blocktrans with council_name=referendum.council_name %}
+            {% blocktrans trimmed with council_name=referendum.council_name %}
                 {{ council_name }} governance referendum
             {% endblocktrans %}
         </h1>
@@ -16,7 +16,7 @@
             {% else %}
                 On <strong>{{ referendum.date|date:"l j F Y" }}</strong>
             {% endif %},
-            {% blocktrans with were_or_will_be=referendum.in_past|yesno:"were, will be" council_name=referendum.council_name %}
+            {% blocktrans trimmed with were_or_will_be=referendum.in_past|yesno:"were, will be" council_name=referendum.council_name %}
                 voters in <strong>{{ council_name }}</strong> able to vote in a governance referendum.
             {% endblocktrans %}
         </p>
@@ -26,7 +26,7 @@
             <p>{% trans "The question you will be asked on the ballot paper is:" %}</p>
         {% endif %}
 
-        {% blocktrans referendum_question=referendum.question referendum_answer_one=referendum.answer_one referendum_answer_two=referendum.answer_two %}
+        {% blocktrans trimmed referendum_question=referendum.question referendum_answer_one=referendum.answer_one referendum_answer_two=referendum.answer_two %}
             <h4>{{ referendum_question}}</h4>
             <blockquote>{{ referendum.answer_one }}</blockquote> or <blockquote>{{ referendum_answer_two }}</blockquote>
         {% endblocktrans %}

@@ -1,12 +1,12 @@
 {% extends "people/includes/intros/base.html" %}
 {% load i18n %}
 
-{% block intro_line %}{% blocktrans with person=person.name party=candidacy.party_name %}
+{% block intro_line %}{% blocktrans trimmed with person=person.name party=candidacy.party_name %}
     {{ person}} {{ verb }} a
     <a href="{{ candidacy.party.get_absolute_url }}"
         title="{{ party }}">{{ party }}</a>{% endblocktrans %}
     candidate in
-    {% blocktrans with post=candidacy.post.label election=candidacy.election.nice_election_name %}
+    {% blocktrans trimmed with post=candidacy.post.label election=candidacy.election.nice_election_name %}
         <a href="{{ candidacy.post_election.get_absolute_url }}">
             {{ post }}</a>
         constituency in the

@@ -25,7 +25,7 @@
                         </a>
                     </li>
                     {% if candidacy.votes_cast %}
-                        {% blocktrans with num_votes=candidacy.votes_cast|intcomma %}
+                        {% blocktrans trimmed with num_votes=candidacy.votes_cast|intcomma %}
                             {{ num_votes }} votes
                         {% endblocktrans %}
                     {% endif %}

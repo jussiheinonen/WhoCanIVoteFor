@@ -2,7 +2,7 @@
 
 <li>
     <a href="{{ manifesto.canonical_url }}" rel="noopener noreferrer">
-        {% blocktrans with manifesto_country=manifesto.country %}
+        {% blocktrans trimmed with manifesto_country=manifesto.country %}
             {{ manifesto_country }} manifesto {% endblocktrans %}{% if manifesto.canonical_url != manifesto.pdf_url %}{% trans "website" %}{% endif %}
         {% if manifesto.language != "English" %}{% blocktrans with manifest_language=manifesto.language %} in {{ manifesto_language }}{% endblocktrans %}{% endif %}
         {% if manifesto.canonical_url == manifesto.pdf_url %}(PDF){% endif %}

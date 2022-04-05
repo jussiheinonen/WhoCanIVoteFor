@@ -17,7 +17,7 @@
                     : {{ ballot.post.label }}
                 {% endif %}
             </a>
-            {% blocktrans with short_cancelled_message=ballot.short_cancelled_message_html %}
+            {% blocktrans trimmed with short_cancelled_message=ballot.short_cancelled_message_html %}
                 {{ short_cancelled_message }}
             {% endblocktrans %}
         </li>

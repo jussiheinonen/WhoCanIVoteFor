@@ -8,12 +8,12 @@
                 </h2>
                 <p>
                     {% if object.featured_candidacy.election.in_past %}
-                        {% blocktrans with person_name=object.name party_name=object.featured_candidacy.party_name %}
+                        {% blocktrans trimmed with person_name=object.name party_name=object.featured_candidacy.party_name %}
                             {{ person_name }} was the {{ party_name }} candidate.
                             Find out more about their policies in the {{ party_name }} manifesto.
                         {% endblocktrans %}
                     {% else %}
-                        {% blocktrans with person_name=object.name party_name=object.featured_candidacy.party_name %}
+                        {% blocktrans trimmed with person_name=object.name party_name=object.featured_candidacy.party_name %}
                             {{ person_name }} is the {{ party_name }} candidate.
                             Find out more about their policies in the {{ party_name }} manifesto.
                         {% endblocktrans %}

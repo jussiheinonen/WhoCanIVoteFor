@@ -120,7 +120,7 @@
                     <p>
                         {% if postelection.locked %}
                             {% url '{{ postelection.ynr_sopn_link }}' as sopn_url %}
-                            {% blocktrans%}
+                            {% blocktrans trimmed %}
                                 The <a href="{{ sopn_url }}">official candidate list</a> has been published.
                             {% endblocktrans%}
                         {% else %}

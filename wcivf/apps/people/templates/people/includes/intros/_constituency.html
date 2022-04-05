@@ -3,11 +3,8 @@
 {% block intro_line %}
     {% blocktrans with name=person.name%}{{ name }} {{ verb }} the{% endblocktrans %}
     <a href="{{ candidacy.party.get_absolute_url }}"title="{{ party }}">{{ party }}</a>
-    {% blocktrans with post_label=candidacy.post.label election=candidacy.election.name election_name=candidacy.election.name_without_brackets %} candidate for
+    {% blocktrans trimmed with post_label=candidacy.post.label election=candidacy.election.name election_name=candidacy.election.name_without_brackets %} candidate for
         <a href="{{ candidacy.post_election.get_absolute_url }}">{{ post_label }}</a> constituency in the
         <a href="{{ candidacy.election.get_absolute_url }}" title="{{ election }}">{{ election_name }}</a>.
     {% endblocktrans %}
 {% endblock %}
-
-
-

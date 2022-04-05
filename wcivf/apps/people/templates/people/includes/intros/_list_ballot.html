@@ -4,7 +4,7 @@
 {% load humanize %}
 
 {% block intro_line %}
-    {% blocktrans with person=person.name position=person.featured_candidacy.list_position|ordinal party_name=candidacy.party_name election_name=candidacy.election.name %}
+    {% blocktrans trimmed with person=person.name position=person.featured_candidacy.list_position|ordinal party_name=candidacy.party_name election_name=candidacy.election.name %}
         {{ person }} {{ verb }} the
         {{ position }} place
         candidate for the <a href="{{ candidacy.party.get_absolute_url }}"

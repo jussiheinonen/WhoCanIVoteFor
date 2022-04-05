@@ -15,7 +15,7 @@
             {% trans "If you can add information that should be on this page" %}
 
             {% if object.cta_example_details %}
-                {% blocktrans with person=object.name cta=object.cta_example_details|join:", "%}- such as {{ person }}'s
+                {% blocktrans trimmed with person=object.name cta=object.cta_example_details|join:", "%}- such as {{ person }}'s
                     {{ cta }} - {% endblocktrans %}
             {% endif %}
             {% trans "please use our crowdsourcing website to add it." %}</p>

@@ -16,7 +16,7 @@
                 </tr>
                 <tr>
                     {% for person_post in object.past_not_current_candidacies %}
-                        {% blocktrans with message=person_post.post_election.short_cancelled_message_html %}
+                        {% blocktrans trimmed with message=person_post.post_election.short_cancelled_message_html %}
                             {{ message }}
                             {{ message }}
                             {{ message }}

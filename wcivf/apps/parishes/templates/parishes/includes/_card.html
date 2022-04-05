@@ -13,16 +13,16 @@
                     You {{ were_also_or_will_also_be }} able to vote for {{ ward_seats }} councillors to sit
                 {% endblocktrans %}
             {% else %}
-                {% blocktrans with ward_seats=parish_council_election.ward_seats %}
+                {% blocktrans trimmed with ward_seats=parish_council_election.ward_seats %}
                     You are also represented by {{ ward_seats }} councillors
                 {% endblocktrans %}
             {% endif %}
             {% url 'parish_council_election.website' as parish_council_election_url %}
-            {% blocktrans with council_name=parish_council_election.council_name %}
+            {% blocktrans trimmed with council_name=parish_council_election.council_name %}
                 on <a href="{{ parish_council_election_url }}">{{ council_name }}</a>
             {% endblocktrans %}
             {% if parish_council_election.parish_ward_name %}
-                {% blocktrans with parish_ward_name=parish_council_election.parish_ward_name %}
+                {% blocktrans trimmed with parish_ward_name=parish_council_election.parish_ward_name %}
                     - {{ parish_ward_name }}
                 {% endblocktrans %}
             {% endif %}.
@@ -30,11 +30,11 @@
 
         <p>
             <a href="https://www.localgov.co.uk/What-are-parish-councils/35176">
-                {% blocktrans with council_type=parish_council_election.council_type council_name=parish_council_election.council_name precept_amount=parish_council_election.precept|intcomma %}
+                {% blocktrans trimmed with council_type=parish_council_election.council_type council_name=parish_council_election.council_name precept_amount=parish_council_election.precept|intcomma %}
                     {{ council_type }} councils are the first tier of local government</a>,
                     and have a wide range of powers including looking after community buildings,
                     planning, street lighting and allotments. They also have the power to raise
-                    money through council tax, known as the ‘precept’. In 2020-2021, {{ council_name }}
+                    money through council tax, known as the 'precept'. In 2020-2021, {{ council_name }}
                     raised £{{ precept_amount }} through the precept.
                 {% endblocktrans %}
             </p>
