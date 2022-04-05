@@ -1,6 +1,8 @@
 {% extends "base.html" %}
+{% load i18n %}
+
 {% block content %}
-    {% load i18n %}
+
 
     <div class="ds-stack-smaller">
         <div class="ds-card">
@@ -17,7 +19,7 @@
                             <h2>{{ party_name }}</h2>
                             <h4>
                                 {{ ballot.election.nice_election_name }}
-                                {% if not ballot.is_pcc and not ballot.is_mayoral %}: {{ ballot.friendly_name }} }}{% endif %}
+                                {% if not ballot.is_pcc and not ballot.is_mayoral %}: {{ ballot.friendly_name }}{% endif %}
                             </h4>
 
                             <dl class="ds-descriptions" style="border-style:none;">
@@ -26,7 +28,7 @@
                                         <dt>Facebook</dt>
                                         <dd>
                                             {% if local_party.facebook_page %}
-                                                <a href="{{ local_party.facebook_page }}" title="{% blocktrans party_name=local_party.name %}{{ party_name }}'s Facebook profile{% endblocktrans %}">
+                                                <a href="{{ local_party.facebook_page }}" title="{% blocktrans with party_name=local_party.name %}{{ party_name }}'s Facebook profile{% endblocktrans %}">
                                                     {{ local_party.facebook_page }}
                                                 </a>
                                             {% endif %}
@@ -36,7 +38,7 @@
                                     {% if local_party.homepage %}
                                         <dt>{% trans "Home page" %}</dt>
                                         <dd>
-                                            <a href="{{ local_party.homepage }}" title="{% blocktrans party_name=local_party.name %}{{ party_name }}'s home page{% endblocktrans %}">
+                                            <a href="{{ local_party.homepage }}" title="{% blocktrans with party_name=local_party.name %}{{ party_name }}'s home page{% endblocktrans %}">
                                                 {{ local_party.homepage }}
                                             </a>
                                         </dd>
@@ -60,7 +62,7 @@
                     <h3>{% trans "Party manifesto" %}</h3>
                     <p>
 
-                        {% blocktrans party_name=party.party_name manifesto=manifesto|safe %}Find out more about the {{ party_name }} in their {{ manifesto }}.{% endblocktrans %}
+                        {% blocktrans with party_name=party.party_name manifesto=manifesto|safe %}Find out more about the {{ party_name }} in their {{ manifesto }}.{% endblocktrans %}
                     </p>
                 </div>
             </div>

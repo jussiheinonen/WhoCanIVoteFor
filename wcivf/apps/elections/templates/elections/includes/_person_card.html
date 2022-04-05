@@ -25,9 +25,10 @@
         {% endif %}
 
         {% if not person_post.list_position or not postelection.display_as_party_list %}
-            <p>{{ party }}
+            <p>
+                {{ person_post.party_name }}
                 {% if person_post.votes_cast %}
-                    <br><strong>{{ person_post.votes_cast|intcomma }} {% trans "votes" %}</strong>
+                    <br><strong>{% blocktrans with votes_cast=person_post.votes_cast|intcomma%}{{ votes_cast }} votes{% endblocktrans %}</strong>
                 {% endif %}
             </p>
         {% endif %}

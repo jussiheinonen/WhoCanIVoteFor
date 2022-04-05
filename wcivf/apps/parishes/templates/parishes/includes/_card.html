@@ -22,9 +22,7 @@
                 on <a href="{{ parish_council_election_url }}">{{ council_name }}</a>
             {% endblocktrans %}
             {% if parish_council_election.parish_ward_name %}
-                {% blocktrans trimmed with parish_ward_name=parish_council_election.parish_ward_name %}
-                    - {{ parish_ward_name }}
-                {% endblocktrans %}
+                - {{ parish_council_election.parish_ward_name }}
             {% endif %}.
         </p>
 
