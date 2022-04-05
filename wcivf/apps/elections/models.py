@@ -370,9 +370,11 @@ class PostElection(TimeStampedModel):
     @property
     def expected_sopn_date(self):
         try:
+            # plus one day to make sure we're after the sopn publish date
             return get_election_timetable(
                 self.ballot_paper_id, self.post.territory
-            ).sopn_publish_date
+            ).sopn_publish_date + datetime.timedelta(days=1)
+
         except AttributeError:
             return None
 
