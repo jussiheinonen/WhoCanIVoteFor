@@ -12,10 +12,10 @@
                         <em>{{ news_article.publisher }}</em>:
                     {% endif %}
                     <a href="{{ news_article.url }}" rel="noopener noreferrer">
-                        {% blocktrans with news_title=news_article.title %}{{ news_title }}{% endblocktrans %}
+                        {{ news_article.title }}
                     </a>
                     {% if news_article.summary %}
-                        <p>{% blocktrans with news_summary=news_article.summary %}{{ news_summary }}{% endblocktrans %}</p>
+                        <p>{{ news_article.summary }}</p>
                     {% endif %}
                 </li>
             {% endfor %}

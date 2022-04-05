@@ -35,7 +35,7 @@
                                 <h2>{{ party_name }}</h2>
                                 <p>{% blocktrans with num_candidate=object.personpost_set.all.count|intcomma %}{{num_candidates }} candidates{% endblocktrans %}</p>
                                 {% if object.description %}
-                                    {% blocktrans with party_description=object.description|markdown %}{{ party_description }}{% endblocktrans %}
+                                    {{ object.description|markdown }}
                                 {% endif %}
                                 {% if object.wikipedia_url %}
                                     <p><a href="{{ object.wikipedia_url }}">{% trans "Read more on wikipedia" %}</a></p>
@@ -49,7 +49,7 @@
                         <h2>{{ party_name }}</h2>
                         <p>{% blocktrans with num_candidates=object.personpost_set.all.count|intcomma pluralize_candidates=object.personpost_set.all.count|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}</p>{% endblocktrans %}</p>
                         {% if object.description %}
-                            {% blocktrans with party_description=object.description|markdown %}{{ party_description }}{% endblocktrans %}
+                            {{ object.description|markdown }}
                         {% endif %}
                         {% if object.wikipedia_url %}
                             <p><a href="{{ object.wikipedia_url }}">{% trans "Read more on wikipedia" %}</a></p>

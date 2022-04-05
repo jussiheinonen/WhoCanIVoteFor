@@ -7,7 +7,7 @@
     {% for election in election_group.list %}
         <ul style="list-style: none;">
             <li>
-                <a href="{{ election.get_absolute_url }}">{% blocktrans with nice_election_name=election.nice_election_name%}{{ nice_election_name }}{% endblocktrans %}</a>
+                <a href="{{ election.get_absolute_url }}">{{ election.nice_election_name }}</a>
             </li>
         </ul>
     {% endfor %}

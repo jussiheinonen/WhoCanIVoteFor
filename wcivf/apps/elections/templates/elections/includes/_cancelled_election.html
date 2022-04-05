@@ -87,9 +87,6 @@
 
 <p>
     {% if object.metadata.cancelled_election.detail %}
-        {% blocktrans trimmed with reason_cancelled=object.metadata.cancelled_election.detail %}
-            {{ reason_cancelled }}
-        {% endblocktrans %}
+        {{ object.metadata.cancelled_election.detail }}
     {% endif %}
 </p>
-

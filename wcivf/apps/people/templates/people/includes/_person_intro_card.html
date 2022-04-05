@@ -21,7 +21,7 @@
                 <ul>
                     <li>{% blocktrans with election=candidacy.election.name %}{{ election }} for{% endblocktrans %}
                         <a href="{{ candidacy.post_election.get_absolute_url }}">
-                            {% blocktrans with post_name=candidacy.post_election.friendly_name %}{{ post_name }}{% endblocktrans %}
+                            {{ candidacy.post_election.friendly_name }}
                         </a>
                     </li>
                     {% if candidacy.votes_cast %}

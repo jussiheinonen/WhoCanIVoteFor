@@ -3,6 +3,6 @@
 {% block extra_crumbs %}
     {{ block.super }}
     <li>
-        {% blocktrans with postelection_name=postelection.friendly_name %}{{ postelection_name }}{% endblocktrans %}
+        {{ postelection.friendly_name }}
     </li>
 {% endblock extra_crumbs %}

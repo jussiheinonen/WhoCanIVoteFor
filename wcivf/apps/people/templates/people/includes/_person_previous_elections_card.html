@@ -23,7 +23,7 @@
                         {% endblocktrans %}
                         <td>{{ person_post.election.election_date|date:"Y" }}</td>
                         <td>{% blocktrans with post_label=person_post.post.label election=person_post.election %}{{ post_label}}: {{ election }}{% endblocktrans %}</td>
-                        <td>{% blocktrans with party_name=person_post.party_name %}{{ party_name }}{% endblocktrans %}</td>
+                        <td>{{ person_post.party_name }}</td>
                         {% if person_post.elected %}
                             <td>{% if person_post.votes_cast %}{% blocktrans with num_votes=person_post.votes_cast|intcomma %}{{ num_votes}} votes (elected){% endblocktrans %}{% else %}{% trans "Elected unopposed" %}{% endif %}</td>
                         {% else %}

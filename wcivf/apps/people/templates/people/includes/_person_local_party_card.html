@@ -2,7 +2,7 @@
 {% if person.local_party %}
     <div class="ds-card">
         <div class="ds-card-body">
-            <h4 class="ds-h3">{% blocktrans %}{{ party}}{% endblocktrans %}</h4>
+            <h4 class="ds-h3">{{ party}}</h4>
             <p>
                 {% if person.local_party.is_local %}
                     {% blocktrans with person=person.name party_label=person.local_party.label %}{{ person }}'s local party is {{ party_label }}.{% endblocktrans %}

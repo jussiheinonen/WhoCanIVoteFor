@@ -26,7 +26,7 @@
             }
         </style>
         {% for election_dict in elections %}
-            <h2>{% blocktrans with election=election_dict.election %}{{ election }}{% endblocktrans %}</h2>
+            <h2>{{ election_dict.election }}</h2>
             <table id="{{ election_dict.election.name.split|join:"_" }}" class="display" width="100%">
                 <thead>
                     <tr>

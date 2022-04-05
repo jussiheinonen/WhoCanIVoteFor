@@ -7,7 +7,7 @@
             </h2>
             {% if object.wikipedia_bio %}
                 <h4>{% trans "Wikipedia" %}</h4>
-                <p>{% blocktrans with bio=object.wikipedia_bio %}{{ bio }}{% endblocktrans %}</p>
+                <p>{{ object.wikipedia_bio }}</p>
                 <a href="{{ object.wikipedia_url }}" class="link-button">{% trans "Read more on Wikipedia" %}</a>
             {% endif %}
             {% if object.favourite_biscuit %}

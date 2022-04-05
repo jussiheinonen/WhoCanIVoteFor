@@ -14,15 +14,15 @@
                 {% if object.long_statement %}
                     <ul class="ds-details">
                         <blockquote class="ds-stack-smaller">
-                            <p>{% blocktrans with statement_intro=object.statement_intro%}{{ statement_intro }}{% endblocktrans %}</p>
+                            <p>{{ object.statement_intro }}</p>
                             <details>
                                 <summary>{% trans "Full statement" %}</summary>
-                                <p>{% blocktrans with statement_remainer=object.statement_remainder|linebreaksbr %}{{ statement_remainer }}{% endblocktrans %}</p>
+                                <p>{{ object.statement_remainder|linebreaksbr }}</p>
                             </details>
                         </blockquote>
                     </ul>
                 {% else %}
-                    <blockquote>{% blocktrans %}{{ object.statement_to_voters|linebreaks }}{% endblocktrans %}</blockquote>
+                    <blockquote>{{ object.statement_to_voters|linebreaks }}</blockquote>
                 {% endif %}
                 <p class="small">{% blocktrans with person_name=object.name %}This statement was added by {{ person_name }}, their team, or by a <a href="https://candidates.democracyclub.org.uk/person/{{ object.ynr_id }}">Democracy Club volunteer</a>,
                     based on
