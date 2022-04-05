@@ -1,5 +1,21 @@
+{% load i18n %}
 {% block intro_line %}
-    {{ person.name }} {{ verb }} a {% if candidacy.party.get_absolute_url %}<a href="{{ candidacy.party.get_absolute_url }}" title="{{ candidacy.party_name }}">{{ candidacy.party_name }}</a>{% else %}{{ candidacy.party_name}}{% endif %} candidate in {% if candidacy.post_election.get_absolute_url %}<a href="{{ candidacy.post_election.get_absolute_url }}">{{ candidacy.post.label }}</a>{% else %}{{ candidacy.post.label }}{% endif %} in the {% if candidacy.election.get_absolute_url %}<a href="{{ candidacy.election.get_absolute_url }}" title="{{ candidacy.election.name }}">{{ candidacy.election.nice_election_name }}</a>{% else %}{{ candidacy.election.nice_election_name }}{% endif %}.
+    {% if verb == "is" %}
+        {% blocktrans trimmed %}
+            {{ person_name }} is a <a href="{{ party_url }}" title="{{ party_name }}">{{ party_name }}</a>
+            candidate in <a href="{{ post_url }}">{{ post_label }}</a> in the
+            <a href="{{ election_url }}" title="{{ election_name }}">{{ election_name }}</a>.
+        {% endblocktrans %}
+
+    {% else %}
+        {% blocktrans trimmed %}
+            {{ person_name }} was a <a href="{{ party_url }}" title="{{ party_name }}">{{ party_name }}</a>
+            candidate in <a href="{{ post_url }}">{{ post_label }}</a> in the
+            <a href="{{ election_url }}" title="{{ election_name }}">{{ election_name }}</a>.
+        {% endblocktrans %}
+    {% endif %}
+
+
 {% endblock %}
 {% if candidacy.votes_cast %}
     {% include "people/includes/intros/_votes_cast.html" %}

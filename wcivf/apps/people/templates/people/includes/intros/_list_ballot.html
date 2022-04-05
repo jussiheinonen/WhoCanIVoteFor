@@ -4,13 +4,18 @@
 {% load humanize %}
 
 {% block intro_line %}
-    {% blocktrans trimmed with person=person.name position=person.featured_candidacy.list_position|ordinal party_name=candidacy.party_name election_name=candidacy.election.name %}
-        {{ person }} {{ verb }} the
-        {{ position }} place
-        candidate for the <a href="{{ candidacy.party.get_absolute_url }}"
-            title="{{ party_name }}">{{ party_name }}</a>
-        in the <a href="{{ candidacy.election.get_absolute_url }}"
-            title="{{ election_name }}">
-            {{ election_name }}</a>.
-    {% endblocktrans %}
+    {% if verb == "is" %}
+        {% blocktrans trimmed %}
+            {{ person_name }} is the {{ list_position_ordinal }} place candidate for the
+            <a href="{{ party_url }}" title="{{ party_name }}">{{ party_name }}</a>
+            in the <a href="{{ election_url }}" title="{{ election_name }}">{{ election_name }}</a>.
+        {% endblocktrans %}
+    {% else %}
+        {% blocktrans trimmed %}
+            {{ person_name }} was the {{ list_position_ordinal }} place candidate for the
+            <a href="{{ party_url }}" title="{{ party_name }}">{{ party_name }}</a>
+            in the <a href="{{ election_url }}" title="{{ election_name }}">{{ election_name }}</a>.
+        {% endblocktrans %}
+    {% endif %}
+
 {% endblock %}

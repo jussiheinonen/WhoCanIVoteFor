@@ -1,10 +1,18 @@
 {% extends "people/includes/intros/base.html" %}
-
+{% load i18n %}
 {% block intro_line %}
-    {{ person.name }} {{ verb }} the Speaker seeking re-election in
-    <a href="{{ candidacy.post_election.get_absolute_url }}">
-        {{ candidacy.post.label }}</a> constituency in the <a
-            href="{{ candidacy.election.get_absolute_url }}"
-            title="{{ candidacy.election.nice_election_name }}">
-            {{ candidacy.election.nice_election_name }}</a>.
+    {% if verb == "is" %}
+        {% blocktrans trimmed%}
+            {{ person_name }} is the Speaker seeking re-election in
+            <a href="{{ post_url }}">{{ post_label }}</a> constituency in the
+            <a href="{{ election_url }}" title="{{ election_name }}">{{ election_name }}</a>.
+        {% endblocktrans %}
+    {% else %}
+        {% blocktrans trimmed%}
+            {{ person_name }} was the Speaker seeking re-election in
+            <a href="{{ post_url }}">{{ post_label }}</a> constituency in the
+            <a href="{{ election_url }}" title="{{ election_name }}">{{ election_name }}</a>.
+        {% endblocktrans %}
+    {% endif %}
+
 {% endblock %}

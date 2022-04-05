@@ -37,7 +37,7 @@
                 {% endif %}
                 {% if person.local_party.email %}
                     <div>
-                        <dt>Email</dt>
+                        <dt>{% trans "Email" %}</dt>
                         <a href="mailto:{{ person.local_party.email }}">
                             {% blocktrans %}{{ party }}'s email{% endblocktrans %}
                         </a>

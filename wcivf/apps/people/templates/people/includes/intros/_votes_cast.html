@@ -1,6 +1,12 @@
 {% load humanize %}
 {% load i18n %}
 
-{% blocktrans trimmed with election_result=candidacy.elected|yesno:"were elected with,received" num_votes=candidacy.votes_cast|intcomma %}
-    They {{ election_result }} <strong>{{ num_votes }}</strong> votes.
-{% endblocktrans %}
+{% if candidacy.elected %}
+    {% blocktrans trimmed with num_votes=candidacy.votes_cast|intcomma %}
+        They were elected with <strong>{{ num_votes }}</strong> votes.
+    {% endblocktrans %}
+{% else %}
+    {% blocktrans trimmed with num_votes=candidacy.votes_cast|intcomma %}
+        They received <strong>{{ num_votes }}</strong> votes.
+    {% endblocktrans %}
+{% endif %}

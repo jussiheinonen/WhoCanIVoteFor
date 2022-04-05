@@ -1,10 +1,15 @@
 {% extends "people/includes/intros/base.html" %}
 {% load i18n %}
 {% block intro_line %}
-    {% blocktrans with name=person.name%}{{ name }} {{ verb }} the{% endblocktrans %}
-    <a href="{{ candidacy.party.get_absolute_url }}"title="{{ party }}">{{ party }}</a>
-    {% blocktrans trimmed with post_label=candidacy.post.label election=candidacy.election.name election_name=candidacy.election.name_without_brackets %} candidate for
-        <a href="{{ candidacy.post_election.get_absolute_url }}">{{ post_label }}</a> constituency in the
-        <a href="{{ candidacy.election.get_absolute_url }}" title="{{ election }}">{{ election_name }}</a>.
-    {% endblocktrans %}
+    {% if verb == "is" %}
+        {% blocktrans trimmed %}
+            {{ name }} is the <a href="{{ party_url }}">{{ party_name }}</a> candidate for <a href="{{ post_url }}">{{ post_label }}</a> constituency in the
+            <a href="{{ election_url }}" title="{{ election }}">{{ election_name }}</a>.
+        {% endblocktrans %}
+    {% else %}
+        {% blocktrans trimmed %}
+            {{ name }} was the <a href="{{ party_url }}">{{ party_name }}</a> candidate for <a href="{{ post_url }}">{{ post_label }}</a> constituency in the
+            <a href="{{ election_url }}" title="{{ election }}">{{ election_name }}</a>.
+        {% endblocktrans %}
+    {% endif %}
 {% endblock %}
