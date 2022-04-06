@@ -1,6 +1,6 @@
 from django.views.generic import DetailView
 from django.http import Http404
-from django.db.models import Prefetch, Q
+from django.db.models import Prefetch, Q, Count
 
 from elections.dummy_models import DummyPostElection
 
@@ -22,15 +22,23 @@ class PersonMixin(object):
             .prefetch_related(
                 Prefetch(
                     "personpost_set",
-                    queryset=PersonPost.objects.all().select_related(
+                    queryset=PersonPost.objects.all()
+                    .select_related(
                         "election", "post", "party", "post_election"
+                    )
+                    .prefetch_related(
+                        "previous_party_affiliations",
                     ),
                 ),
                 "facebookadvert_set",
                 # "leaflet_set",
             )
         )
-
+        queryset = queryset.annotate(
+            previous_party_count=Count(
+                "personpost__previous_party_affiliations"
+            )
+        )
         try:
             # Get the single item from the filtered queryset
             obj = queryset.get()

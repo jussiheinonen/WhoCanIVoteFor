@@ -240,12 +240,12 @@ msgstr "(Wedi marw)"
 msgid "Elected"
 msgstr "Etholwyd"
 
-#: wcivf/apps/elections/templates/elections/includes/_person_card.html:31
+#: wcivf/apps/elections/templates/elections/includes/_person_card.html:30
 #, python-format
 msgid "%(votes_cast)s votes"
 msgstr "%(votes_cast)s pleidlais"
 
-#: wcivf/apps/elections/templates/elections/includes/_person_card.html:39
+#: wcivf/apps/elections/templates/elections/includes/_person_card.html:38
 #, python-format
 msgid "Photo of %(person_name)s"
 msgstr "Llun o %(person_name)s"
@@ -461,6 +461,19 @@ msgstr ""
 #: wcivf/templates/home.html:23
 msgid "Find your candidates"
 msgstr "Dod o hyd i'ch ymgeiswyr"
+
+#: wcivf/apps/elections/templates/elections/includes/_previous_party_affiliations.html:7
+#, python-format
+msgid ""
+"%(person_name)s has declared their affiliation with the following party in "
+"the past 12 months:"
+msgid_plural ""
+"%(person_name)s has declared their affiliation with the following parties in "
+"the past 12 months:"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
 #: wcivf/apps/elections/templates/elections/includes/_registration_details.html:9
 msgid "Register to vote"
@@ -1257,7 +1270,7 @@ msgstr ""
 msgid "is %(a_or_an)s %(party_name)s candidate in the following elections:"
 msgstr "yw %(a_or_an)s ymgeisydd y %(party_name)s yn yr etholiadau canlynol:"
 
-#: wcivf/apps/people/templates/people/includes/_person_intro_card.html:22
+#: wcivf/apps/people/templates/people/includes/_person_intro_card.html:23
 #, python-format
 msgid "%(election)s for"
 msgstr "%(election)s ar gyfer"
@@ -1271,7 +1284,7 @@ msgstr "%(num_votes)s pleidlais"
 msgid "(elected)"
 msgstr "(etholwyd)"
 
-#: wcivf/apps/people/templates/people/includes/_person_intro_card.html:46
+#: wcivf/apps/people/templates/people/includes/_person_intro_card.html:51
 #, python-format
 msgid "profile photo of %(person)s"
 msgstr "Llun proffil %(person)s"
@@ -1456,26 +1469,26 @@ msgstr "Canlyniadau"
 msgid "%(message)s %(message)s %(message)s"
 msgstr "%(message)s %(message)s %(message)s"
 
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:25
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:28
 #, python-format
 msgid "%(post_label)s: %(election)s"
 msgstr "%(post_label)s: %(election)s"
 
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:28
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:31
 #, python-format
 msgid "%(num_votes)s votes (elected)"
 msgstr "%(num_votes)s pleidlais (etholwyd)"
 
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:28
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:31
 msgid "Elected unopposed"
 msgstr "Etholwyd yn ddiwrthwynebiad"
 
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:30
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:33
 #, python-format
 msgid "%(num_votes)s votes (not elected)"
 msgstr "%(num_votes)s pleidlais (heb ei ethol)"
 
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:30
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:33
 msgid "Vote count not available"
 msgstr "Nid yw'r cyfrif pleidleisiau ar gael"
 
@@ -1843,3 +1856,14 @@ msgstr "Etholiadau i ddod"
 #: wcivf/templates/mailing_list.html:8
 msgid "Join our mailing list"
 msgstr "Ymunwch â'n rhestr bostio"
+msgstr ""
+
+#, fuzzy
+#~| msgid "All Elections"
+#~ msgid "Previous Elections"
+#~ msgstr "Pob Etholiad"
+
+#, fuzzy
+#~| msgid "All Elections"
+#~ msgid "Election"
+#~ msgstr "Pob Etholiad"
