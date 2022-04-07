@@ -1,17 +1,18 @@
 {% load humanize %}
+{% load i18n %}
 <div class="ds-card">
     <div class="ds-card-body">
         {% if postelections.count == 0 %}
-            We don't know of any upcoming elections.
+            {% trans "We don't know of any upcoming elections." %}
         {% else %}
             {% regroup postelections by election.election_date as header_elections_by_date %}
-            <h2>Elections in your area</h2>
+            <h2>{% trans "Elections in your area" %}</h2>
 
             {% for election_group in header_elections_by_date %}
 
                 {% if election_group.list.0.past_date %}
                     {% ifchanged election_group.list.0.past_date %}
-                        <h3>Recently past elections</h3>
+                        <h3>{% trans "Recently past elections" %}</h3>
                     {% endifchanged %}
                 {% endif %}
 
@@ -24,8 +25,9 @@
                         {{ election_group.grouper|naturalday:"l j F Y"|title }}
                     </h3>
                     <p>
-                        You will have {{ num_ballots|apnumber }}
-                        ballot paper{{ num_ballots|pluralize }} to fill out.
+                        {% blocktrans trimmed with num_ballots=num_ballots|apnumber ballots_pluralised=num_ballots|pluralize %}
+                            You will have {{ num_ballots }} ballot paper{{ ballots_pluralised }} to fill out.
+                        {% endblocktrans %}
                     </p>
                 {% endif %}
 
@@ -34,20 +36,23 @@
                         <li {% if ballot.past_date %}class="past_elections" {% endif %}>
 
                             <a href="#election_{{ ballot.election.slug }}">
-                                {{ ballot.election.nice_election_name }}
+                                {{ ballot.election.nice_election_name  }}
                                 {% if ballot.post.label != post.election and not ballot.is_mayoral and not ballot.is_pcc %}
                                     : {{ ballot.post.label }}
                                 {% endif %}
                             </a>
-                            {{ ballot.short_cancelled_message_html }}
+                            {% blocktrans trimmed with short_cancelled_message=ballot.short_cancelled_message_html %}
+                                {{ ballot.short_cancelled_message_html }}
+                            {% endblocktrans %}
                         </li>
                     {% endfor %}
 
                     {% if parish_council_election and parish_council_election.election_date == election_group.grouper %}
                         <li {% if parish_council_election.in_past %}class="past_elections" {% endif %}>
-                            <a href="#parishcouncil">{{ parish_council_election.council_name }}
-                                {% if parish_council_election.is_unconstested %} (uncontested)
-                                {% elif parish_council_election.unknown_if_contested %} (may be contested)
+                            <a href="#parishcouncil">
+                                {{ parish_council_election.council_name }}
+                                {% if parish_council_election.is_unconstested %} {% trans "(uncontested)" %}
+                                {% elif parish_council_election.unknown_if_contested %} {% trans "(may be contested)" %}
                                 {% endif %}
                             </a>
                         </li>
@@ -62,12 +67,10 @@
         {% endif %}
 
         {% if not ballot.election.contested and not ballot.election.ynr_sopn_link %}
-            <p>There may also be parish, town or
-                community council elections in some areas.
-            </p>
+            <p>{% trans "There may also be parish, town or community council elections in some areas." %}</p>
         {% endif %}
 
-        <p><a href='#where'>Where do I vote?</a></p>
+        <p><a href='#where'>{% trans "Where do I vote?" %}</a></p>
 
     </div>
 </div>

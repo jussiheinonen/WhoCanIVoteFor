@@ -16,7 +16,7 @@
                     {{ form|dc_form }}
                     {% if request.GET.invalid_postcode %}
                         <p>
-                            <strong>{% blocktrans with postcode=request.GET.postcode %}Sorry, we don't know the postcode {{ postcode }}.
+                            <strong>{% blocktrans trimmed with postcode=request.GET.postcode %}Sorry, we don't know the postcode {{ postcode }}.
                                 Is there another one you can try?{% endblocktrans %}</strong>
                         </p>
                     {% endif %}

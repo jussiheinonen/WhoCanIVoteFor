@@ -2,16 +2,16 @@
 
     <div class="ds-card">
         <div class="ds-card-body">
-            <h2>European Parliament election results</h2>
+            <h2>{% trans "European Parliament election results" %}</h2>
 {% else %}
-    <h3>European Parliament election results</h3>
+    <h3>{% trans "European Parliament election results" %}</h3>
 {% endif %}
 <p>
-    The results of the UK European Parliament elections
+    {% trans "The results of the UK European Parliament elections
     are published on the European Parliament's election results
-    website.
+    website." %}
 </p>
-<a href="https://election-results.eu/" class="ds-card-link">View results</a>
+<a href="https://election-results.eu/" class="ds-card-link">{% trans "View results" %}</a>
 {% if not card == 0 %}
     </div>
     </div>

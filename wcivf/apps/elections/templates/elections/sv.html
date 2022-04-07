@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load markdown_deux_tags %}
 {% load humanize %}
+{% load i18n %}
 
 {% block content %}
 
@@ -20,7 +21,7 @@
                         This is designed to ensure that the elected candidate
                         has closer to majority support than would be the case
                         under <a href="{% url 'fptp_voting_system_view' %}">First-past-the-post</a>.
-                        
+
                         Voters do not need to cast a second preference vote, and cannot vote for the same candidate twice.
 
                         SV is used for Police and Crime Commissioner elections

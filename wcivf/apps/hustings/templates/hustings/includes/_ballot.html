@@ -1,10 +1,11 @@
+{% load i18n %}
 <div class="ds-card" id="hustings">
     <div class="ds-card-body">
         <h3>
             <span aria-hidden="true">📅</span>
-            Election events
+            {% trans "Election events" %}
         </h3>
-        <p>You can meet candidates and question them at online events (often known as 'hustings'). Here are some events that are taking place:</p>
+        <p>{% trans "You can meet candidates and question them at online events (often known as 'hustings'). Here are some events that are taking place:" %}</p>
         {% include "hustings/includes/_list.html" with hustings=postelection.husting_set.displayable %}
     </div>
 </div>

@@ -21,13 +21,17 @@
     }
 </style>
 
-<p>This page generates a customised email for {{ object.name }}
-    to ask them to provide missing data
-    for the Democracy Club dataset. </p>
+<p>
+    {% blocktrans trimmed %}
+        This page generates a customised email for {{ object.name }}
+        to ask them to provide missing data
+        for the Democracy Club dataset.
+    {% endblocktrans %}
+</p>
 
 
-<p>Add your name, check the box if you live in {{ object.current_or_future_candidacies.0.post.label }},
-    and then press 'open email in email program'.</p>
+<p>{% blocktrans trimmed with post_label=object.current_or_future_candidacies.0.post.label %}Add your name, check the box if you live in {{ post_label }},
+    and then press 'open email in email program'.{% endblocktrans %}</p>
 
 <form>
     <div class="form-group">
@@ -40,7 +44,7 @@
     </div>
 </form>
 
-<p>Here's the email text we've generated for you to send to <span class="candidatename">{{ object.name }}</span>.</p>
+<p>{% blocktrans with person_name=object.name %}Here's the email text we've generated for you to send to <span class="candidatename">{{ person_name }}{% endblocktrans %}</span>.</p>
 
 <p id="headers">
     To: <span id="candidateemail" class="candidateemail">{{ object.email }}</span><br>

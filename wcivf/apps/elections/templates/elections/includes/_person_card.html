@@ -1,5 +1,6 @@
 {% load static %}
 {% load humanize %}
+{% load i18n %}
 
 <li class="ds-candidate {% if person_post.elected %}elected{% endif %}">
     <div class="ds-candidate-body ds-stack-smaller">
@@ -12,21 +13,22 @@
             </a>
             {% if postelection.election.current and person_post.person.death_date %}
                 {% if person_post.party.is_independent %}
-                    (Deceased)
+                    {% trans "(Deceased)" %}
                 {% endif %}
             {% endif %}
         </h6>
         {% if person_post.elected %}
             <p>
                 <span aria-hidden="true">🌟</span>
-                Elected
+                {% trans "Elected"%}
             </p>
         {% endif %}
 
         {% if not person_post.list_position or not postelection.display_as_party_list %}
-            <p>{{ person_post.party_name }}
+            <p>
+                {{ person_post.party_name }}
                 {% if person_post.votes_cast %}
-                    <br><strong>{{ person_post.votes_cast|intcomma }} votes</strong>
+                    <br><strong>{% blocktrans with votes_cast=person_post.votes_cast|intcomma%}{{ votes_cast }} votes{% endblocktrans %}</strong>
                 {% endif %}
             </p>
         {% endif %}
@@ -34,7 +36,7 @@
 
     <div class="ds-candidate-image">
         {% if person_post.person.photo_url %}
-            <img src="{{ person_post.person.photo_url }}" alt="Photo of {{ person_post.person.name }}">
+            <img src="{{ person_post.person.photo_url }}" alt="{% blocktrans trimmed with person_name=person_post.person.name%}Photo of {{ person_name }}{% endblocktrans %}">
         {% elif person_post.person.gender|lower == 'male' %}
             <img src="{% static 'people/images/blank-man.png' %}" style="background-color: #ddd;">
         {% else %}

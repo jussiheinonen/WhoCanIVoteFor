@@ -1,11 +1,9 @@
 {% extends "elections/includes/_elections_breadcrumbs.html" %}
-
+{% load i18n %}
 {% block extra_crumbs %}
     <li>
         <a href="{{ object.election.get_absolute_url }}">
             {{ election.nice_election_name }}
         </a>
     </li>
-
-
 {% endblock extra_crumbs %}

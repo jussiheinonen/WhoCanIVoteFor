@@ -1,3 +1,4 @@
+from django.contrib.humanize.templatetags.humanize import ordinal
 from django.db.models import JSONField
 from django.urls import reverse
 from django.db import models
@@ -255,7 +256,7 @@ class Person(models.Model):
         )
 
     @cached_property
-    def featured_candidacy(self):
+    def featured_candidacy(self) -> PersonPost:
         """
         Return the current or future PersonPost object, or if there is not
         current/future, a past one. Some people will have more than one current
@@ -317,8 +318,23 @@ class Person(models.Model):
         context = {
             "verb": verb,
             "person": self,
-            "candidacy": self.featured_candidacy,
+            "person_name": self.name,
         }
+        if self.featured_candidacy and self.featured_candidacy.party:
+            context.update(
+                {
+                    "candidacy": self.featured_candidacy,
+                    "party_name": self.featured_candidacy.party_name,
+                    "list_position_ordinal": ordinal(
+                        self.featured_candidacy.list_position
+                    ),
+                    "party_url": self.featured_candidacy.party.get_absolute_url(),
+                    "post_label": self.featured_candidacy.post.label,
+                    "post_url": self.featured_candidacy.post_election.get_absolute_url(),
+                    "election_name": self.featured_candidacy.election.nice_election_name,
+                    "election_url": self.featured_candidacy.election.get_absolute_url(),
+                }
+            )
         return render_to_string(
             template_name=self.intro_template, context=context
         )

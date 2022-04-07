@@ -1,32 +1,39 @@
-{%  load humanize %}
+{% load humanize %}
+{% load i18n %}
+
 <section class="ds-candidate">
     <div class="ds-candidate-body ds-stack-smaller">
         <h2 class="ds-candidate-name ds-h3">
             {{ object.name }}
         </h2>
         {% if person.display_deceased and person.featured_candidacy.party.is_independent %}
-            (Deceased)
+            {% trans "(Deceased)" %}
         {% endif %}
 
         {% if object.current_or_future_candidacies.all.count > 1 %}
-            <h5>{{ object.name }} is {% if object.current_or_future_candidacies.0.party.is_independent %}an{% else %}a{% endif %}
-                {{object.current_or_future_candidacies.0.party_name }} candidate in the following elections:</h5>
+            <h5>{{ object.name }}
+                {% blocktrans trimmed with party_name=object.current_or_future_candidacies.0.party_name a_or_an=object.current_or_future_candidacies.0.party.is_independent|yesno:_("an,a") %}
+                    is {{ a_or_an }} {{ party_name }} candidate in the following elections:
+                {% endblocktrans %}
+            </h5>
 
             {% for candidacy in object.current_or_future_candidacies %}
                 <ul>
-                    <li>
-                        {{ candidacy.election.name }} for <a href="{{ candidacy.post_election.get_absolute_url }}">
-                            {{ candidacy.post_election.friendly_name }}</a>
-                        {% if candidacy.votes_cast %}
-                            {{ candidacy.votes_cast|intcomma }} votes
-                        {% endif %}
-                        {% if candidacy.elected %}
-                            (elected)
-                        {% endif %}
+                    <li>{% blocktrans with election=candidacy.election.name %}{{ election }} for{% endblocktrans %}
+                        <a href="{{ candidacy.post_election.get_absolute_url }}">
+                            {{ candidacy.post_election.friendly_name }}
+                        </a>
                     </li>
+                    {% if candidacy.votes_cast %}
+                        {% blocktrans trimmed with num_votes=candidacy.votes_cast|intcomma %}
+                            {{ num_votes }} votes
+                        {% endblocktrans %}
+                    {% endif %}
+                    {% if candidacy.elected %}
+                        {% trans "(elected)" %}
+                    {% endif %}
                 </ul>
             {% endfor %}
-
         {% else %}
             <p>
                 {{ object.intro|safe }}
@@ -36,7 +43,7 @@
 
     {% if object.photo_url %}
         <div class="ds-candidate-image">
-            <img src="{{ object.photo_url }}" alt="profile photo of {{ object.name }}">
+            <img src="{{ object.photo_url }}" alt="{% blocktrans with person=object.name %}profile photo of {{ person }}{% endblocktrans %}">
         </div>
     {% endif %}
 </section>

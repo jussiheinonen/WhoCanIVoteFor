@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load markdown_deux_tags %}
 {% load humanize %}
+{% load i18n %}
 
 {% block page_title %}{% include "people/includes/_person_meta_title.html" %}{% endblock page_title %}
 {% block page_description %}{% include "people/includes/_person_meta_description.html" %}{% endblock page_description %}
@@ -20,15 +21,15 @@
                     <h2 class="ds-candidate-name ds-h3">
                         {{ object.name }}
                         {% if person.display_deceased and person.featured_candidacy.party.is_independent %}
-                            (Deceased)
+                            {% trans "(Deceased)" %}
                         {% endif %}
                     </h2>
-                    <p>{{ object.name }} stood for election {{ object.past_not_current_candidacies.count }} times.</p>
+                    <p>{% blocktrans trimmed with person_name=object.name past_candidacy_count=object.past_not_current_candidacies.count %}{{ person_name }} stood for election {{ past_candidacy_count }} times.{% endblocktrans %}</p>
                 </div>
 
                 {% if object.photo_url %}
                     <div class="ds-candidate-image">
-                        <img src="{{ object.photo_url }}" alt="profile photo of {{ object.name }}">
+                        <img src="{{ object.photo_url }}" alt="{% blocktrans %}profile photo of {{ object.name }}{% endblocktrans %}">
                     </div>
                 {% endif %}
             </section>

@@ -1,23 +1,24 @@
+{% load i18n %}
 <section class="ds-card">
     <div class="ds-card-body ds-stack-smaller">
         <h2 class="ds-candidate-name ds-h3">
-            {{ object.name }} online
+            {{ object.name }} {% trans "online" %}
         </h2>
         <dl class="ds-descriptions">
             {% if object.facebook_page_url or object.facebook_personal_url %}
                 <div>
-                    <dt>Facebook</dt>
+                    <dt>{% trans "Facebook" %}</dt>
                     <div>
                         {% if object.facebook_personal_url %}
                             <dd>
-                                <a href="{{ object.facebook_personal_url }}" title="{{ object.name }}'s Facebook personal page">
+                                <a href="{{ object.facebook_personal_url }}" title="{% blocktrans with person_name=object.name%}{{ person_name }}'s personal Facebook{% endblocktrans%}">
                                     {{ object.facebook_personal_username }}
                                 </a><br />
                             </dd>
                         {% endif %}
                         {% if object.facebook_page_url %}
                             <dd>
-                                <a href="{{ object.facebook_page_url }}" title="{{ object.name }}'s Facebook page">
+                                <a href="{{ object.facebook_page_url }}" title="{% blocktrans with person_name=object.name%}{{ person_name }}'s Facebook page{% endblocktrans%}">
                                     {{ object.facebook_username}}
                                 </a>
                             </dd>
@@ -28,9 +29,9 @@
 
             {% if object.linkedin_url %}
                 <div>
-                    <dt>LinkedIn</dt>
+                    <dt>{% trans "LinkedIn" %}</dt>
                     <dd>
-                        <a href="{{ object.linkedin_url }}" title="{{ object.name }}'s LinkedIn profile">
+                        <a href="{{ object.linkedin_url }}" title="{% blocktrans with person_name=object.name%}{{ person_name }}'s LinkedIn profile{% endblocktrans%}">
                             {{ object.linkedin_username}}
                         </a>
                     </dd>
@@ -39,9 +40,9 @@
 
             {% if object.homepage_url %}
                 <div>
-                    <dt>Home page</dt>
+                    <dt>{% trans "Home page" %}</dt>
                     <dd>
-                        <a href="{{ object.homepage_url }}" title="{{ object.name }}'s home page">
+                        <a href="{{ object.homepage_url }}" title="{% blocktrans with person_name=object.name%}{{ person_name }}'s home page{% endblocktrans%}">
                             {{ object.homepage_url }}
                         </a>
                     </dd>
@@ -50,10 +51,10 @@
 
             {% if object.blog_url %}
                 <div>
-                    <dt>Blog</dt>
+                    <dt>{% trans "Blog" %}</dt>
                     <dd>
-                        <a href="{{ object.blog_url }}" title="{{ object.name }}'s Blog">
-                            {{ object.blog_url }}
+                        <a href="{{ object.blog_url }}" title="{% blocktrans with person_name=object.name%}{{ person_name }}'s blog{% endblocktrans%}">
+                            {% blocktrans with person_name=object.name%}{{ person_name }}'s blog{% endblocktrans%}
                         </a>
                     </dd>
                 </div>
@@ -61,9 +62,9 @@
 
             {% if object.instagram_url %}
                 <div>
-                    <dt>Instagram</dt>
+                    <dt>{% trans "Instagram" %}</dt>
                     <dd>
-                        <a href="{{ object.instagram_url }}" title="{{ object.name }}'s instagram">
+                        <a href="{{ object.instagram_url }}" title="{% blocktrans with person_name=object.name%}{{ person_name }}'s Instagram{% endblocktrans%}">
                             {{ object.instagram_username }}
                         </a>
                     </dd>
@@ -72,9 +73,9 @@
 
             {% if object.youtube_profile %}
                 <div>
-                    <dt>YouTube</dt>
+                    <dt>{% trans "YouTube" %}</dt>
                     <dd>
-                        <a href="{{ object.youtube_profile }}" title="{{ object.name }}'s YouTube">
+                        <a href="{{ object.youtube_profile }}" title="{% blocktrans with person_name=object.name%}{{ person_name }}'s YouTube{% endblocktrans%}">
                             {{ object.youtube_username }}
                         </a>
                     </dd>
@@ -83,9 +84,9 @@
 
             {% if object.party_ppc_page_url %}
                 <div>
-                    <dt>The party's candidate page for this person</dt>
+                    <dt>{% trans "The party's candidate page for this person" %}</dt>
                     <dd>
-                        <a href="{{ object.party_ppc_page_url }}" title="Party page for {{ object.name }}">
+                        <a href="{{ object.party_ppc_page_url }}" title="{% blocktrans with person_name=object.name%}Party page for {{ person_name }}{% endblocktrans%}">
                             {{ object.party_ppc_page_url }}
                         </a>
                     </dd>
@@ -94,25 +95,25 @@
 
             {% if object.email and object.current_or_future_candidacies %}
                 <div>
-                    <dt>Email</dt>
+                    <dt>{% trans "Email" %}</dt>
                     <dd>
-                        <a href="mailto:{{ object.email }}">{{ object.email }}</a>
+                        <a href="mailto:{{ object.email }}" title="{% blocktrans with person_name=object.name%}{{ person_name }}'s email{% endblocktrans%}">{{ object.email }}</a>
                     </dd>
                 </div>
             {% else %}
                 <div>
-                    <dt>We don't know {{ object.name }}'s email address.</dt>
+                    {% blocktrans with person_name=object.name %}<dt>We don't know {{ person_name }}'s email address.</dt>{% endblocktrans %}
                     <dd>
-                        <a href="{{ object.get_ynr_url }}">Can you add it?</a>
+                        <a href="{{ object.get_ynr_url }}">{% trans "Can you add it?" %}</a>
                     </dd>
                 </div>
             {% endif %}
         </dl>
         {% if object.twitter_username %}
-            <h3>Latest tweets</h3>
+            <h3>{% trans "Latest tweets" %}</h3>
             <div class="twitter_container">
                 <a data-width="100%" data-height="500" class="twitter-timeline" href="https://twitter.com/{{ object.twitter_username }}">
-                    Tweets by @{{ object.twitter_username }}</a>
+                    {% blocktrans with twitter_name=object.twitter_username %}Tweets by @{{ twitter_name }}{% endblocktrans %}</a>
                 <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
             </div>
         {% endif %}

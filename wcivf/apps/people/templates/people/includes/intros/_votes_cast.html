@@ -1,5 +1,12 @@
 {% load humanize %}
+{% load i18n %}
 
-They{% if candidacy.elected %} were elected with
-{% else %} received {% endif %}<strong>
-    {{ candidacy.votes_cast|intcomma }}</strong> votes.
+{% if candidacy.elected %}
+    {% blocktrans trimmed with num_votes=candidacy.votes_cast|intcomma %}
+        They were elected with <strong>{{ num_votes }}</strong> votes.
+    {% endblocktrans %}
+{% else %}
+    {% blocktrans trimmed with num_votes=candidacy.votes_cast|intcomma %}
+        They received <strong>{{ num_votes }}</strong> votes.
+    {% endblocktrans %}
+{% endif %}

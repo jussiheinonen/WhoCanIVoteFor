@@ -1,9 +1,10 @@
+{% load i18n %}
 {% if postelection.cancelled %}
-    {{ object.election.name }}: This election has been cancelled.
+    {% blocktrans with election_name=object.election.name %}{{ election_name }}: This election has been cancelled.{% endblocktrans %}
 {% else %}
     {% if postelection.people|length %}
-        {{ object.election.name }}: The {{ postelection.people|length }} candidates in {{ object.post.label }}
+        {% blocktrans with election_name=object.election.name num_candidates=postelection.people|length post_label=object.post.label%}{{ election_name }}: The {{ num_candidates }} candidates in {{ post_label }}{% endblocktrans %}
     {% else %}
-        {{ object.election.name }}: No candidates known yet.
+        {% blocktrans with election_name=object.election.name %}{{ election_name }}: No candidates known yet.{% endblocktrans %}
     {% endif %}
 {% endif %}

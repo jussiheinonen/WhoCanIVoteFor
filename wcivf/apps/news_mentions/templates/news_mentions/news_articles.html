@@ -1,8 +1,9 @@
+{% load i18n %}
 <div class="ds-card">
     <div class="ds-card-body">
         <h2>
             <span aria-hidden="true">📰</span>
-            News articles
+            {% trans "News articles" %}
         </h2>
         <ul>
             {% for news_article in news_articles %}

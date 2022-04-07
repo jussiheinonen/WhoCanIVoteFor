@@ -1,32 +1,33 @@
 {% load humanize %}
+{% load i18n %}
 
 {% if object.current_or_future_candidacies %}
     <section class="ds-card">
         <div class="ds-card-body">
-            <h3>That's all we know! Will you help us find more about this candidate?</h3>
-            <p>Our volunteers have been working hard to add information on as many
-                candidates as possible, but they need help.
-            </p>
+            <h3>{% trans "That's all we know! Will you help us find more about this candidate?" %}</h3>
+            <p>{% trans "Our volunteers have been working hard to add information on as many candidates as possible, but they need help." %}</p>
 
             {% if object.should_show_email_cta %}
-                <p>Thousands of voters will rely on this site.
+                <p>{% trans "Thousands of voters will rely on this site." %}
             {% else %}
                 <p>
             {% endif %}
-            If you can add information that should be on this page
+            {% trans "If you can add information that should be on this page" %}
 
             {% if object.cta_example_details %}
-                - such as {{ object.name }}'s
-                {{ object.cta_example_details|join:", " }} -
+                {% blocktrans trimmed with person=object.name cta=object.cta_example_details|join:", "%}- such as {{ person }}'s
+                    {{ cta }} - {% endblocktrans %}
             {% endif %}
-            please use our crowdsourcing website to add it.</p>
+            {% trans "please use our crowdsourcing website to add it." %}</p>
         <a href="{{ object.get_ynr_url }}update/" class="ds-cta ds-cta-blue">
-            Add or edit details &raquo;
+            {% trans "Add or edit details &raquo;" %}
         </a>
         {% if object.should_show_email_cta %}
-            <p>You can also email {{ object.name }} directly to ask them to add information to this page.
+            <p>
+                {% blocktrans with person=object.name %}You can also email {{ person }} directly to ask them to add information to this page.{% endblocktrans %}
                 <a href="{% url 'email_person_view' pk=object.pk ignored_slug=person.name|slugify %}"
-                    class="ds-cta ds-cta-blue">Ask the candidate for more information &raquo;</a>
+                    class="ds-cta ds-cta-blue">{% trans "Ask the candidate for more information &raquo;" %}</a>
+
             </p>
         {% endif %}
 

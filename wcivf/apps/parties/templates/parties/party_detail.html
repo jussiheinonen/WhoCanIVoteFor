@@ -1,7 +1,8 @@
 {% extends "base.html" %}
-}
+
 {% load markdown_deux_tags %}
 {% load humanize %}
+{% load i18n %}
 
 {% block og_image %}{% if object.emblem_url %}{{ CANONICAL_URL }}{{ object.emblem_url }}{% endif %}{% endblock og_image %}
 {% block og_title %}{{ object.party_name }}{% endblock og_title %}
@@ -13,12 +14,12 @@
     <nav class="ds-breadcrumbs ds-stack" aria-label="You are here: {{ request.path }}">
         <ol>
             <li>
-                <a href="{% url 'home_view' %}">Home</a>
+                <a href="{% url 'home_view' %}">{% trans "Home" %}</a>
             </li>
             <li>
-                <a href="{% url 'parties_view' %}">Parties</a>
+                <a href="{% url 'parties_view' %}">{% trans "Parties" %}</a>
             </li>
-            <li>Current: {{ object.party_name }}</li>
+            <li>{% blocktrans with party_name=object.party_name %}Current: {{ party_name }}{% endblocktrans %}</li>
         </ol>
     </nav>
     <div class="ds-card">
@@ -31,13 +32,13 @@
                                 <img src="{{ party.emblem_url }}" alt="{{ party_name }} emblem">
                             </div>
                             <div class="ds-not-sidebar">
-                                <h2>{{ object.party_name }}</h2>
-                                <p>{{ object.personpost_set.all.count|intcomma }} candidates</p>
+                                <h2>{{ party_name }}</h2>
+                                <p>{% blocktrans with num_candidate=object.personpost_set.all.count|intcomma %}{{num_candidates }} candidates{% endblocktrans %}</p>
                                 {% if object.description %}
                                     {{ object.description|markdown }}
                                 {% endif %}
                                 {% if object.wikipedia_url %}
-                                    <p><a href="{{ object.wikipedia_url }}">Read more on wikipedia</a></p>
+                                    <p><a href="{{ object.wikipedia_url }}">{% trans "Read more on wikipedia" %}</a></p>
                                 {% endif %}
                             </div>
                         </div>
@@ -45,13 +46,13 @@
 
                 {% else %}
                     <div>
-                        <h2>{{ object.party_name }}</h2>
-                        <p>{{ object.personpost_set.all.count|intcomma }} candidate{{ object.personpost_set.all.count|pluralize }}</p>
+                        <h2>{{ party_name }}</h2>
+                        <p>{% blocktrans with num_candidates=object.personpost_set.all.count|intcomma pluralize_candidates=object.personpost_set.all.count|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}</p>{% endblocktrans %}</p>
                         {% if object.description %}
                             {{ object.description|markdown }}
                         {% endif %}
                         {% if object.wikipedia_url %}
-                            <p><a href="{{ object.wikipedia_url }}">Read more on wikipedia</a></p>
+                            <p><a href="{{ object.wikipedia_url }}">{% trans "Read more on wikipedia" %}</a></p>
                         {% endif %}
                     </div>
 
@@ -67,11 +68,11 @@
                                 <div>
                                     <dt>{{ post.post__label }}
                                         {% if post.post_election__cancelled %}
-                                            (The poll for this election was cancelled)
+                                            {% trans "(The poll for this election was cancelled)" %}
                                         {% endif %}
                                     </dt>
                                     <dd>
-                                        {{ post.num_candidates }} candidate{{ post.num_candidates|pluralize }}
+                                        {% blocktrans with num_candidates=post.num_candidates pluralize_candidates=post.num_candidates|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}{% endblocktrans %}
                                     </dd>
                                 </div>
                             </dl>

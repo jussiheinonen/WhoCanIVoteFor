@@ -1,30 +1,33 @@
 {% load humanize %}
+{% load i18n %}
 
 {% if object.past_not_current_candidacies %}
     <section class="ds-card">
         <div class="ds-table">
             <table>
                 <caption style="font-style: normal;">
-                    <h3 class="ds-padded">Previous Elections</h3>
+                    <h3 class="ds-padded">{% trans "Previous Elections" %}</h3>
                 </caption>
                 <tr>
-                    <th>Date</th>
-                    <th>Election</th>
-                    <th>Party</th>
-                    <th>Results</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Election" %}</th>
+                    <th>{% trans "Party" %}</th>
+                    <th>{% trans "Results" %}</th>
                 </tr>
                 <tr>
                     {% for person_post in object.past_not_current_candidacies %}
-                        {{ person_post.post_election.short_cancelled_message_html }}
-                        {{ person_post.post_election.short_cancelled_message_html }}
-                        {{ person_post.post_election.short_cancelled_message_html }}
+                        {% blocktrans trimmed with message=person_post.post_election.short_cancelled_message_html %}
+                            {{ message }}
+                            {{ message }}
+                            {{ message }}
+                        {% endblocktrans %}
                         <td>{{ person_post.election.election_date|date:"Y" }}</td>
-                        <td>{{ person_post.post.label }}: {{ person_post.election }}</td>
+                        <td>{% blocktrans with post_label=person_post.post.label election=person_post.election %}{{ post_label}}: {{ election }}{% endblocktrans %}</td>
                         <td>{{ person_post.party_name }}</td>
                         {% if person_post.elected %}
-                            <td>{% if person_post.votes_cast %}{{ person_post.votes_cast|intcomma }} votes (elected){% else %}Elected unopposed{% endif %}</td>
+                            <td>{% if person_post.votes_cast %}{% blocktrans with num_votes=person_post.votes_cast|intcomma %}{{ num_votes}} votes (elected){% endblocktrans %}{% else %}{% trans "Elected unopposed" %}{% endif %}</td>
                         {% else %}
-                            <td>{% if person_post.votes_cast %}{{ person_post.votes_cast|intcomma }} votes (not elected){% else %}Vote count not available{% endif %}</td>
+                            <td>{% if person_post.votes_cast %}{% blocktrans with num_votes=person_post.votes_cast|intcomma %}{{ num_votes }} votes (not elected){% endblocktrans %}{% else %}{% trans "Vote count not available" %}{% endif %}</td>
                         {% endif %}
                         </tr>
                     {% endfor %}

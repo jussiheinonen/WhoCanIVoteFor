@@ -1,5 +1,5 @@
 {% load humanize %}
-
+{% load i18n %}
 <div class="ds-card" id="parishcouncil">
     <div class="ds-card-body">
         <h1>
@@ -9,27 +9,44 @@
 
         <p>
             {% if parish_council_election.is_contested %}
-                You {% if parish_council_election.in_past %}were also{% else %}will also be{% endif %} able to vote for {{ parish_council_election.ward_seats }} councillors to sit
+                {% blocktrans trimmed with were_also_or_will_also_be=parish_council_election.in_past|yesno:"were also, will also be" ward_seats=parish_council_election.ward_seats %}
+                    You {{ were_also_or_will_also_be }} able to vote for {{ ward_seats }} councillors to sit
+                {% endblocktrans %}
             {% else %}
-                You are also represented by {{ parish_council_election.ward_seats }} councillors
+                {% blocktrans trimmed with ward_seats=parish_council_election.ward_seats %}
+                    You are also represented by {{ ward_seats }} councillors
+                {% endblocktrans %}
             {% endif %}
-            on <a href="{{ parish_council_election.website }}">{{ parish_council_election.council_name }}</a>{% if parish_council_election.parish_ward_name %} - {{ parish_council_election.parish_ward_name}}{% endif %}.
+            {% url 'parish_council_election.website' as parish_council_election_url %}
+            {% blocktrans trimmed with council_name=parish_council_election.council_name %}
+                on <a href="{{ parish_council_election_url }}">{{ council_name }}</a>
+            {% endblocktrans %}
+            {% if parish_council_election.parish_ward_name %}
+                - {{ parish_council_election.parish_ward_name }}
+            {% endif %}.
         </p>
 
         <p>
-            <a href="https://www.localgov.co.uk/What-are-parish-councils/35176">{{ parish_council_election.council_type }} councils are the first tier of local government</a>, and have a wide range of powers including looking after community buildings, planning, street lighting and allotments.
-            They also have the power to raise money through council tax, known as the ‘precept’.
-            In 2020-2021, {{ parish_council_election.council_name }} raised £{{ parish_council_election.precept|intcomma }} through the precept.
-        </p>
-
-        {% if parish_council_election.is_contested %}
-            <p><a href="{{ parish_council_election.sopn }}">View the official list of candidates (PDF).</a></p>
-        {% elif parish_council_election.is_uncontested %}
-            <p>
-                This election was uncontested because only one candidate came forward to stand for each available seat.
-                No votes will be cast, and the candidate/s below has/have been automatically declared the winner/s.
-                {% if parish_council_election.sopn %}<a href="{{ parish_council_election.sopn }}">See who was elected</a>.{% endif %}
+            <a href="https://www.localgov.co.uk/What-are-parish-councils/35176">
+                {% blocktrans trimmed with council_type=parish_council_election.council_type council_name=parish_council_election.council_name precept_amount=parish_council_election.precept|intcomma %}
+                    {{ council_type }} councils are the first tier of local government</a>,
+                    and have a wide range of powers including looking after community buildings,
+                    planning, street lighting and allotments. They also have the power to raise
+                    money through council tax, known as the 'precept'. In 2020-2021, {{ council_name }}
+                    raised £{{ precept_amount }} through the precept.
+                {% endblocktrans %}
             </p>
-        {% endif %}
+
+            {% if parish_council_election.is_contested %}
+                <p><a href="{{ parish_council_election.sopn }}">
+                    {% trans "View the official list of candidates (PDF)." %}
+                </a></p>
+            {% elif parish_council_election.is_uncontested %}
+                <p>
+                    {% trans "This election was uncontested because only one candidate came forward to stand for each available seat.
+                    No votes will be cast, and the candidate/s below has/have been automatically declared the winner/s." %}
+                    {% if parish_council_election.sopn %}<a href="{{ parish_council_election.sopn }}">{% trans "See who was elected" %}</a>.{% endif %}
+                </p>
+            {% endif %}
+        </div>
     </div>
-</div>

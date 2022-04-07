@@ -1,15 +1,19 @@
 {% load humanize %}
-
+{% load i18n %}
 {% for husting in hustings %}
     <p>
-        {% if husting.in_past %}(Past event) {% endif %}
+        {% if husting.in_past %}{% trans "(Past event)" %}{% endif %}
         <strong>
-            {{ husting.starts|naturalday:"l j F Y"|title }} {{ husting.starts|date:"H:i"}}{% if husting.ends %}&ndash;{{ husting.ends | date:"H:i"}}{% endif %}:
+            {% blocktrans with husting_start_title=husting.starts|naturalday:"l j F Y"|title husting_start=husting.starts|date:"H:i"%}{{ husting_start_title }} {{ husting_start }}{% endblocktrans %}
+            {% if husting.ends %}&ndash;{{ husting.ends | date:"H:i"}}{% endif %}:
         </strong>
-        {% if husting.url %}<a href="{{ husting.url }}">{% endif %}{{ husting.title}}{% if husting.url %}</a>{% endif %}{% if husting.location %}, {{ husting.location }}{% endif %}
+        {% if husting.url %}
+            <a href="{{ husting.url }}">{{ husting.title }}</a>
+        {% endif %}
+        {% if husting.location %}, {{ husting.location  }}{% endif %}
         {% if husting.postevent_url %}
             <br>
-            <a href="{{ husting.postevent_url }}"><i class="icon-videocam" aria-hidden="true"></i> See video or other info from this event.</a>
+            <a href="{{ husting.postevent_url }}"><i class="icon-videocam" aria-hidden="true"></i>{% trans "See video or other info from this event." %}</a>
         {% endif %}
     </p>
     {% include "hustings/includes/_ld_husting.html" %}

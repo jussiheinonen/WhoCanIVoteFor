@@ -9,7 +9,10 @@ from django.test import TestCase
 from django.test.utils import override_settings
 from django.urls import reverse
 from dc_utils.tests.helpers import validate_html
-from people.tests.factories import PersonFactory, PersonPostFactory
+from people.tests.factories import (
+    PersonFactory,
+    PersonPostWithPartyFactory,
+)
 from parties.tests.factories import PartyFactory
 from elections.tests.factories import (
     ElectionFactory,
@@ -46,7 +49,7 @@ class TestHtml:
             reverse("standing_as_a_candidate"),
             reverse("opensearch"),
             reverse("status_check_view"),
-            PersonPostFactory(
+            PersonPostWithPartyFactory(
                 election=ElectionFactory()
             ).person.get_absolute_url(),
             reverse(

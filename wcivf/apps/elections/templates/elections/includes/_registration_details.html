@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load postcode_tags %}
 {% load humanize %}
 
@@ -5,22 +6,37 @@
     <div class="ds-card-body">
         <h2 id='where'>
             <span aria-hidden="true">📝</span>
-            Register to vote
+            {% blocktrans %}Register to vote{% endblocktrans %}
         </h2>
 
-        <p>You need to be registered in order to vote.
-            If you aren't registered to vote visit
-            <a href="https://www.gov.uk/register-to-vote">
-                https://www.gov.uk/register-to-vote
-            </a>
+        <p>
+            {% blocktrans trimmed %}
+                You need to be registered in order to vote.
+                If you aren't registered to vote visit
+                <a href="https://www.gov.uk/register-to-vote">
+                    https://www.gov.uk/register-to-vote
+                </a>
+            {% endblocktrans %}
         </p>
         {% if postelection %}
-            <p>Register before midnight on {{ postelection.registration_deadline }} to vote on
-                {{ postelection.election.election_date }}.
+            <p>
+                {% blocktrans trimmed with registration_deadline=postelection.registration_deadline election_date=postelection.election.election_date%}
+                    Register before midnight on {{ registration_deadline }} to vote on {{ election_date }}.
+                {% endblocktrans %}
             </p>
-            <p>Once registered, apply before midnight on {{ postelection.postal_vote_application_deadline }}
-                to vote by post on {{ postelection.election.election_date }}.</p>
-            <p>To register by post, contact your local council.</p>
+            <p>
+                {% blocktrans trimmed with postal_vote_application_deadline=postelection.postal_vote_application_deadline election_date=postelection.election.election_date %}
+                    Once registered, apply before midnight on {{ postal_vote_application_deadline }} to vote by post on {{ election_date }}.
+                {% endblocktrans %}
+            </p>
+            <p>
+                {% if council %}
+                    {% blocktrans trimmed with council_name=council.name%}To register by post, contact {{ council_name }}.{% endblocktrans %}
+                {% else %}
+                    {% blocktrans %}To register by post, contact your local council.{% endblocktrans %}
+                {% endif %}
+
+            </p>
         {% endif %}
         {% if council.council_id %}
             <p>{{ council.name }}
@@ -41,7 +57,7 @@
         {% endif %}
         <!-- valid only for Scottish postcodes -->
         {% if council.registration_contacts %}
-            <h2>Need help with electoral services?</h2>
+            <h2>{% blocktrans %}Need help with electoral services?{% endblocktrans %}</h2>
             {{ council.registration_contacts.name }}
             {{ council.registration_contacts.address|linebreaksbr }}
             <br>{{ council.registration_contacts.postcode  }}

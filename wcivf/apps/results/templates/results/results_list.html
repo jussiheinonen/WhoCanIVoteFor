@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-
-{% block page_title %}Election results{% endblock page_title %}
+{% load i18n %}
+{% block page_title %}{% trans "Election results" %}{% endblock page_title %}
 
 {% block page_meta %}
     <meta http-equiv="refresh" content="60">
@@ -9,11 +9,11 @@
 {% endblock page_meta %}
 
 {% block content %}
-    <section class="card">
-        <h1>Latest election results</h1>
+    <section class="ds-card">
+        <h1>{% trans "Latest election results" %]</h1>
         <p>
             <a href="http://odileeds.org/projects/ge2017/">
-                See these results on a map, thanks to our friends at ODI Leeds
+                {% trans "See these results on a map, thanks to our friends at ODI Leeds" %}
             </a>
         </p>
         <style>
@@ -30,14 +30,14 @@
             <table id="{{ election_dict.election.name.split|join:"_" }}" class="display" width="100%">
                 <thead>
                     <tr>
-                        <th>Constituency</th>
-                        <th>Result</th>
+                        <th>{% trans "Constituency" %}</th>
+                        <th>{% trans "Result" %}</th>
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
-                        <th>Constituency</th>
-                        <th>Result</th>
+                        <th>{% trans "Constituency" %}</th>
+                        <th>{% trans "Result" %}</th>
                     </tr>
                 </tfoot>
                 <tbody>
@@ -46,7 +46,8 @@
                             {% for person_post in result.person_posts.all %}
                                 <td data-order="{{ result.rank_order }}">
                                     {{ result.declaration_time|time:"H:i" }}:
-                                    <a href="{{ result.post_election.get_absolute_url }}">{{ person_post.post.area_name }}</a>
+                                    <a href="{{ result.post_election.get_absolute_url }}">
+                                        {{ area_name }}</a>
                                 </td>
                                 <td>
                                     {% if person_post.person.photo_url %}
@@ -56,7 +57,7 @@
                                 </td>
                             {% empty %}
                                 <td data-order="{{ result.rank_order }}">
-                                    Expected {{ result.expected_declaration_time|time:"H:i" }}:
+                                    {% trans "Expected" %} {{ result.expected_declaration_time|time:"H:i" }}:
                                     <a href="{{ result.post_election.get_absolute_url }}">{{ result.post_election.post.area_name }}</a>
                                 </td>
                                 <td>
@@ -67,7 +68,7 @@
                 </tbody>
             </table>
         {% empty %}
-            <p>No results yet</p>
+            <p>{% trans "No results yet" %}</p>
         {% endfor %}
 
     </section>

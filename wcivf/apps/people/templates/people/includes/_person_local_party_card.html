@@ -1,12 +1,13 @@
+{% load i18n %}
 {% if person.local_party %}
     <div class="ds-card">
         <div class="ds-card-body">
-            <h4 class="ds-h3">{{ person.local_party.name }}</h4>
+            <h4 class="ds-h3">{{ party}}</h4>
             <p>
                 {% if person.local_party.is_local %}
-                    {{ person.name }}'s local party is {{ person.local_party.label }}.
+                    {% blocktrans with person=person.name party_label=person.local_party.label %}{{ person }}'s local party is {{ party_label }}.{% endblocktrans %}
                 {% else %}
-                    {{ person.name }} is a {{ person.local_party.name }} candidate.
+                    {% blocktrans with person=person.name %}{{ person }} is a {{ party }} candidate.{% endblocktrans %}
                 {% endif %}
             </p>
             <dl class="ds-descriptions">
@@ -28,33 +29,33 @@
                 {% endif %}
                 {% if person.local_party.homepage %}
                     <div>
-                        <dt>Party Homepage</dt>
+                        <dt>{% trans "Party Homepage" %}</dt>
                         <a href="{{ person.local_party.homepage }}">
-                            {{ person.local_party.name }}'s website
+                            {% blocktrans %}{{ party }}'s website{% endblocktrans %}
                         </a>
                     </div>
                 {% endif %}
                 {% if person.local_party.email %}
                     <div>
-                        <dt>Email</dt>
+                        <dt>{% trans "Email" %}</dt>
                         <a href="mailto:{{ person.local_party.email }}">
-                            {{ person.local_party.name }}'s email
+                            {% blocktrans %}{{ party }}'s email{% endblocktrans %}
                         </a>
                     </div>
                 {% endif %}
                 {% if person.local_party.contact_page_url %}
                     <div>
-                        <dt>Contact page</dt>
+                        <dt>{% trans "Contact page" %}</dt>
                         <a href="{{ person.local_party.contact_page_url }}">
-                            {{ person.local_party.name }}'s contact page
+                            {% blocktrans %}{{ party }}'s contact page{% endblocktrans %}
                         </a>
                     </div>
                 {% endif %}
                 {% if person.local_party.youtube_profile_url %}
                     <div>
-                        <dt>Youtube page</dt>
+                        <dt>{% trans "Youtube page" %}</dt>
                         <a href="{{ person.local_party.youtube_profile_url }}">
-                            {{ person.local_party.name }}'s Youtube profile
+                            {% blocktrans %}{{ party }}'s Youtube profile{% endblocktrans %}
                         </a>
                     </div>
                 {% endif %}

@@ -1,3 +1,4 @@
+{% load i18n %}
 {% regroup elections by election_date as elections_by_type %}
 {% for election_group in elections_by_type %}
     <h3>
