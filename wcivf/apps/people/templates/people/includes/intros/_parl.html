@@ -5,13 +5,13 @@
 
     {% if verb == "is" %}
         {% blocktrans trimmed %}
-            {{ person_name }} is a <a href="{{ party_url }}" title="{{ party }}">{{ party }}</a>
+            {{ person_name }} is a <a href="{{ party_url }}" title="{{ party_name }}">{{ party_name }}</a>
             candidate in <a href="{{ post_url }}">{{ post_label }}</a>
             constituency in the <a href="{{ election_url }}" title="{{ election_name }}">{{ election_name }}</a>.
         {% endblocktrans %}
     {% else %}
         {% blocktrans trimmed %}
-            {{ person_name }} was a <a href="{{ party_url }}" title="{{ party }}">{{ party }}</a>
+            {{ person_name }} was a <a href="{{ party_url }}" title="{{ party_name }}">{{ party_name }}</a>
             candidate in <a href="{{ post_url }}">{{ post_label }}</a>
             constituency in the <a href="{{ election_url }}" title="{{ election_name }}">{{ election_name }}</a>.
         {% endblocktrans %}

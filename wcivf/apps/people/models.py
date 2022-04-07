@@ -320,18 +320,18 @@ class Person(models.Model):
             "person": self,
             "person_name": self.name,
         }
-        if self.featured_candidacy:
+        if self.featured_candidacy and self.featured_candidacy.party:
             context.update(
                 {
                     "candidacy": self.featured_candidacy,
-                    "party_name": self.featured_candidacy.party.party_name,
-                    "list_position": ordinal(
+                    "party_name": self.featured_candidacy.party_name,
+                    "list_position_ordinal": ordinal(
                         self.featured_candidacy.list_position
                     ),
                     "party_url": self.featured_candidacy.party.get_absolute_url(),
                     "post_label": self.featured_candidacy.post.label,
                     "post_url": self.featured_candidacy.post_election.get_absolute_url(),
-                    "election_name": self.featured_candidacy.election.name_without_brackets,
+                    "election_name": self.featured_candidacy.election.nice_election_name,
                     "election_url": self.featured_candidacy.election.get_absolute_url(),
                 }
             )

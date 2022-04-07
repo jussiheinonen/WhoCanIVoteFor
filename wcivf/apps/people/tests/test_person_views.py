@@ -174,10 +174,9 @@ class PersonViewTests(TestCase):
             party_name=party.party_name,
         )
         response = self.client.get(self.person_url, follow=True)
-
         self.assertContains(
             response,
-            f"{self.person.name} is a {person_post.party_name} candidate in {person_post.post.label} constituency in the {election.name}.",
+            f"{self.person.name} is a {person_post.party_name} candidate in {person_post.post.label} constituency in the {election.nice_election_name}.",
         )
 
     def test_no_previous_elections(self):
@@ -576,6 +575,11 @@ class TestPersonIntro(TestCase):
                 response = self.client.get(person.get_absolute_url())
 
                 self.assertContains(response, expected)
+
+                if " is " in expected:
+                    expected = expected.replace(" is ", " was ")
+                    person.death_date = "2020-01-01"
+                    response = self.client.get(person.get_absolute_url())
 
     def test_intro_method(self):
         """
