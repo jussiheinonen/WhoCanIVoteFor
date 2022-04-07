@@ -54,7 +54,7 @@
                     <dt>{% trans "Blog" %}</dt>
                     <dd>
                         <a href="{{ object.blog_url }}" title="{% blocktrans with person_name=object.name%}{{ person_name }}'s blog{% endblocktrans%}">
-                            {{ object.blog_url }}
+                            {% blocktrans with person_name=object.name%}{{ person_name }}'s blog{% endblocktrans%}
                         </a>
                     </dd>
                 </div>
