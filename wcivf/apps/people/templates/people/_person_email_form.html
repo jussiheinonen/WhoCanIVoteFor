@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <style>
     #email p,
     #headers {
@@ -22,8 +24,8 @@
 </style>
 
 <p>
-    {% blocktrans trimmed %}
-        This page generates a customised email for {{ object.name }}
+    {% blocktrans trimmed with name=object.name %}
+        This page generates a customised email for {{ name }}
         to ask them to provide missing data
         for the Democracy Club dataset.
     {% endblocktrans %}
