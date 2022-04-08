@@ -119,12 +119,10 @@
                 {% if postelection.should_display_sopn_info %}
                     <p>
                         {% if postelection.locked %}
-                            {% url '{{ postelection.ynr_sopn_link }}' as sopn_url %}
-                            {% blocktrans trimmed %}
+                            {% blocktrans trimmed with sopn_url=postelection.ynr_sopn_link %}
                                 The <a href="{{ sopn_url }}">official candidate list</a> has been published.
                             {% endblocktrans%}
                         {% else %}
-                            {% trans "The official candidate list should" %}
                             {% if postelection.past_expected_sopn_day %}
                                 {% trans "The official candidate list should have been published on" %}
                             {% else %}
