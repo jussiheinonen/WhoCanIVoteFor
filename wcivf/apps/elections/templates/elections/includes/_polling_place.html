@@ -23,28 +23,34 @@
             </p>
         {% else %}
             {% if polling_station.custom_finder %}
-                <p>{% You can find your polling station by
-                    <a href="{{ polling_station.custom_finder }}">
-                        following this link</a>.</p>
+                {% blocktrans trimmed with custom_finder=polling_station.custom_finder %}
+                    <p>You can find your polling station by
+                        <a href="{{ custom_finder }}">
+                            following this link</a>.</p>
+                {% endblocktrans %}
             {% else %}
                 {% if ballots_today and not multiple_city_of_london_elections_today %}
-                    <strong>Polling stations are open from {{ ballots_today.0.election.polls_open|time:"ga" }} till {{ ballots_today.0.election.polls_close|time:"ga" }} today.</strong>
+                    {% blocktrans trimmed with open_time=ballots_today.0.election.polls_open|time:"ga" close_time=ballots_today.0.election.polls_close|time:"ga" %}
+                        <strong>Polling stations are open from {{ open_time }} till {{ close_time }} today.</strong>
+                    {% endblocktrans %}
                 {% endif %}
                 {% if polling_station.addresses %}
-                    <p>Your polling station in {{ postcode }} depends on your address. <a href="https://wheredoivote.co.uk/postcode/{{ postcode }}/">Check the correct polling station for your address &raquo;</a></p>
+                    {% blocktrans trimmed %}
+                        <p>Your polling station in {{ postcode }} depends on your address. <a href="https://wheredoivote.co.uk/postcode/{{ postcode }}/">Check the correct polling station for your address &raquo;</a></p>
+                    {% endblocktrans %}
                 {% else %}
 
                     <p>{% blocktrans %}You should get a "poll card" through the post telling you where to vote.{% endblocktrans %}</p>
                     <p>
                         {% if postcode|ni_postcode %}
-                            {% blocktrans trimmed %}
+                            {% blocktrans trimmed with council_phone=polling_station.council.phone %}
                                 If you haven't got one, or aren't sure where to vote, you should call the Electoral Office
-                                on <a href="tel:{{ polling_station.council.phone }}">{{ polling_station.council.phone }}</a>
+                                on <a href="tel:{{ council_phone }}">{{ council_phone }}</a>
                             {% endblocktrans %}
                         {% elif polling_station.council %}
-                            {% blocktrans trimmed with council_name=polling_station.council%}
+                            {% blocktrans trimmed with council_name=polling_station.council council_phone=polling_station.council.phone %}
                                 If you haven't got one, or aren't sure where to vote, you should call {{ council_name }}
-                                on <a href="tel:{{ polling_station.council.phone }}">{{ polling_station.council.phone }}</a>
+                                on <a href="tel:{{ council_phone }}">{{ council_phone }}</a>
                             {% endblocktrans %}
                         {% else %}
                             {% blocktrans trimmed %}
