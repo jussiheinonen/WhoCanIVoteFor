@@ -1,6 +1,6 @@
 import sys
 import pytest
-from elections.models import Election, PostElection
+from elections.models import Election, PostElection, PostElectionQuerySet
 
 from parties.importers import LocalPartyImporter, LocalElection
 from parties.models import LocalParty
@@ -78,21 +78,28 @@ class TestLocalPartyImporter:
         filter.return_value.exists.assert_called_once()
 
     def test_get_ballots_filters_by_ballot_paper_id(self, importer, mocker):
-        mocker.patch.object(PostElection.objects, "filter", return_value=True)
-        result = importer.get_ballots(election_id="Foo")
-        assert result is True
-        PostElection.objects.filter.assert_called_once()
+        mock_qs = mocker.MagicMock(spec=PostElectionQuerySet)
+        mocker.patch.object(
+            PostElection.objects, "filter", return_value=mock_qs
+        )
+        importer.get_ballots(election_id="Foo", parties=["parties"])
         PostElection.objects.filter.assert_called_once_with(
-            ballot_paper_id="Foo"
+            ballot_paper_id="Foo",
+        )
+        mock_qs.filter.assert_called_once_with(
+            personpost__party__in=["parties"]
         )
 
     def test_get_ballots_filter_by_election_slug(self, importer, mocker):
         mock = mocker.MagicMock()
         mock.__bool__.return_value = False
         mocker.patch.object(PostElection.objects, "filter", return_value=mock)
-        importer.get_ballots(election_id="Foo")
+        importer.get_ballots(election_id="Foo", parties=["parties"])
         PostElection.objects.filter.assert_called_with(
             election__slug="Foo",
+        )
+        mock.filter.assert_called_once_with(
+            personpost__party__in=["parties"],
         )
 
     def test_import_parties_no_current_elections(self, importer, mocker):

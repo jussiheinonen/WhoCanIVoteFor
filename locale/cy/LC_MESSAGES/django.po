@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-08 10:27+0100\n"
+"POT-Creation-Date: 2022-04-08 13:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -252,46 +252,66 @@ msgstr ""
 msgid "or any identification"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:37
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:26
+#, python-format
+msgid ""
+"<p>You can find your polling station by <a href=\"%(custom_finder)s\"> "
+"following this link</a>.</p>"
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:33
+#, python-format
+msgid ""
+"<strong>Polling stations are open from %(open_time)s till %(close_time)s "
+"today.</strong>"
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:38
+#, python-format
+msgid ""
+"<p>Your polling station in %(postcode)s depends on your address. <a href="
+"\"https://wheredoivote.co.uk/postcode/%(postcode)s/\">Check the correct "
+"polling station for your address &raquo;</a></p>"
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:43
 msgid ""
 "You should get a \"poll card\" through the post telling you where to vote."
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:40
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:46
 #, python-format
 msgid ""
 "If you haven't got one, or aren't sure where to vote, you should call the "
-"Electoral Office on <a href=\"tel:%(polling_station.council.phone)s\">"
-"%(polling_station.council.phone)s</a>"
+"Electoral Office on <a href=\"tel:%(council_phone)s\">%(council_phone)s</a>"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:45
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:51
 #, python-format
 msgid ""
 "If you haven't got one, or aren't sure where to vote, you should call "
-"%(council_name)s on <a href=\"tel:%(polling_station.council.phone)s\">"
-"%(polling_station.council.phone)s</a>"
+"%(council_name)s on <a href=\"tel:%(council_phone)s\">%(council_phone)s</a>"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:50
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:56
 msgid ""
 "If you haven't got one, or aren't sure where to vote, you should call your "
 "local council"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:59
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:65
 msgid "You will need photographic identification."
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:65
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:71
 msgid "Read more about how to vote in Northern Ireland"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:68
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:74
 msgid "Read more about how to vote"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:75
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:81
 msgid "Get walking directions from"
 msgstr ""
 
@@ -464,62 +484,58 @@ msgstr ""
 msgid ""
 "The official candidate list has not yet been published. However, we expect "
 "at least <strong>%(num_ballots)s</strong> in the %(postelection)s. You can "
-"help improve this page: <a href=\"%(postelection.ynr_link)s\"> add "
-"information about candidates to our database</a>."
+"help improve this page: <a href=\"%(ynr_link)s\"> add information about "
+"candidates to our database</a>."
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:123
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:122
 #, python-format
 msgid ""
 "The <a href=\"%(sopn_url)s\">official candidate list</a> has been published."
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:127
-msgid "The official candidate list should"
-msgstr ""
-
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:129
 msgid "The official candidate list should have been published on"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:131
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:129
 msgid "The official candidate list should be published on"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:140
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:138
 msgid "Read the official candidate booklet for this election."
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:144
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:142
 #, python-format
 msgid " %(description)s "
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:151
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:149
 msgid "Can you vote in this election?"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:152
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:150
 msgid "Age"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:154
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:152
 #, python-format
 msgid ""
 "You need to be over %(voter_age)s on the %(voter_age_date)s of "
 "%(election_date)s in order to vote in this election."
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:159
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:157
 msgid "Citizenship"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:178
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:176
 #: wcivf/apps/people/templates/people/includes/_person_about_card.html:9
 msgid "Wikipedia"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:180
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:178
 #: wcivf/apps/people/templates/people/includes/_person_about_card.html:11
 msgid "Read more on Wikipedia"
 msgstr ""
@@ -1407,43 +1423,43 @@ msgstr ""
 msgid "Back to candidates in"
 msgstr "Dod o hyd i'ch ymgeiswyr"
 
-#: wcivf/apps/referendums/templates/referendums/includes/_card.html:8
+#: wcivf/apps/referendums/templates/referendums/includes/_card.html:9
 #, python-format
 msgid "%(council_name)s governance referendum"
 msgstr ""
 
-#: wcivf/apps/referendums/templates/referendums/includes/_card.html:15
+#: wcivf/apps/referendums/templates/referendums/includes/_card.html:16
 msgid "Today"
 msgstr ""
 
-#: wcivf/apps/referendums/templates/referendums/includes/_card.html:19
+#: wcivf/apps/referendums/templates/referendums/includes/_card.html:20
 #, python-format
 msgid ""
 "voters in <strong>%(council_name)s</strong> able to vote in a governance "
 "referendum."
 msgstr ""
 
-#: wcivf/apps/referendums/templates/referendums/includes/_card.html:24
+#: wcivf/apps/referendums/templates/referendums/includes/_card.html:25
 msgid "The question on the ballot paper was:"
 msgstr ""
 
-#: wcivf/apps/referendums/templates/referendums/includes/_card.html:26
+#: wcivf/apps/referendums/templates/referendums/includes/_card.html:27
 msgid "The question you will be asked on the ballot paper is:"
 msgstr ""
 
-#: wcivf/apps/referendums/templates/referendums/includes/_card.html:29
+#: wcivf/apps/referendums/templates/referendums/includes/_card.html:30
 #, python-format
 msgid ""
 "<h4>%(referendum_question)s</h4> <blockquote>%(referendum.answer_one)s</"
 "blockquote> or <blockquote>%(referendum_answer_two)s</blockquote>"
 msgstr ""
 
-#: wcivf/apps/referendums/templates/referendums/includes/_card.html:36
+#: wcivf/apps/referendums/templates/referendums/includes/_card.html:37
 #, python-format
 msgid "Find more information on the %(council_name)s council website."
 msgstr ""
 
-#: wcivf/apps/referendums/templates/referendums/includes/_card.html:40
+#: wcivf/apps/referendums/templates/referendums/includes/_card.html:41
 msgid "Here are some other links about the campaign that we know about:"
 msgstr ""
 
