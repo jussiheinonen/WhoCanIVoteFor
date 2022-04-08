@@ -1,3 +1,5 @@
+{% load i18n %}
+
 {% if not card == 0 %}
 
     <div class="ds-card">
@@ -7,9 +9,7 @@
     <h3>{% trans "European Parliament election results" %}</h3>
 {% endif %}
 <p>
-    {% trans "The results of the UK European Parliament elections
-    are published on the European Parliament's election results
-    website." %}
+    {% trans "The results of the UK European Parliament elections are published on the European Parliament's election results website." %}
 </p>
 <a href="https://election-results.eu/" class="ds-card-link">{% trans "View results" %}</a>
 {% if not card == 0 %}
