@@ -51,8 +51,8 @@
                     <ul>
                         {% for postelection in object.postelection_set.all %}
                             <li>
-                                {% blocktrans trimmed with post_label=postelection.post.label cancelled_message=postelection.short_cancelled_message_html %}
-                                    <a href="{{ postelection.get_absolute_url }}">{{ post_label }}</a>
+                                {% blocktrans trimmed with postelection_url=postelection.get_absolute_url post_label=postelection.post.label cancelled_message=postelection.short_cancelled_message_html %}
+                                    <a href="{{ postelection_url }}">{{ post_label }}</a>
                                     {{ cancelled_message }}
                                 {% endblocktrans %}
                             </li>
