@@ -6,8 +6,7 @@
             {{ manifesto_country }} manifesto {% endblocktrans %}{% if manifesto.canonical_url != manifesto.pdf_url %}{% trans "website" %}{% endif %}
         {% if manifesto.language != "English" %}{% blocktrans with manifest_language=manifesto.language %} in {{ manifesto_language }}{% endblocktrans %}{% endif %}
         {% if manifesto.canonical_url == manifesto.pdf_url %}(PDF){% endif %}
-{% endblocktrans %}
-</a>
+    </a>
 
 </li>
 {% if manifesto.pdf_url and manifesto.canonical_url != manifesto.pdf_url %}
