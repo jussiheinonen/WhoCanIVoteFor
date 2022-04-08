@@ -73,7 +73,7 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         party_list = self.get_party_list_from_party_id(party_id)
         return Party.objects.filter(party_id__in=party_list)
 
-    def get_ballots(self, election_id):
+    def get_ballots(self, election_id, parties):
         """
         First checks if the election_id is a special case or is not a full
         election ID e.g. it is made of only two parts such as local.2022-05-05.
@@ -86,19 +86,19 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         election_id_list = election_id.split(".")
         election_type = election_id_list[0]
         if len(election_id_list) == 2 or election_type in special_cases:
-            return PostElection.objects.filter(
+            ballots = PostElection.objects.filter(
                 ballot_paper_id__startswith=f"{election_type}.",
                 election__election_date=self.election.date,
             )
-
-        ballots = PostElection.objects.filter(ballot_paper_id=election_id)
+        else:
+            ballots = PostElection.objects.filter(ballot_paper_id=election_id)
 
         if not ballots:
             # This might be an election ID, in that case,
             # apply thie row to all post elections without
             # info already
             ballots = PostElection.objects.filter(election__slug=election_id)
-
+        ballots = ballots.filter(personpost__party__in=parties)
         return ballots
 
     def all_rows(self):
@@ -195,7 +195,7 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
                 continue
 
             ballots = self.get_ballots(
-                election_id=row["election_id"].strip(),
+                election_id=row["election_id"].strip(), parties=parties
             )
             if not ballots:
                 self.write("Skipping as no ballots to use")
@@ -206,6 +206,12 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
                 elections = ballots.values_list(
                     "election__slug", flat=True
                 ).distinct()
+                manifesto_web = row.get("Manifesto Website URL", "").strip()
+                manifesto_pdf = row.get("Manifesto PDF URL", "").strip()
+                if not any([manifesto_web, manifesto_pdf]):
+                    self.write("No links to create Manifesto, skipping")
+                    continue
+
                 for slug in elections:
                     election = Election.objects.get(slug=slug)
                     self.add_manifesto(row, party, election)
@@ -221,9 +227,6 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
     def add_manifesto(self, row, party, election):
         manifesto_web = row.get("Manifesto Website URL", "").strip()
         manifesto_pdf = row.get("Manifesto PDF URL", "").strip()
-        if not any([manifesto_web, manifesto_pdf]):
-            return self.write("No links to create Manifesto, skipping")
-
         country = self.get_country(election_type=election.election_type)
         language = row.get("Manifesto Language", "English").strip()
         easy_read_url = row.get("Manifesto Easy Read PDF", "").strip()
