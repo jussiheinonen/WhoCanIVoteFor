@@ -93,12 +93,12 @@
 
                                 {% else %}
                                     {# Case: Candidates and the post is NOT locked (add CTA) #}
-                                    {% blocktrans trimmed with num_ballots=postelection.party_ballot_count postelection=postelection.friendly_name %}
+                                    {% blocktrans trimmed with num_ballots=postelection.party_ballot_count postelection=postelection.friendly_name ynr_link=postelection.ynr_link %}
                                         The official candidate list has not yet been published.
                                         However, we expect at least <strong>{{ num_ballots }}</strong>
                                         in the {{ postelection }}.
 
-                                        You can help improve this page: <a href="{{ postelection.ynr_link }}">
+                                        You can help improve this page: <a href="{{ ynr_link }}">
                                             add information about candidates to our database</a>.
                                     {% endblocktrans %}
                                 {% endif %}
