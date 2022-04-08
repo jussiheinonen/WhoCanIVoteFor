@@ -1,4 +1,5 @@
 {% load humanize %}
+{% load i18n %}
 
 <div class="ds-card" id="election_{{ referendum.slug }}">
     <div class="ds-card-body">
@@ -26,7 +27,7 @@
             <p>{% trans "The question you will be asked on the ballot paper is:" %}</p>
         {% endif %}
 
-        {% blocktrans trimmed referendum_question=referendum.question referendum_answer_one=referendum.answer_one referendum_answer_two=referendum.answer_two %}
+        {% blocktrans trimmed with referendum_question=referendum.question referendum_answer_one=referendum.answer_one referendum_answer_two=referendum.answer_two %}
             <h4>{{ referendum_question}}</h4>
             <blockquote>{{ referendum.answer_one }}</blockquote> or <blockquote>{{ referendum_answer_two }}</blockquote>
         {% endblocktrans %}

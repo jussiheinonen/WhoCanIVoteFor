@@ -23,7 +23,7 @@
                 <div class="ds-card-body">
                     <h3>{% trans "Next election" %}</h3>
                     <p>
-                        {% blocktrans with postelection=postelection.friendly_name %}The <a href="{{ postelection.next_ballot.get_absolute_url }}">next election for {{ postelection }}</a> is{% endblocktrans %}
+                        {% blocktrans with post_election_url=postelection.next_ballot.get_absolute_url postelection=postelection.friendly_name %}The <a href="{{ post_election_url }}">next election for {{ postelection }}</a> is{% endblocktrans %}
                         {% if postelection.next_ballot.election.is_election_day %}
                             <strong>{% trans "being held today" %}</strong>.
                         {% else %}
