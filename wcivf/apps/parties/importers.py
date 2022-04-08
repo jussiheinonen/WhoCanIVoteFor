@@ -15,10 +15,17 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
     # TODO check if this need updating
     JOINT_PARTIES = [["party:53", "joint-party:53-119"]]
 
-    def __init__(self, election, force_update=False, from_file=False):
+    def __init__(
+        self,
+        election,
+        force_update=False,
+        from_file=False,
+        delete_existing=True,
+    ):
         self.election = election
         self.force_update = force_update
         self.read_from = getattr(self, "read_from_url")
+        self.delete_existing = delete_existing
         if from_file:
             self.read_from = getattr(self, "read_from_file")
 
@@ -140,7 +147,7 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
             country = self.get_country(
                 election_type=post_election.election.election_type
             )
-            LocalParty.objects.update_or_create(
+            _, created = LocalParty.objects.update_or_create(
                 parent=party,
                 post_election=post_election,
                 defaults={
@@ -155,6 +162,10 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
                     ).strip(),
                     "contact_page_url": row.get("Contact page", "").strip(),
                 },
+            )
+            msg = "Created" if created else "Updated"
+            self.write(
+                f"{msg} Local Party object for {party.party_name} in {post_election.ballot_paper_id}"
             )
 
         self.write(f"Imported Local Party objects for {name}")
@@ -173,8 +184,9 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         row contains data we can use. Then adds a LocalParty object for each
         parent party.
         """
-        self.delete_parties_for_election_date()
-        self.delete_manifestos_for_election_date()
+        if self.delete_existing:
+            self.delete_parties_for_election_date()
+            self.delete_manifestos_for_election_date()
 
         if not self.current_elections():
             self.write(

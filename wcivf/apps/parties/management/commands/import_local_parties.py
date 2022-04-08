@@ -99,6 +99,18 @@ class Command(BaseCommand):
             metavar=("election_date", "path_to_file"),
             help="To import from a file, pass in an election date and the path to the file",
         )
+        parser.add_argument(
+            "--date",
+            action="store",
+            help="date",
+            required=False,
+        )
+        parser.add_argument(
+            "--url",
+            action="store",
+            help="url",
+            required=False,
+        )
 
     def valid_date(self, value):
         return parse(value)
@@ -132,11 +144,28 @@ class Command(BaseCommand):
             )
             importer.import_parties()
 
+    def import_from_url(self):
+        """
+        Runs the importer for all elections in the ELECTIONS list. This is the
+        default method of running the import process
+        """
+        election = LocalElection(
+            date=self.options["date"], csv_files=[self.options["url"]]
+        )
+        importer = LocalPartyImporter(
+            election=election,
+            delete_existing=False,
+        )
+        importer.import_parties()
+
     @transaction.atomic
     def handle(self, **options):
         self.options = options
 
         if options["from_file"]:
             return self.import_from_file()
+
+        if options["url"] and options["date"]:
+            return self.import_from_url()
 
         self.import_from_elections()
