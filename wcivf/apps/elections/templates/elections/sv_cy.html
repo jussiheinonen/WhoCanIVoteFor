@@ -1,0 +1,77 @@
+{% extends "base.html" %}{% load markdown_deux_tags %}{% load humanize %}{% load i18n %}{% block content %}    {% include "elections/includes/_voting_system_breadcrumbs.html" %}
+
+    <div class="ds-page">
+        <div class="ds-stack">
+            <div class="ds-card ds-padded">
+                <div class="ds-card-body">
+                    <h2>Pleidlais Atodol</h2>
+                    <p>Mae system etholiadol y Bleidlais Atodol yn caniatáu i bleidleiswyr                        fwrw pleidlais ar gyfer eu dewis cyntaf a’u hail ddewis ar yr un                        papur pleidleisio. Os nad fydd ymgeisydd yn ennill o leiaf hanner yr holl                        bleidleisiau dewis cyntaf, yna bydd y ddau ymgeisydd sydd ar y blaen yn mynd ymlaen i ail rownd a bydd pob ymgeisydd arall yn cael eu dileu o’r etholiad.
+                        Yna bydd y pleidleisiau ail ddewis sydd ar bapurau pleidleisio’r ymgeiswyr a ddilëwyd o’r etholiad yn cael eu cyfrif a'u hychwanegu at gyfansymiau'r ymgeiswyr sydd ar y blaen.
+
+                        Nod hyn yw sicrhau bod yr ymgeisydd sy’n cael ei ethol                        yn nes at gael cefnogaeth y mwyafrif o gymharu â’r                        system <a href="{% url 'fptp_voting_system_view' %}">Cyntaf i'r felin</a>.
+
+                        Nid oes rhaid i bleidleiswyr fwrw pleidlais ail ddewis, ac ni allan nhw bleidleisio dros yr un ymgeisydd ddwywaith.
+
+                        Defnyddir Pleidlais Atodol ar gyfer etholiadau Comisiynwyr yr Heddlu a Throseddu yng Nghymru a Lloegr, ac ar gyfer meiri a etholir yn uniongyrchol yn Lloegr, gan gynnwys Llundain, Manceinion, a Lerpwl.
+                    </p>
+                    <h3>Enghraifft o etholiad</h3>
+                    <p>
+                        Yn etholiadau Comisiynydd yr Heddlu a Throseddu Swydd Nottingham 2016, enillodd yr ymgeisydd Llafur lai                        na 50% o'r bleidlais ddewis gyntaf, felly roedd angen mynd i ail rownd. Cafodd pleidleisiau ail ddewis yr                        ymgeiswyr annibynnol ac UKIP, a ddilëwyd o’r etholiad, eu cyfrif, a’u dyfarnu naill ai i’r Blaid Lafur neu i’r Ceidwadwyr.
+                    </p>
+
+                    <div class="ds-table">
+                        <table>
+                            <caption>
+                                <h2>
+                                    Etholiad Comisiynydd Heddlu a Throsedd Swydd Nottingham 2016
+                                </h2>
+                            </caption>
+                            <tbody>
+                                <tr>
+                                    <th>Plaid</th>
+                                    <th>Pleidleisiau Dewis Cyntaf</th>
+                                    <th>Pleidleisiau Dewis Cyntaf + Ail Ddewis</th>
+                                </tr>
+                                <tr>
+                                    <td>Llafur</td>
+                                    <td>80,926</td>
+                                    <td>89,749 (Etholwyd)</td>
+                                </tr>
+                                <tr>
+                                    <td>Y Blaid Geidwadol</td>
+                                    <td>48,155</td>
+                                    <td>56,105</td>
+                                </tr>
+                                <tr>
+                                    <td>UKIP</td>
+                                    <td>20,030</td>
+                                    <td>Wedi’u Dileu</td>
+                                </tr>
+                                <tr>
+                                    <td>Annibynnol</td>
+                                    <td>14,579</td>
+                                    <td>Wedi’u Dileu</td>
+                                </tr>
+                                <tr>
+                                    <td>Annibynnol</td>
+                                    <td>7,164</td>
+                                    <td>Wedi’u Dileu</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Cyfanswm</b></td>
+                                    <td><b>170,854</b></td>
+                                    <td><b></b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p>
+                        Fel y gwelwch, o'r 41,773 o bleidleisiau a fwriwyd ar gyfer y tri ymgeisydd a ddilëwyd, dim ond 16,773 o bobl a roddodd eu pleidlais ail ddewis i Lafur neu’r Ceidwadwyr. Efallai fod rhai pleidleiswyr wedi penderfynu                        peidio â bwrw pleidlais ail ddewis, neu efallai eu bod wedi rhoi pleidlais ail ddewis i un o'r ymgeiswyr eraill a ddilëwyd.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

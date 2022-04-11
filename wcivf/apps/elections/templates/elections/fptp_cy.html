@@ -1,0 +1,64 @@
+{% extends "base.html" %}{% load markdown_deux_tags %}{% load humanize %}{% load i18n %}{% block content %}    {% include "elections/includes/_voting_system_breadcrumbs.html" %}
+
+    <div class="ds-page">
+        <div class="ds-stack">
+            <div class="ds-card ds-padded">
+                <div class="ds-card-body">
+                    <h2>Cyntaf i'r felin (FPTP)</h2>
+                    <p>System y cyntaf i'r felin                        yw'r symlaf o'r holl systemau pleidleisio                        a ddefnyddir yn etholiadau'r DU. Yn syml:                        mae pob pleidleisiwr yn cael un bleidlais, ac mae'r                        ymgeisydd sydd â'r nifer fwyaf o bleidleisiau yn ennill y sedd.
+                        Fe'i defnyddir yn etholiadau Senedd y DU ac ar gyfer                        etholiadau llywodraeth leol Cymru a Lloegr.
+                    </p>
+
+                    <h3>Pleidlais bloc</h3>
+                    <p>Yr unig amrywiad o'r system bleidleisio hon yw’r hyn                        a elwir yn Bleidlais Bloc. Mae rhai o seddau llywodraeth leol                        yn rhai aml-aelod, sy'n golygu, er enghraifft,                        y gallan nhw ethol tri chynghorydd i gynrychioli                        un ward. Yn yr achos hwn, bydd y pleidleisiwr yn cael tair                        pleidlais. Gelwir hyn weithiau'n bleidlais bloc.
+                        Nid oes rhaid i bleidleiswyr bleidleisio dros ymgeiswyr o'r                        un blaid, fodd bynnag.
+                    </p>
+
+                    <h3>Enghraifft o etholiad</h3>
+                    <p>Gan gymryd ward enghreifftiol o etholiadau lleol 2019                        yn Swydd Lincoln, gallwch weld mai’r ymgeisydd                        annibynnol oedd y mwyaf poblogaidd ac felly fe'i hetholwyd,                        ond dim ond dau o'r tri Ceidwadwr a etholwyd. Pe bai                        pleidleisiau’r Ceidwadwyr wedi'i rhannu'n fwy cyfartal rhwng                        eu hymgeiswyr, efallai y bydden nhw wedi caniatáu i’r unig                        ymgeisydd Llafur i gael ei ethol. Felly, rhaid i bleidiau a phleidleiswyr                        ddyfalu pa mor dda                        fydd eu canlyniad yn y math hwn o etholiad. Efallai y bydd pleidiau’n dymuno                        dweud wrth bleidleiswyr pwy yw eu prif ymgeiswyr.
+                    </p>
+                    <div class="ds-table">
+                        <table>
+                            <caption>
+                                <h2>
+                                    Etholiad Cyngor Ardal South Kesteven 2019
+                                </h2>
+                                <h2>
+                                    Ward Deeping St James (tair sedd)
+                                </h2>
+                            </caption>
+                            <tbody>
+                                <tr>
+                                    <th>Ymgeiswyr</th>
+                                    <th>Pleidleisiau</th>
+                                </tr>
+                                <tr>
+                                    <td>Annibynnol</td>
+                                    <td>1,291 (Etholwyd)</td>
+                                </tr>
+                                <tr>
+                                    <td>Y Blaid Geidwadol</td>
+                                    <td>349</td>
+                                </tr>
+                                <tr>
+
+                                    <td>Y Blaid Lafur</td>
+                                    <td>461</td>
+
+                                </tr>
+                                <tr>
+                                    <td>Y Blaid Geidwadol</td>
+                                    <td>945 (Etholwyd)</td>
+                                </tr>
+                                <tr>
+                                    <td>Y Blaid Geidwadol</td>
+                                    <td>714 (Etholwyd)</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock content %}
