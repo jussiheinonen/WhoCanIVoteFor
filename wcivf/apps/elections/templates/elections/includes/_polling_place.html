@@ -48,7 +48,7 @@
                                 on <a href="tel:{{ council_phone }}">{{ council_phone }}</a>
                             {% endblocktrans %}
                         {% elif polling_station.council %}
-                            {% blocktrans trimmed with council_name=polling_station.council council_phone=polling_station.council.phone %}
+                            {% blocktrans trimmed with council_name=polling_station.council.name council_phone=polling_station.council.phone %}
                                 If you haven't got one, or aren't sure where to vote, you should call {{ council_name }}
                                 on <a href="tel:{{ council_phone }}">{{ council_phone }}</a>
                             {% endblocktrans %}
