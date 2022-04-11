@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-08 13:54+0100\n"
+"POT-Creation-Date: 2022-04-11 11:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -932,7 +932,7 @@ msgstr ""
 
 #: wcivf/apps/people/templates/people/includes/_person_about_card.html:14
 #, python-format
-msgid "<h4>Favourite Biscuit\"</h4> <p>%(biscuit)s</p>"
+msgid "<h4>Favourite Biscuit</h4> <p>%(biscuit)s</p>"
 msgstr ""
 
 #: wcivf/apps/people/templates/people/includes/_person_contact_card.html:5
