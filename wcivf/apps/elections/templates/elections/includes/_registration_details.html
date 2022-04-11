@@ -25,51 +25,45 @@
                 {% endblocktrans %}
             </p>
             <p>
-                {% blocktrans trimmed with postal_vote_application_deadline=postelection.postal_vote_application_deadline election_date=postelection.election.election_date %}
-                    Once registered, apply before midnight on {{ postal_vote_application_deadline }} to vote by post on {{ election_date }}.
+                {% blocktrans trimmed with postal_vote_application_deadline=postelection.postal_vote_application_deadline|date:"l jS F" election_date=postelection.election.election_date %}
+                    If you want to vote by post in the elections on {{ election_date }}, first ensure you are registered to vote and then
+                    <a href="https://www.gov.uk/government/publications/apply-for-a-postal-vote">apply for a postal vote</a> before 5pm on {{ postal_vote_application_deadline }}.
                 {% endblocktrans %}
             </p>
             <p>
                 {% if council %}
-                    {% blocktrans trimmed with council_name=council.name%}To register by post, contact {{ council_name }}.{% endblocktrans %}
+                    {% if council.registration_contacts %}
+                        {% blocktrans trimmed %}To register by post, contact your Valuation Joint Board.{% endblocktrans %}
+                    {% else %}
+                        {% blocktrans trimmed with council_name=council.name%}To register by post, contact {{ council_name }}.{% endblocktrans %}
+                    {% endif %}
                 {% else %}
-                    {% blocktrans %}To register by post, contact your local council.{% endblocktrans %}
+                    {% if postelection.post.territory == "SCT" %}
+                        {% blocktrans %}To register by post, contact your Valuation Joint Board.{% endblocktrans %}
+                    {% else %}
+                        {% blocktrans %}To register by post, contact your local council.{% endblocktrans %}
+                    {% endif %}
                 {% endif %}
 
             </p>
         {% endif %}
         {% if council.council_id %}
-            <p>{{ council.name }}
-                {{ council.electoral_services_contacts.address|linebreaksbr }}
-                {{ council.electoral_services_contacts.postcode }}
-                <br>
-                <a href="mailto:{{ council.electoral_services_contacts.email }}">
-                    {{ council.electoral_services_contacts.email }}
-                </a>
-                <br>
-                <a href="{{ council.electoral_services_contacts.website }}">
-                    {{ council.electoral_services_contacts.website }}
-                </a>
-                {% for number in council.electoral_services_contacts.phone_numbers %}
-                    <br>{{ number }}
-                {% endfor %}
-            </p>
+            <!-- valid only for Scottish postcodes -->
+            {% if council.registration_contacts %}
+                {% include "elections/includes/_council_contact_details.html" with contact_details=council.registration_contacts %}
+
+                <p>
+                    {% blocktrans trimmed %}
+                        For questions about your poll card, polling place, or about returning your postal voting ballot, contact your council.
+                    {% endblocktrans %}
+                </p>
+
+            {% endif %}
+
+            {% include "elections/includes/_council_contact_details.html" with contact_details=council.electoral_services_contacts %}
+
+
         {% endif %}
-        <!-- valid only for Scottish postcodes -->
-        {% if council.registration_contacts %}
-            <h2>{% blocktrans %}Need help with electoral services?{% endblocktrans %}</h2>
-            {{ council.registration_contacts.name }}
-            {{ council.registration_contacts.address|linebreaksbr }}
-            <br>{{ council.registration_contacts.postcode  }}
-            <br>
-            <a href="{{ council.registration_contacts.website }}">
-                {{ council.registration_contacts.website }}
-            </a>
-            <br>{{ council.registration_contacts.email }}
-            {% for number in council.registration_contacts.phone_numbers %}
-                <br>{{ number }}
-            {% endfor %}
-            </p>
-        {% endif %}
+
     </div>
 </section>
