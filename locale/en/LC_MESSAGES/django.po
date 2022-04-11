@@ -1560,3 +1560,7 @@ msgstr ""
 #: wcivf/templates/mailing_list.html:8
 msgid "Join our mailing list"
 msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_registration_details.html:55
+msgid "For questions about your poll card, polling place, or about returning your postal voting ballot, contact your council."
+msgstr ""

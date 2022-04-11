@@ -1,0 +1,18 @@
+<address class="ds-stack-smallest">
+    {{ contact_details.name }}
+    {% if contact_details.address %}
+        {{ contact_details.address|linebreaksbr }}
+    {% endif %}
+    {% if contact_details.postcode %}
+        <br>{{ contact_details.postcode  }}
+        <br>
+    {% endif %}
+
+    <a href="{{ contact_details.website }}">
+        {{ contact_details.website }}
+    </a>
+    <br><a href="mailto:{{ contact_details.email }}">{{ contact_details.email }}</a>
+    {% for number in contact_details.phone_numbers %}
+        <br><a href="tel:{{ number }}">{{ number }}</a>
+    {% endfor %}
+</address>
