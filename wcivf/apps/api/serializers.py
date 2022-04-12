@@ -44,11 +44,19 @@ class PartySerializer(serializers.HyperlinkedModelSerializer):
 class PersonPostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = PersonPost
-        fields = ("list_position", "party", "person")
+        fields = (
+            "list_position",
+            "party",
+            "person",
+            "previous_party_affiliations",
+        )
 
     person = PersonSerializer(many=False, read_only=True)
     party = PartySerializer(many=False, read_only=True)
     list_position = serializers.SerializerMethodField(allow_null=True)
+    previous_party_affiliations = serializers.SerializerMethodField(
+        allow_null=True
+    )
 
     def get_list_position(self, obj):
         """
@@ -63,6 +71,11 @@ class PersonPostSerializer(serializers.HyperlinkedModelSerializer):
         ).display_as_party_list:
             return obj.list_position
         return None
+
+    def get_previous_party_affiliations(self, obj: PersonPost):
+        parties = obj.previous_party_affiliations.all()
+        if parties:
+            return PartySerializer(parties, many=True, read_only=True).data
 
 
 class VotingSystemSerializer(serializers.ModelSerializer):

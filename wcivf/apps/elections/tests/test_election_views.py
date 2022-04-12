@@ -1,4 +1,6 @@
 import pytest
+import factory
+
 from django.shortcuts import reverse
 from django.test import TestCase
 from django.test.utils import override_settings
@@ -12,7 +14,12 @@ from elections.tests.factories import (
     PostFactory,
 )
 from elections.views.mixins import PostelectionsToPeopleMixin
-from people.tests.factories import PersonFactory, PersonPostFactory
+from parties.tests.factories import PartyFactory
+from people.tests.factories import (
+    PersonFactory,
+    PersonPostFactory,
+    PersonPostWithPartyFactory,
+)
 from pytest_django.asserts import assertContains, assertNotContains
 from elections.views import PostView
 
@@ -457,3 +464,66 @@ class TestPostElectionsToPeopleMixin(TestCase):
         self.assertEqual(candidates[0].person.name, "Jane Adams")
         self.assertEqual(candidates[1].person.name, "John Middle")
         self.assertEqual(candidates[2].person.name, "Jane Smith")
+
+
+class TestPostelectionsToPeopleMixin(TestCase):
+
+    # should be updated as more queries are added
+    PERSON_POST_QUERY = 1
+    PLEDGE_QUERY = 1
+    LEAFLET_QUERY = 1
+    PREVIOUS_PARTY_AFFILIATIONS_QUERY = 1
+    ALL_QUERIES = [
+        PERSON_POST_QUERY,
+        PLEDGE_QUERY,
+        LEAFLET_QUERY,
+        PREVIOUS_PARTY_AFFILIATIONS_QUERY,
+    ]
+
+    def setUp(self):
+        self.post_election = PostElectionFactory()
+        self.candidates = PersonPostWithPartyFactory.create_batch(
+            size=10,
+            post_election=self.post_election,
+            election=self.post_election.election,
+        )
+        self.mixin = PostelectionsToPeopleMixin()
+
+    def test_num_queries_previous_party_affiliations(self):
+        """
+        Test with lots of previous party affiliations, number of
+        queries is consistent
+        """
+        for candidate in self.candidates:
+            old_parties = PartyFactory.create_batch(
+                size=10, party_id=factory.Sequence(lambda n: f"PP{n}")
+            )
+            candidate.previous_party_affiliations.set(old_parties)
+
+        with self.assertNumQueries(sum(self.ALL_QUERIES)):
+            queryset = self.mixin.people_for_ballot(self.post_election)
+            previous_parties = []
+            for candidate in queryset:
+                party_ids = [
+                    party.party_id
+                    for party in candidate.previous_party_affiliations.all()
+                ]
+                previous_parties += party_ids
+
+            candidates = list(queryset)
+            self.assertEqual(len(candidates), 10)
+            self.assertEqual(len(previous_parties), 10 * 10)
+
+    def test_num_queries_using_compact(self):
+        """
+        Test when using compact number of queries is one less
+        """
+        all_queries_without_pledge = self.ALL_QUERIES.copy()
+        all_queries_without_pledge.remove(self.PLEDGE_QUERY)
+        with self.assertNumQueries(sum(all_queries_without_pledge)):
+            queryset = self.mixin.people_for_ballot(
+                self.post_election, compact=True
+            )
+            # resolve queryset to execute the queries
+            candidates = list(queryset)
+            self.assertEqual(len(candidates), 10)

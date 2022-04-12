@@ -104,7 +104,7 @@ Resources:
             Schedule: cron(*/5 * ? * * *) # using the ? as you cannot use * wildcard for both day-of-month and day-of-week field. See https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html#CronExpressions
             Name: import-people-recently-updated
             Description: Update all people updated in YNR recently
-            Input: '{"command": "import_people", "args": ["--recently-updated", "--exclude-candidacies"]}'
+            Input: '{"command": "import_people", "args": ["--recently-updated"]}'
         DeleteDeletedPeople:
           Type: Schedule # More info about API Event Source: https://github.com/aws/serverless-application-model/blob/master/versions/2016-10-31.md#schedule
           Properties:

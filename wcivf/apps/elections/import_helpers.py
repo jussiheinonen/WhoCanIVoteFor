@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from elections.helpers import JsonPaginator, EEHelper
 from elections.models import PostElection, Election, Post, VotingSystem
+from parties.models import Party
 from people.models import Person, PersonPost
 
 
@@ -381,7 +382,7 @@ class YNRBallotImporter:
                     # the main candidacy data
                     elected = result.get("elected", candidate["elected"])
 
-                    PersonPost.objects.create(
+                    person_post = PersonPost.objects.create(
                         post_election=ballot,
                         person=person,
                         party_id=candidate["party"]["legacy_slug"],
@@ -395,6 +396,20 @@ class YNRBallotImporter:
                         post=ballot.post,
                         election=ballot.election,
                     )
+                    for party in candidate.get(
+                        "previous_party_affiliations", []
+                    ):
+                        # if the previous party affiliation is the
+                        # same as the party on the candidacy skip it
+                        party_id = party["legacy_slug"]
+                        if party_id == person_post.party_id:
+                            continue
+
+                        try:
+                            party = Party.objects.get(party_id=party_id)
+                        except Party.DoesNotExist:
+                            continue
+                        person_post.previous_party_affiliations.add(party)
 
             if created:
                 self.stdout.write(

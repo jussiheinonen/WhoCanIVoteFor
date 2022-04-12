@@ -17,6 +17,8 @@ from elections.import_helpers import YNRBallotImporter, YNRPostImporter
 from elections.models import Election, PostElection, Post
 from datetime import date
 from elections.tests.factories import PostElectionFactory
+from parties.models import Party
+from people.models import PersonPost
 
 
 class GetElectionTimetable(TestCase):
@@ -494,6 +496,68 @@ class TestYNRImporterAddBallots:
                 importer.force_metadata = test_case["force_metadata"]
                 importer.add_ballots(results=results)
                 test_case["assert"]()
+
+    @pytest.mark.django_db
+    def test_import_ballots_adds_candidacies(
+        self, mocker, importer, ballot_dict, ballot
+    ):
+        """
+        Tests that if candidacies are included the importer will create them
+        """
+        ballot_dict["candidacies"] = [
+            {
+                "person": {"name": "Joe Bloggs", "id": "9876"},
+                "result": None,
+                "elected": False,
+                "party_list_position": None,
+                "party": {
+                    "url": "http://candidates.democracyclub.org.uk/api/next/parties/PP53/",
+                    "ec_id": "PP53",
+                    "name": "Labour Party",
+                    "legacy_slug": "party:53",
+                    "created": "2022-02-16T16:23:03.962770Z",
+                    "modified": "2022-03-10T10:12:26.510945Z",
+                },
+                "party_name": "Labour Party",
+                "party_description_text": "Labour Party",
+                "created": "2022-03-16T11:25:42.328768Z",
+                "modified": "2022-03-17T12:36:20.946155Z",
+                "ballot": {
+                    "url": "http://candidates.democracyclub.org.uk/api/next/ballots/local.cardiff.gabalfa.2022-05-05/",
+                    "ballot_paper_id": "local.cardiff.gabalfa.2022-05-05",
+                },
+                "previous_party_affiliations": [
+                    {
+                        "url": "http://candidates.democracyclub.org.uk/api/next/parties/ynmp-party:2/",
+                        "ec_id": "ynmp-party:2",
+                        "name": "Independent",
+                        "legacy_slug": "ynmp-party:2",
+                        "created": "2022-02-16T15:39:15.647123Z",
+                        "modified": "2022-02-16T17:13:11.323855Z",
+                    }
+                ],
+            },
+        ]
+
+        results = {"results": [ballot_dict]}
+        importer.exclude_candidacies = False
+        importer.recently_updated = True
+
+        person_post = mocker.MagicMock(spec=PersonPost)
+        mocker.patch.object(
+            PersonPost.objects, "create", return_value=person_post
+        )
+        party = mocker.MagicMock(spec=Party)
+        mocker.patch.object(Party.objects, "get", return_value=party)
+        importer.add_ballots(results=results)
+
+        ballot.personpost_set.all.return_value.delete.assert_called_once()
+
+        PersonPost.objects.create.assert_called_once()
+        Party.objects.get.assert_called_once_with(party_id="ynmp-party:2")
+        person_post.previous_party_affiliations.add.assert_called_once_with(
+            party
+        )
 
 
 class TestYNRBallotImporterDivisionType:
