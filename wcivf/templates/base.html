@@ -169,12 +169,14 @@
                                 <img src="{% static "images/logo_icon.svg" %}" alt="" />
                                 <span class="ds-text-left">
                                     {% trans "democracy" %}<br>{% trans "club" %}
-                                    {% get_current_language as LANGUAGE_CODE %}
-                                    {% if LANGUAGE_CODE != "en" %}
-                                        <em lang="cy">{% language "cy" %}{% trans "Who Can I Vote For?" %}{% endlanguage %}</em>
-                                    {% endif %}
                                 </span>
                             </a>
+                            <p>
+                                {% get_current_language as LANGUAGE_CODE %}
+                                {% if LANGUAGE_CODE != "en" %}
+                                    <em lang="cy">{% language "cy" %}{% trans "Who Can I Vote For?" %}{% endlanguage %}</em>
+                                {% endif %}
+                            </p>
                             {% now "Y" as current_year %}
                             <p>{% blocktrans %}Copyright &copy; {{ current_year }}{% endblocktrans %}</p>
                             <p>{% trans "Democracy Club Community Interest Company" %}</p>
