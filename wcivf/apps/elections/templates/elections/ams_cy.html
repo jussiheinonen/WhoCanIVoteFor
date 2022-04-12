@@ -1,0 +1,138 @@
+{% extends "base.html" %}{% load markdown_deux_tags %}{% load humanize %}{% load i18n %}{% block content %}    {% include "elections/includes/_voting_system_breadcrumbs.html" %}
+
+    <div class="ds-page">
+        <div class="ds-stack">
+            <div class="ds-card ds-padded">
+                <div class="ds-card-body">
+                    <h2>Y System Aelodau Ychwanegol</h2>
+                    <p>Mae'r System Aelodau Ychwanegol (AMS) yn fath o gynrychiolaeth gyfrannol.
+                        Defnyddir y System Aelodau Ychwanegol yn etholiadau Senedd Cymru a Senedd yr Alban,                        yn ogystal ag etholiadau Cynulliad Llundain.
+                    </p>
+                    <p>
+                        Mae pleidleiswyr yn derbyn dau bapur pleidleisio a gallan nhw bleidleisio ar y ddau: un ar gyfer                        cynrychiolydd etholaeth, a etholir ar sail y <a href="{% url 'fptp_voting_system_view' %}">Cyntaf i'r felin</a>, ac un ar gyfer cynrychiolydd rhanbarthol. Does dim rhaid iddyn nhw bleidleisio dros yr un blaid gyda’r ddwy bleidlais.
+
+                        Er enghraifft, bydd pleidleisiwr yn Paisley yn yr Alban yn derbyn papur pleidleisio sy'n rhestru'r holl ymgeiswyr sydd am gynrychioli Paisley yn Senedd yr Alban. Byddan nhw hefyd yn cael papur pleidleisio sy'n                        rhestru'r pleidiau a/neu ymgeiswyr annibynnol sy'n sefyll                        am y saith sedd ar gyfer Gorllewin yr Alban. Mae'r ymgeiswyr ar y papur pleidleisio rhanbarthol                         yn cael eu rhestru yn y drefn y mae eu pleidiau gwleidyddol am iddyn nhw gael eu hethol, ac nid yw pleidleiswyr yn cael unrhyw ddewis dros y drefn hon                        (gelwir hyn yn 'restr gaeedig').
+                    </p>
+
+                    <h3>Dyrannu seddau</h3>
+                    <p>Bydd nifer cyffredinol y seddi etholaethol y mae plaid yn eu hennill yn cael                        effaith ar faint o gynrychiolwyr rhanbarthol a ddyrennir i’r blaid honno.
+                        Bwriad hyn yw dod â nifer y seddi a enillir gan blaid yn nes at y                        ganran o’r bleidlais gyffredinol a dderbyniwyd ganddyn nhw yn y rhanbarth.
+                        Dyrennir seddi rhanbarthol yn ôl fformiwla a elwir yn ddull D'Hondt.                     Mae nifer y pleidleisiau sydd eu hangen i ennill sedd (y 'cwota') yn cael ei                        gyfrifo gan ddefnyddio'r fformiwla ganlynol:
+                        <p class="ds-card ds-padded ds-dark">
+                            Cwota'r bleidlais = Cyfanswm nifer y pleidleisiau a enillwyd gan y blaid / Cyfanswm nifer y seddi a enillwyd eisoes gan y                            blaid, +1.
+                        </p>
+                        <p>
+                            Dyrennir seddi ar ôl rowndiau cyfrif. Y pleidiau sydd â’r nifer uchaf o bleidleisiau                            ar ôl cymhwyso’r fformiwla uchod                             sy’n ennill y seddau rhanbarthol.
+                        </p>
+                    </p>
+                    <h3>Enghraifft o etholiad</h3>
+                    <p>
+                        Yn rhanbarth Gorllewin yr Alban 2016, roedd canlyniadau’r prif bleidiau oedd                        fel a ganlyn (gyda chyfanswm y cwota pleidleisio ar gyfer rowndiau dilynol mewn cromfachau):
+                    </p>
+                    <div class="ds-table ds-padded">
+                        <table>
+                            <caption>
+                                <h2>
+                                    Rhanbarth Gorllewin yr Alban, etholiadau Senedd yr Alban 2016
+                                </h2>
+                            </caption>
+                            <tbody>
+                                <tr>
+                                    <th>Plaid</th>
+                                    <th>Seddi etholaethol a enillwyd (cyfanswm o 10)</th>
+                                    <th>Pleidleisiau a enillwyd</th>
+                                    <th>Cwota rownd gyntaf</th>
+                                    <th>Cwota'r ail rownd</th>
+                                    <th>Cwota'r drydedd rownd</th>
+                                    <th>Cwota'r bedwaredd rownd</th>
+                                    <th>Cwota'r bumed rownd</th>
+                                    <th>Cwota'r chweched rownd</th>
+                                    <th>Cwota'r seithfed rownd</th>
+                                    <th>Seddi Rhanbarthol a Enillwyd</th>
+                                </tr>
+                                <tr>
+                                    <td>SNP</td>
+                                    <td>8</td>
+                                    <td>135,827</td>
+                                    <td>15,091</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>Llafur</td>
+                                    <td>1</td>
+                                    <td>72,544</td>
+                                    <td>36,272 (etholwyd)</td>
+                                    <td>24,181</td>
+                                    <td>18,136</td>
+                                    <td>Dim newid (etholwyd)</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid (etholwyd)</td>
+                                    <td>Dim newi</td>
+                                    <td>3</td>
+                                </tr>
+                                <tr>
+                                    <td>Ceidwadwyr</td>
+                                    <td>1</td>
+                                    <td>71,528</td>
+                                    <td>35,764</td>
+                                    <td>Dim newid (etholwyd)</td>
+                                    <td>23,842 (etholwyd)</td>
+                                    <td>17,882</td>
+                                    <td>Dim newid (etholwyd)</td>
+                                    <td>3,576</td>
+                                    <td>Dim newid</td>
+                                    <td>3</td>
+                                </tr>
+                                <tr>
+                                    <td>Y Blaid Werdd</td>
+                                    <td>0</td>
+                                    <td>17,218</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid (etholwyd)</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Dem. Rhydd.</td>
+                                    <td>0</td>
+                                    <td>12,097</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>Dim newid</td>
+                                    <td>0</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>
+                        Er mai'r SNP enillodd y nifer fwyaf o bleidleisiau,                        gan eu bod wedi ennill wyth allan o'r deg                        sedd etholaethol, roedd eu cwota o 15,092, yn is na               bron pob un o'r pleidiau eraill.
+                        O ganlyniad, ni chawson nhw                        unrhyw seddi rhanbarthol.
+                    </p>
+                    <p>
+                        Enillodd y Blaid Lafur a'r Ceidwadwyr                        sedd etholaeth yr un hefyd, felly mae nifer eu pleidleisiau                        wedi cael ei rannu â dau yn rownd un y                        dyraniad seddi, tra bod cyfrif pawb arall yn                        wedi'i rannu ag un. Cwota pleidlais y blaid Lafur yn                        rownd un oedd 36,272 (72,544/2) felly cafodd                        yr ymgeisydd a oedd ar frig eu rhestr ei ethol.
+                        <p>
+                        </p>
+                        <p> Yna ailadroddwyd y broses hon, a chyda                            cyfanswm pleidleisiau Llafur bellach yn 24,181 gan ei fod yn cael ei                            rannu â thri. O ganlyniad, y Ceidwadwyr,                            enillodd yr ail sedd ar y rhestr.
+                            Aeth y broses hon yn ei blaen nes enillwyd y seithfed                            sedd gan y Blaid Werdd, a                            oedd â 17,218 o bleidleisiau o gymharu â chwota'r SNP o                            15,091.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{% endblock content %}

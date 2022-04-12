@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% load i18n %}
+{% block content %}
+    {# fmt:off #}
+{% markdown %}
+
+## Ydych chi’n sefyll etholiad yn y DU? Diweddarwch eich proffil ymgeisydd!
+
+Nod [WhoCanIVoteFor.co.uk](https://whocanivotefor.co.uk/) yw cael proffil cyfredol ar gyfer pob ymgeisydd sy'n sefyll etholiad yn y DU. Mae'r proffiliau hyn wedi helpu miliynau o bleidleiswyr ledled y wlad i benderfynu i bwy y dylen nhw bleidleisio.
+
+Mae WhoCanIVoteFor.co.uk yn defnyddio data o gronfa ddata gyhoeddus Democracy Club o ymgeiswyr etholiadol, a adeiladwyd gyda chymorth llawer o wirfoddolwyr. Mae [Democracy Club](https://democracyclub.org.uk/about/) yn Gwmni Buddiannau Cymunedol amhleidiol a nid-er-elw sydd â gweledigaeth o wlad sydd â’r sylfeini digidol er mwyn cefnogi pawb i fod yn rhan o fywyd democrataidd.
+
+Mae cronfa ddata ymgeiswyr Democracy Club yn borth agored lle gall defnyddwyr ddiweddaru proffiliau gyda gwybodaeth o ffynonellau. Rydyn ni’n annog ymgeiswyr, asiantau a phleidiau i ychwanegu gwybodaeth fel lluniau, datganiadau i bleidleiswyr a dolenni cyfryngau cymdeithasol - ac, yn bwysicach na dim, beth yw hoff fisgedi’r ymgeiswyr.
+
+### Sut mae creu neu ddiweddaru fy mhroffil?
+
+I ddiweddaru eich proffil, mae angen i chi fynd draw i'n [Gwefan Ymgeiswyr](https://candidates.democracyclub.org.uk/) a chreu cyfrif. Bydd hyn yn caniatáu i chi ychwanegu gwybodaeth at eich proffil. Efallai bod gennych broffil ymgeisydd eisoes (diolch i'n gwirfoddolwyr dibynadwy!) felly [chwiliwch am eich enw](https://candidates.democracyclub.org.uk/search) cyn ceisio creu un newydd.
+
+### Eisiau ychwanegu mwy nag un ymgeisydd? Gorau po fwyaf!
+
+Os ydych yn asiant, yn weinyddwr plaid, neu'n digwydd bod â llawer o wybodaeth am ymgeiswyr yn eich ardal leol, gallwch ychwanegu mwy nag un ymgeisydd ar y tro i blaid ac i etholiad benodol. I ychwanegu holl ymgeiswyr plaid ar gyfer un etholiad, dewiswch yr etholiad perthnasol o'r golofn ar y [dudalen etholiadau sydd i ddod](https://candidates.democracyclub.org.uk/elections/). Gallwch ychwanegu’r holl ymgeiswyr ar gyfer un blaid drwy ddefnyddio'r nodwedd "ychwanegu ymgeiswyr ar gyfer un blaid" i ychwanegu nifer o ymgeiswyr ar un ffurflen. A dyna ni!
+
+### Polisi data ymgeiswyr 
+
+Mae'r holl ddata a gesglir gan Democracy Club ar gael i unrhyw un ei weld yn rhad ac am ddim. Mae’r wybodaeth a gesglir am ymgeiswyr yn cael ei harddangos ar WhoCanIVoteFor.co.uk, ac mae hefyd ar gael fel [lawrlwythiad CSV neu API.](https://candidates.democracyclub.org.uk/api/docs/) Os ydych yn dymuno i Democracy Club ddileu’n barhaol unrhyw ran o'r wybodaeth bersonol a gasglwyd mewn perthynas â'ch ymgeisiau blaenorol (manylion cyswllt, datganiad etholiad, llun ac ati), rhowch wybod i ni drwy anfon e-bost hello@democracyclub.org.uk.
+
+Byddwch yn ymwybodol ein bod yn cadw'r holl wybodaeth a gyhoeddir ar y Datganiad am y Sawl a Enwebwyd, gan fod hwn yn fater o gofnod cyhoeddus. Mae hyn yn cynnwys enw, plaid ac etholiad.
+
+### Cysylltwch â ni 
+
+Mae Democracy Club ar gael bob amser i helpu gydag unrhyw faterion. Anfonwch neges atom neu rhowch adborth i ni! [Cysylltwch â ni.](https://democracyclub.org.uk/contact/)
+{% endmarkdown %}            
+    {# fmt:on #}
+{% endblock %}
