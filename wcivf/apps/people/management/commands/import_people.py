@@ -211,20 +211,26 @@ class Command(BaseCommand):
                 num_ballots = candidacy["result"].get("num_ballots", None)
                 defaults["votes_cast"] = num_ballots
 
-            obj, created = person_obj.personpost_set.update_or_create(
+            personpost, created = person_obj.personpost_set.update_or_create(
                 post_election=ballot,
                 post=ballot.post,
                 election=ballot.election,
                 defaults=defaults,
             )
             for party in candidacy.get("previous_party_affiliations", []):
+                # if the previous party affiliation is the same as the
+                # party on the candidacy skip it
+                party_id = party["legacy_slug"]
+                if party_id == personpost.party_id:
+                    continue
+
                 try:
                     party = Party.objects.get(party_id=party["legacy_slug"])
                 except Party.DoesNotExist:
                     continue
-                obj.previous_party_affiliations.add(party)
+                personpost.previous_party_affiliations.add(party)
 
-            msg = f"{obj} was {'created' if created else 'updated'}"
+            msg = f"{personpost} was {'created' if created else 'updated'}"
             self.stdout.write(msg=msg)
 
     def import_ballots_for_date(self, date):
