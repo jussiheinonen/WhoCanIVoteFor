@@ -145,11 +145,13 @@ class PollingStationInfoMixin(object):
 
         info = {}
         base_url = settings.WDIV_BASE + settings.WDIV_API
-        url = "{}/postcode/{}.json?auth_token={}".format(
+        url = "{}/postcode/{}.json".format(
             base_url,
             postcode,
-            getattr(settings, "WDIV_API_KEY", "DCINTERNAL-WHO"),
         )
+        token = getattr(settings, "WDIV_API_KEY", "DCINTERNAL-WHO")
+        if token:
+            url = f"{url}?auth_token={token}"
         try:
             req = requests.get(url)
         except:
