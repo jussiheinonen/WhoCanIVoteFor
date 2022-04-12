@@ -84,7 +84,7 @@ class TestAPISearchViews(APITestCase):
                             "photo_url": None,
                             "leaflets": None,
                         },
-                        "previous_party_affiliations": [],
+                        "previous_party_affiliations": None,
                     }
                 ],
             }
