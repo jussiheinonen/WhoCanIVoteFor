@@ -76,7 +76,7 @@ class LocalParty(models.Model):
     )
     youtube_profile_url = models.URLField(blank=True, max_length=800)
     contact_page_url = models.URLField(blank=True, max_length=800)
-    sheets_url = models.URLField(
+    file_url = models.URLField(
         blank=True,
         max_length=800,
         help_text="The url to the google sheet the object was imported from. Not to be displayed.",
@@ -116,7 +116,7 @@ class Manifesto(models.Model):
     pdf_url = models.URLField(blank=True, max_length=800)
     web_url = models.URLField(blank=True, max_length=800)
     easy_read_url = models.URLField(blank=True, max_length=800)
-    sheets_url = models.URLField(
+    file_url = models.URLField(
         blank=True,
         max_length=800,
         help_text="The url to the google sheet the object was imported from. Not to be displayed.",
