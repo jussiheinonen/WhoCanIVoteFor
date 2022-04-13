@@ -154,7 +154,6 @@ class Command(BaseCommand):
         )
         importer = LocalPartyImporter(
             election=election,
-            delete_existing=False,
         )
         importer.import_parties()
 

@@ -20,14 +20,16 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         election,
         force_update=False,
         from_file=False,
-        delete_existing=True,
     ):
         self.election = election
         self.force_update = force_update
         self.read_from = getattr(self, "read_from_url")
-        self.delete_existing = delete_existing
         if from_file:
             self.read_from = getattr(self, "read_from_file")
+
+    @property
+    def single_sheet(self):
+        return len(self.election.csv_files) == 1
 
     def write(self, msg):
         """
@@ -40,16 +42,28 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         Deletes LocalParty objects associated with elections for the given
         election date
         """
-        count, _ = LocalParty.objects.filter(
-            post_election__election__election_date=self.election.date,
-        ).delete()
-        self.write(f"Deleted {count} local parties for {self.election.date}")
+        if self.single_sheet:
+            count, _ = LocalParty.objects.filter(
+                sheets_url__in=self.election.csv_files,
+            ).delete()
+        else:
+            count, _ = LocalParty.objects.filter(
+                post_election__election__election_date=self.election.date,
+            ).delete()
+
+        self.write(f"Deleted {count} local parties")
 
     def delete_manifestos_for_election_date(self):
-        count, _ = Manifesto.objects.filter(
-            election__election_date=self.election.date,
-        ).delete()
-        self.write(f"Deleted {count} manifestos for {self.election.date}")
+        if self.single_sheet:
+            count, _ = Manifesto.objects.filter(
+                sheets_url__in=self.election.csv_files,
+            ).delete()
+        else:
+            count, _ = Manifesto.objects.filter(
+                election__election_date=self.election.date,
+            ).delete()
+
+        self.write(f"Deleted {count} manifestos")
 
     def current_elections(self):
         """
@@ -147,21 +161,21 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
             country = self.get_country(
                 election_type=post_election.election.election_type
             )
+            defaults = {
+                "name": name,
+                "twitter": twitter,
+                "facebook_page": row["Facebook"],
+                "homepage": row["Website"],
+                "email": row["Email"],
+                "is_local": country == "Local",
+                "youtube_profile_url": row.get("Youtube profile", "").strip(),
+                "contact_page_url": row.get("Contact page", "").strip(),
+            }
+            if self.single_sheet:
+                defaults["sheets_url"] = self.election.csv_files[0]
+
             _, created = LocalParty.objects.update_or_create(
-                parent=party,
-                post_election=post_election,
-                defaults={
-                    "name": name,
-                    "twitter": twitter,
-                    "facebook_page": row["Facebook"],
-                    "homepage": row["Website"],
-                    "email": row["Email"],
-                    "is_local": country == "Local",
-                    "youtube_profile_url": row.get(
-                        "Youtube profile", ""
-                    ).strip(),
-                    "contact_page_url": row.get("Contact page", "").strip(),
-                },
+                parent=party, post_election=post_election, defaults=defaults
             )
             msg = "Created" if created else "Updated"
             self.write(
@@ -184,9 +198,8 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         row contains data we can use. Then adds a LocalParty object for each
         parent party.
         """
-        if self.delete_existing:
-            self.delete_parties_for_election_date()
-            self.delete_manifestos_for_election_date()
+        self.delete_parties_for_election_date()
+        self.delete_manifestos_for_election_date()
 
         if not self.current_elections():
             self.write(
@@ -243,16 +256,22 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         language = row.get("Manifesto Language", "English").strip()
         easy_read_url = row.get("Manifesto Easy Read PDF", "").strip()
         if any([manifesto_web, manifesto_pdf]):
+
+            defaults = {
+                "web_url": manifesto_web,
+                "pdf_url": manifesto_pdf,
+                "easy_read_url": easy_read_url,
+            }
+
+            if self.single_sheet:
+                defaults["sheets_url"] = self.election.csv_files[0]
+
             manifesto_obj, created = Manifesto.objects.update_or_create(
                 election=election,
                 party=party,
                 country=country,
                 language=language or "English",
-                defaults={
-                    "web_url": manifesto_web,
-                    "pdf_url": manifesto_pdf,
-                    "easy_read_url": easy_read_url,
-                },
+                defaults=defaults,
             )
             manifesto_obj.save()
             self.write(f"{'Created' if created else 'Updated'} {manifesto_obj}")
