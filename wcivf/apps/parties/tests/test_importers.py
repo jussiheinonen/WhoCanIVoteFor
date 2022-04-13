@@ -98,7 +98,7 @@ class TestLocalPartyImporter:
         PostElection.objects.filter.assert_called_with(
             election__slug="Foo",
         )
-        mock.filter.assert_called_once_with(
+        mock.exclude.return_value.filter.assert_called_once_with(
             personpost__party__in=["parties"],
         )
 

@@ -2,6 +2,7 @@ from dateutil.parser import parse
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
+from elections.import_helpers import time_function_length
 
 from parties.importers import LocalPartyImporter, LocalElection
 
@@ -132,6 +133,7 @@ class Command(BaseCommand):
             )
             importer.import_parties()
 
+    @time_function_length
     @transaction.atomic
     def handle(self, **options):
         self.options = options

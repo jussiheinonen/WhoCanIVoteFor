@@ -3,6 +3,7 @@ from collections import namedtuple
 
 from core.mixins import ReadFromUrlMixin, ReadFromFileMixin
 from core.helpers import twitter_username
+from elections.import_helpers import time_function_length
 from elections.models import PostElection, Election
 from parties.models import LocalParty, Manifesto, Party
 
@@ -28,6 +29,7 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         """
         sys.stdout.write(f"{msg}\n")
 
+    @time_function_length
     def delete_parties_for_election_date(self):
         """
         Deletes LocalParty objects associated with elections for the given
@@ -38,6 +40,7 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         ).delete()
         self.write(f"Deleted {count} local parties for {self.election.date}")
 
+    @time_function_length
     def delete_manifestos_for_election_date(self):
         count, _ = Manifesto.objects.filter(
             election__election_date=self.election.date,
@@ -66,6 +69,7 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
                 return party_list
         return [party_id]
 
+    @time_function_length
     def get_parties(self, party_id):
         """
         Return a QuerySet of Party objects for the party_id
@@ -73,6 +77,7 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
         party_list = self.get_party_list_from_party_id(party_id)
         return Party.objects.filter(party_id__in=party_list)
 
+    @time_function_length
     def get_ballots(self, election_id, parties):
         """
         First checks if the election_id is a special case or is not a full
@@ -89,7 +94,7 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
             ballots = PostElection.objects.filter(
                 ballot_paper_id__startswith=f"{election_type}.",
                 election__election_date=self.election.date,
-            )
+            ).exclude(localparty__parent__in=parties)
         else:
             ballots = PostElection.objects.filter(ballot_paper_id=election_id)
 
@@ -97,10 +102,13 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
             # This might be an election ID, in that case,
             # apply thie row to all post elections without
             # info already
-            ballots = PostElection.objects.filter(election__slug=election_id)
+            ballots = PostElection.objects.filter(
+                election__slug=election_id
+            ).exclude(localparty__parent__in=parties)
         ballots = ballots.filter(personpost__party__in=parties)
         return ballots
 
+    @time_function_length
     def all_rows(self):
         """
         Yields all CSV rows from multiple files

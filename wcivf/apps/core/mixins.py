@@ -1,5 +1,6 @@
 import csv
 import requests
+from elections.import_helpers import time_function_length
 
 from elections.models import PostElection
 
@@ -8,6 +9,7 @@ class ReadFromUrlMixin:
     def __init__(self, url):
         self.url = url
 
+    @time_function_length
     def read_from_url(self, url=None):
         """
         Takes optional url otherwise uses URL used in init method
