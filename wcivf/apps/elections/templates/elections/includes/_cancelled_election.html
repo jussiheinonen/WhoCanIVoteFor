@@ -36,8 +36,12 @@
             <h4>{% trans "Uncontested and Rescheduled Election" %}</h4>
 
             <p>
-                {% blocktrans trimmed with is_or_are=object.winner_count|pluralize:"is,are" winner_count=object.winner_count|apnumber post=object.post.full_label num_people=object.people.count|apnumber plural=object.people|pluralize %}
-                    This election was uncontested because the number of candidates who stood was fewer than the number of available seats. There {{ is_or_are }} {{ winner_count }} seat{{ winner_count }} in {{ post_label}}, and {{ winner_count }} candidate{{ plural }}.
+                {% blocktrans trimmed with winner_count=object.winner_count|apnumber post_label=object.post.full_label num_people=object.people.count|apnumber count counter=object.people.count %}
+                    This election was uncontested because the number of candidates who stood was fewer than the number of available seats.
+                    There is {{ winner_count }} seat in {{ post_label }}, and {{ num_people }} candidate.
+                {% plural %}
+                    This election was uncontested because the number of candidates who stood was fewer than the number of available seats.
+                    There are {{ winner_count }} seats in {{ post_label }}, and {{ num_people }} candidates.
                 {% endblocktrans %}
             </p>
             {% comment %} Case 4: Election cancelled, uncontested and zero candidates, no metadata {% endcomment %}
