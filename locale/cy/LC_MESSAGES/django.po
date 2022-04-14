@@ -2,12 +2,12 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 # Translators:
 # William Roper <roper.william@gmail.com>, 2022
 # Atebol, 2022
 # Sym Roe <sym@talusdesign.co.uk>, 2022
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
@@ -30,7 +30,7 @@ msgstr "Rhowch eich cod post"
 #: wcivf/apps/elections/templates/elections/election_view.html:8
 #, python-format
 msgid "The %(election)s %(was_or_will_be)s held on %(date)s."
-msgstr "Cynhelir yr %(election)s ar %(date)s."
+msgstr "Cynhelir yr %(election)s %(was_or_will_be)s ar %(date)s."
 
 #: wcivf/apps/elections/templates/elections/election_view.html:21
 #, python-format
