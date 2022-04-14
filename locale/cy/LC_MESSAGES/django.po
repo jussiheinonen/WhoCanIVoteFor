@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-11 11:04+0000\n"
+"POT-Creation-Date: 2022-04-14 15:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -83,7 +83,7 @@ msgid "All Elections in the UK"
 msgstr "Pob Etholiad"
 
 #: wcivf/apps/elections/templates/elections/elections_view.html:14
-#: wcivf/templates/base.html:161
+#: wcivf/templates/base.html:154
 msgid "All Elections"
 msgstr "Pob Etholiad"
 
@@ -140,12 +140,18 @@ msgstr ""
 #, python-format
 msgid ""
 "This election was uncontested because the number of candidates who stood was "
-"fewer than the number of available seats. There %(is_or_are)s "
-"%(winner_count)s seat%(winner_count)s in %(post_label)s, and "
-"%(winner_count)s candidate%(plural)s."
-msgstr ""
+"fewer than the number of available seats. There is %(winner_count)s seat in "
+"%(post_label)s, and %(num_people)s candidate."
+msgid_plural ""
+"This election was uncontested because the number of candidates who stood was "
+"fewer than the number of available seats. There are %(winner_count)s seats "
+"in %(post_label)s, and %(num_people)s candidates."
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
 
-#: wcivf/apps/elections/templates/elections/includes/_cancelled_election.html:50
+#: wcivf/apps/elections/templates/elections/includes/_cancelled_election.html:54
 #, python-format
 msgid ""
 "No votes will be cast, and the candidate%(plural)s below ha%(has_or_have)s "
@@ -154,25 +160,25 @@ msgid ""
 "election date.</p>"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_cancelled_election.html:68
+#: wcivf/apps/elections/templates/elections/includes/_cancelled_election.html:72
 #, fuzzy
 #| msgid "All Elections"
 msgid "Cancelled Election"
 msgstr "Pob Etholiad"
 
-#: wcivf/apps/elections/templates/elections/includes/_cancelled_election.html:69
+#: wcivf/apps/elections/templates/elections/includes/_cancelled_election.html:73
 msgid "This election was cancelled."
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_cancelled_election.html:76
+#: wcivf/apps/elections/templates/elections/includes/_cancelled_election.html:80
 msgid "It was rescheduled for"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_cancelled_election.html:78
+#: wcivf/apps/elections/templates/elections/includes/_cancelled_election.html:82
 msgid "It will now take place on"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_cancelled_election.html:88
+#: wcivf/apps/elections/templates/elections/includes/_cancelled_election.html:92
 msgid "Read more"
 msgstr ""
 
@@ -185,7 +191,7 @@ msgstr ""
 #: wcivf/apps/elections/templates/elections/includes/_postcode_breadcrumbs.html:5
 #: wcivf/apps/parties/templates/parties/party_detail.html:17
 #: wcivf/apps/people/templates/people/person_detail.html:22
-#: wcivf/templates/base.html:160
+#: wcivf/templates/base.html:153
 msgid "Home"
 msgstr "Cartref"
 
@@ -387,21 +393,30 @@ msgstr ""
 #: wcivf/apps/elections/templates/elections/includes/_registration_details.html:28
 #, python-format
 msgid ""
-"Once registered, apply before midnight on "
-"%(postal_vote_application_deadline)s to vote by post on %(election_date)s."
+"If you want to vote by post in the elections on %(election_date)s, first "
+"ensure you are registered to vote and then <a href=\"https://www.gov.uk/"
+"government/publications/apply-for-a-postal-vote\">apply for a postal vote</"
+"a> before 5pm on %(postal_vote_application_deadline)s."
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_registration_details.html:34
+#: wcivf/apps/elections/templates/elections/includes/_registration_details.html:36
+#: wcivf/apps/elections/templates/elections/includes/_registration_details.html:42
+msgid "To register by post, contact your Valuation Joint Board."
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_registration_details.html:38
 #, python-format
 msgid "To register by post, contact %(council_name)s."
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_registration_details.html:36
+#: wcivf/apps/elections/templates/elections/includes/_registration_details.html:44
 msgid "To register by post, contact your local council."
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_registration_details.html:60
-msgid "Need help with electoral services?"
+#: wcivf/apps/elections/templates/elections/includes/_registration_details.html:56
+msgid ""
+"For questions about your poll card, polling place, or about returning your "
+"postal voting ballot, contact your council."
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:21
@@ -940,7 +955,7 @@ msgid "online"
 msgstr ""
 
 #: wcivf/apps/people/templates/people/includes/_person_contact_card.html:10
-#: wcivf/templates/base.html:170
+#: wcivf/templates/base.html:163
 msgid "Facebook"
 msgstr "Facebook"
 
@@ -969,7 +984,7 @@ msgid "%(person_name)s's home page"
 msgstr ""
 
 #: wcivf/apps/people/templates/people/includes/_person_contact_card.html:54
-#: wcivf/templates/base.html:168
+#: wcivf/templates/base.html:161
 msgid "Blog"
 msgstr "Blog"
 
@@ -1513,62 +1528,62 @@ msgstr ""
 msgid "Language:"
 msgstr "Iaith:"
 
-#: wcivf/templates/base.html:127 wcivf/templates/base.html:181
+#: wcivf/templates/base.html:127 wcivf/templates/base.html:177
 #: wcivf/templates/home.html:5 wcivf/templates/home.html:6
 msgid "Who Can I Vote For?"
 msgstr "Pwy alla i bleidleisio ar gyfer?"
 
-#: wcivf/templates/base.html:162
+#: wcivf/templates/base.html:155
 msgid "Standing as a candidate?"
 msgstr "Sefyll fel ymgeisydd?"
 
-#: wcivf/templates/base.html:163
+#: wcivf/templates/base.html:156
 #, python-format
 msgid "About %(SITE_TITLE)s"
 msgstr "Ynglŷn %(SITE_TITLE)s"
 
-#: wcivf/templates/base.html:164
+#: wcivf/templates/base.html:157
 msgid "Privacy"
 msgstr "Preifatrwydd"
 
-#: wcivf/templates/base.html:165
+#: wcivf/templates/base.html:158
 msgid "Source code"
 msgstr "Cod ffynhonnell"
 
-#: wcivf/templates/base.html:166
+#: wcivf/templates/base.html:159
 msgid "About Democracy Club"
 msgstr "Ynglŷn â'r Clwb Democratiaeth"
 
-#: wcivf/templates/base.html:167
+#: wcivf/templates/base.html:160
 msgid "Contact Us"
 msgstr "Cysylltwch â Ni"
 
-#: wcivf/templates/base.html:169
+#: wcivf/templates/base.html:162
 msgid "Twitter"
 msgstr "Trydar"
 
-#: wcivf/templates/base.html:171
+#: wcivf/templates/base.html:164
 msgid "GitHub"
 msgstr "GitHub"
 
-#: wcivf/templates/base.html:178
+#: wcivf/templates/base.html:171
 msgid "democracy"
 msgstr "democratiaeth"
 
-#: wcivf/templates/base.html:178
+#: wcivf/templates/base.html:171
 msgid "club"
 msgstr "clwb"
 
-#: wcivf/templates/base.html:186
+#: wcivf/templates/base.html:181
 #, python-format
 msgid "Copyright &copy; %(current_year)s"
 msgstr "Hawlfraint © %(current_year)s"
 
-#: wcivf/templates/base.html:187
+#: wcivf/templates/base.html:182
 msgid "Democracy Club Community Interest Company"
 msgstr "Cwmni Buddiannau Cymunedol y Clwb Democratiaeth"
 
-#: wcivf/templates/base.html:188
+#: wcivf/templates/base.html:183
 msgid ""
 "Company No: <a href=\"https://beta.companieshouse.gov.uk/"
 "company/09461226\">09461226</a>"
@@ -1576,7 +1591,7 @@ msgstr ""
 "Rhif y Cwmni: <a href=\"https://beta.companieshouse.gov.uk/"
 "company/09461226\">09461226</a>"
 
-#: wcivf/templates/base.html:190
+#: wcivf/templates/base.html:185
 #, fuzzy
 #| msgid ""
 #| "\n"
@@ -1617,8 +1632,4 @@ msgstr "Etholiadau i ddod"
 
 #: wcivf/templates/mailing_list.html:8
 msgid "Join our mailing list"
-msgstr ""
-
-#: wcivf/apps/elections/templates/elections/includes/_registration_details.html:55
-msgid "For questions about your poll card, polling place, or about returning your postal voting ballot, contact your council."
 msgstr ""
