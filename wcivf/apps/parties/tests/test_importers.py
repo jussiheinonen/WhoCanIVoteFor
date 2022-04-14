@@ -52,14 +52,12 @@ class TestLocalPartyImporter:
         importer.write("Foo")
         sys.stdout.write.assert_called_once_with("Foo\n")
 
-    def test_delete_parties_for_election_date(self, importer, mocker):
+    def test_delete_parties(self, importer, mocker):
         filter = mocker.MagicMock()
         filter.return_value.delete.return_value = (0, {})
         mocker.patch.object(LocalParty.objects, "filter", new=filter)
-        importer.delete_parties_for_election_date()
-        filter.assert_called_once_with(
-            post_election__election__election_date=importer.election.date
-        )
+        importer.delete_parties()
+        filter.assert_called_once_with(file_url__in=importer.election.csv_files)
         filter.return_value.delete.assert_called_once()
 
     def test_current_elections(self, importer):
@@ -98,25 +96,25 @@ class TestLocalPartyImporter:
         PostElection.objects.filter.assert_called_with(
             election__slug="Foo",
         )
-        mock.filter.assert_called_once_with(
+        mock.exclude.return_value.filter.assert_called_once_with(
             personpost__party__in=["parties"],
         )
 
     def test_import_parties_no_current_elections(self, importer, mocker):
-        mocker.patch.object(importer, "delete_parties_for_election_date")
-        mocker.patch.object(importer, "delete_manifestos_for_election_date")
+        mocker.patch.object(importer, "delete_parties")
+        mocker.patch.object(importer, "delete_manifestos")
         mocker.patch.object(importer, "current_elections", return_value=False)
-        mocker.patch.object(importer, "all_rows")
+        mocker.patch.object(importer, "read_from_url")
 
         assert importer.import_parties() is None
-        importer.delete_parties_for_election_date.assert_called_once()
-        importer.delete_manifestos_for_election_date.assert_called_once()
+        importer.delete_parties.assert_called_once()
+        importer.delete_manifestos.assert_called_once()
         importer.current_elections.assert_called_once()
-        importer.all_rows.assert_not_called()
+        importer.read_from_url.assert_not_called()
 
     def test_import_parties_runs(self, importer, row, mocker):
-        mocker.patch.object(importer, "delete_parties_for_election_date")
-        mocker.patch.object(importer, "delete_manifestos_for_election_date")
+        mocker.patch.object(importer, "delete_parties")
+        mocker.patch.object(importer, "delete_manifestos")
         mocker.patch.object(importer, "current_elections")
 
         party = mocker.MagicMock()
@@ -128,7 +126,7 @@ class TestLocalPartyImporter:
         ]
         mocker.patch.object(importer, "get_ballots", return_value=ballots)
 
-        mocker.patch.object(importer, "all_rows", return_value=[row])
+        mocker.patch.object(importer, "read_from", return_value=[row])
 
         mocker.patch.object(importer, "add_local_party")
         mocker.patch.object(importer, "add_manifesto")
@@ -140,14 +138,16 @@ class TestLocalPartyImporter:
         importer.import_parties()
 
         # assert what we expect to have been called was called
-        importer.delete_parties_for_election_date.assert_called_once()
-        importer.delete_manifestos_for_election_date.assert_called_once()
+        importer.delete_parties.assert_called_once()
+        importer.delete_manifestos.assert_called_once()
         importer.current_elections.assert_called_once()
-        importer.all_rows.assert_called()
-        importer.add_local_party.assert_called_once_with(row, party, ballots)
+        file_url = importer.election.csv_files[0]
+        importer.add_local_party.assert_called_once_with(
+            row, party, ballots, file_url
+        )
 
         importer.add_manifesto.assert_called_once_with(
-            row, party, "election_obj"
+            row, party, "election_obj", file_url
         )
         Election.objects.get.assert_called_once_with(slug="election_slug")
 
@@ -164,7 +164,10 @@ class TestLocalPartyImporter:
         ballots = mocker.MagicMock()
         ballots.filter.return_value = [post_election]
 
-        importer.add_local_party(row=row, party=party, ballots=ballots)
+        file_url = importer.election.csv_files[0]
+        importer.add_local_party(
+            row=row, party=party, ballots=ballots, file_url=file_url
+        )
 
         ballots.filter.assert_called_once_with(personpost__party=party)
         LocalParty.objects.update_or_create.assert_called_once_with(
@@ -179,6 +182,7 @@ class TestLocalPartyImporter:
                 "is_local": True,
                 "youtube_profile_url": "",
                 "contact_page_url": "",
+                "file_url": file_url,
             },
         )
 
@@ -209,19 +213,3 @@ class TestLocalPartyImporter:
             expected = case[1]
             with subtests.test(msg=case[0]):
                 assert importer.get_country(election_slug) == expected
-
-    def test_ordered_rows(self, importer, mocker):
-        rows = [
-            {"election_id": ""},
-            {"election_id": "local.foo.bar.2022-05-05"},
-            {"election_id": "local.foo.2022-05-05"},
-            {"election_id": "local.2022-05-05"},
-        ]
-        mocker.patch.object(importer, "all_rows", return_value=rows)
-
-        ordered_rows = importer.ordered_rows()
-        # row without id should be removed
-        assert len(ordered_rows) == 3
-        assert ordered_rows[0]["election_id"] == "local.2022-05-05"
-        assert ordered_rows[1]["election_id"] == "local.foo.2022-05-05"
-        assert ordered_rows[2]["election_id"] == "local.foo.bar.2022-05-05"
