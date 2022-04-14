@@ -1,11 +1,9 @@
 from django.test import TestCase
 from django.shortcuts import reverse
-from django.conf import settings
-
-settings.USE_I18N = True
-settings.LANGUAGE_CODE = "cy"
+from django.test.utils import override_settings
 
 
+@override_settings(USE_I18N=True, LANGUAGE_CODE="cy")
 class TestTranslatedURL(TestCase):
     def test_translated_ams_url(self):
         response = self.client.get(reverse("ams_voting_system_view"))
