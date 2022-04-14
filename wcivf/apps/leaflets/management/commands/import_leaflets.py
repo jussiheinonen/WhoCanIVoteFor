@@ -3,6 +3,7 @@ from datetime import datetime
 from django.core.management.base import BaseCommand
 from django.db import transaction
 from django.utils import timezone as tz
+from django.utils.http import urlencode
 
 import requests
 
@@ -12,21 +13,69 @@ from leaflets.models import Leaflet
 
 
 class Command(BaseCommand):
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--recently-uploaded",
+            action="store_true",
+            dest="recently_uploaded",
+            help="Import leaflets uploaded since last imported Leaflet",
+        )
+        parser.add_argument(
+            "--uploaded-since",
+            action="store",
+            dest="uploaded_since",
+            help="Import leaflets uploaded since last imported Leaflet",
+        )
+
     @transaction.atomic
     def handle(self, **options):
         base_url = "https://electionleaflets.org/api/leaflets"
-        Leaflet.objects.all().delete()
+
         qs = PostElection.objects.filter(election__current=True)
-        for ballot in qs:
-            url = f"{base_url}/?ballot={ballot.ballot_paper_id}"
+        if options["recently_uploaded"]:
+            # delete non current leaflets
+            Leaflet.objects.exclude(
+                person__personpost__post_election__in=qs
+            ).delete()
+
+            try:
+                last_uploaded = (
+                    Leaflet.objects.order_by(
+                        "-date_uploaded_to_electionleaflets"
+                    )
+                    .first()
+                    .date_uploaded_to_electionleaflets
+                )
+            except AttributeError:
+                last_uploaded = None
+
+            if not last_uploaded:
+                last_uploaded = str(
+                    datetime.strptime(options["uploaded_since"], "%Y-%m-%d")
+                )
+
+            params = urlencode({"date_uploaded__gt": last_uploaded})
+            url = f"{base_url}/?{params}"
+            req = requests.get(url)
             while url:
-                req = requests.get(url)
                 if req.status_code == 200:
                     results = req.json()
                     url = results.get("next", None)
                     self.add_leaflets(results.get("results", []))
                 else:
                     url = None
+        else:
+            Leaflet.objects.all().delete()
+            for ballot in qs:
+                url = f"{base_url}/?ballot={ballot.ballot_paper_id}"
+                while url:
+                    req = requests.get(url)
+                    if req.status_code == 200:
+                        results = req.json()
+                        url = results.get("next", None)
+                        self.add_leaflets(results.get("results", []))
+                    else:
+                        url = None
 
     def add_leaflets(self, results):
         for leaflet in results:
