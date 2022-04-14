@@ -75,6 +75,7 @@ jobs:
           command: |
             python -m venv .venv
             . .venv/bin/activate
+            python manage.py compilemessages
             pip install --upgrade pip aws-sam-cli
             make build clean
       - persist_to_workspace:
