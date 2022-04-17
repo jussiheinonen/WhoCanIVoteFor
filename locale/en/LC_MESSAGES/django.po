@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-14 14:34+0000\n"
+"POT-Creation-Date: 2022-04-17 08:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1172,42 +1172,42 @@ msgstr ""
 
 #: wcivf/apps/people/templates/people/includes/_person_policy_card.html:35
 #, python-format
-msgid "Recent leaflets from %(object.name)s"
+msgid "Recent leaflets from %(person_name)s"
 msgstr ""
 
 #: wcivf/apps/people/templates/people/includes/_person_policy_card.html:42
 #, python-format
-msgid "Thumbnail of leaflet from %(object.name)s"
+msgid "Thumbnail of leaflet from %(person_name)s"
 msgstr ""
 
 #: wcivf/apps/people/templates/people/includes/_person_policy_card.html:46
 #, python-format
 msgid ""
 "Uploaded %(date)s<br /> <a href=\"https://electionleaflets.org/leaflets/"
-"%(leaflet.leaflet_id)s\" class=\"cta\">See leaflet</a>"
+"%(leaflet_id)s\" class=\"cta\">See leaflet</a>"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:54
+#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:55
 #, python-format
 msgid ""
-"<a class=\"ds-cta\" href=\"https://electionleaflets.org/person/"
-"%(object.ynr_id)s\">More leaflets from %(object.name)s</a> <a class=\"ds-cta"
-"\" href=\"https://electionleaflets.org/leaflets/add/\">Upload a leaflet</a>"
+"<a class=\"ds-cta\" href=\"https://electionleaflets.org/person/%(person_id)s"
+"\"> More leaflets from %(person_name)s</a> <a class=\"ds-cta\" href="
+"\"https://electionleaflets.org/leaflets/add/\">Upload a leaflet</a>"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:63
+#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:65
 msgid "Record in office"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:64
+#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:66
 msgid "See this candidate's "
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:66
+#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:68
 msgid "record on TheyWorkForYou"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:67
+#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:69
 msgid "their speeches, voting history and more"
 msgstr ""
 
