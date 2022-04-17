@@ -12,7 +12,7 @@
             {% if object.statement_to_voters %}
                 <h4>{% trans "Statement to voters" %}</h4>
                 {% if object.long_statement %}
-                    <ul class="ds-details">
+                    <div class="ds-details">
                         <blockquote class="ds-stack-smaller">
                             <p>{{ object.statement_intro }}</p>
                             <details>
@@ -20,13 +20,17 @@
                                 <p>{{ object.statement_remainder|linebreaksbr }}</p>
                             </details>
                         </blockquote>
-                    </ul>
+                    </div>
                 {% else %}
                     <blockquote>{{ object.statement_to_voters|linebreaks }}</blockquote>
                 {% endif %}
-                <p class="small">{% blocktrans trimmed with person_name=object.name %}This statement was added by {{ person_name }}, their team, or by a <a href="https://candidates.democracyclub.org.uk/person/{{ object.ynr_id }}">Democracy Club volunteer</a>,
-                    based on
-                    information published by the candidate elsewhere".{% endblocktrans %}</p>
+                <p class="small">
+                    {% blocktrans trimmed with person_name=object.name %}
+                        This statement was added by {{ person_name }}, their team, or by a
+                        <a href="https://candidates.democracyclub.org.uk/person/{{ object.ynr_id }}">
+                            Democracy Club volunteer</a>, based on
+                        information published by the candidate elsewhere".
+                    {% endblocktrans %}</p>
             {% endif %}
 
             <!-- leaflets -->
@@ -51,13 +55,18 @@
                         </li>
                     {% endfor %}
                 </ul>
-                <p class="text" style="clear:both;padding-top:1em">
-                    {% blocktrans trimmed with person_name=object.name person_id=object.ynr_id %}
-                        <a class="ds-cta" href="https://electionleaflets.org/person/{{ person_id }}">
-                            More leaflets from {{ person_name }}</a>
-                        <a class="ds-cta" href="https://electionleaflets.org/leaflets/add/">Upload a leaflet</a>
-                    {% endblocktrans %}
-                </p>
+                <div class="ds-cluster">
+                    <div>
+                        {% blocktrans trimmed with person_name=object.name person_id=object.ynr_id %}
+                            <a class="ds-cta" href="https://electionleaflets.org/person/{{ person_id }}">
+                                More leaflets from {{ person_name }}</a>
+                            <a class="ds-cta" href="https://electionleaflets.org/leaflets/add/">
+                                Upload a leaflet
+                            </a>
+                        {% endblocktrans %}
+                    </div>
+                </div>
+
             {% endif %}
 
             <!-- TWFY  -->
