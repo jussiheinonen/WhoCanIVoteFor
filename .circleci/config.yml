@@ -47,7 +47,7 @@ jobs:
       - run:
           name: Install HTML Tidy
           command: wget https://github.com/htacg/tidy-html5/releases/download/5.8.0/tidy-5.8.0-Linux-64bit.deb && sudo dpkg -i tidy-5.8.0-Linux-64bit.deb
-      
+
       # run tests!
       - run:
           name: run tests
@@ -75,7 +75,6 @@ jobs:
           command: |
             python -m venv .venv
             . .venv/bin/activate
-            python manage.py compilemessages
             pip install --upgrade pip aws-sam-cli
             make build clean
       - persist_to_workspace:
