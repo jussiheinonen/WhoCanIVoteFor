@@ -32,8 +32,8 @@
                                 <img src="{{ party.emblem_url }}" alt="{{ party_name }} emblem">
                             </div>
                             <div class="ds-not-sidebar">
-                                <h2>{{ party_name }}</h2>
-                                <p>{% blocktrans with num_candidate=object.personpost_set.all.count|intcomma %}{{num_candidates }} candidates{% endblocktrans %}</p>
+                                <h2>{{ party.party_name }}</h2>
+                                <p>{% blocktrans with num_candidates=object.personpost_set.all.count|intcomma pluralize_candidates=object.personpost_set.all.count|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}</p>{% endblocktrans %}</p>
                                 {% if object.description %}
                                     {{ object.description|markdown }}
                                 {% endif %}
@@ -46,7 +46,7 @@
 
                 {% else %}
                     <div>
-                        <h2>{{ party_name }}</h2>
+                        <h2>{{ party.party_name }}</h2>
                         <p>{% blocktrans with num_candidates=object.personpost_set.all.count|intcomma pluralize_candidates=object.personpost_set.all.count|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}</p>{% endblocktrans %}</p>
                         {% if object.description %}
                             {{ object.description|markdown }}
@@ -61,23 +61,21 @@
                 {% regroup object.personpost_set.all.counts_by_post by election__name as people_by_election %}
 
                 {% for election in people_by_election %}
-                    <h4>{{ election.grouper }}</h4>
-                    {% for post in election.list %}
-                        <div>
-                            <dl class="ds-descriptions">
-                                <div>
-                                    <dt>{{ post.post__label }}
-                                        {% if post.post_election__cancelled %}
-                                            {% trans "(The poll for this election was cancelled)" %}
-                                        {% endif %}
-                                    </dt>
-                                    <dd>
-                                        {% blocktrans with num_candidates=post.num_candidates pluralize_candidates=post.num_candidates|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}{% endblocktrans %}
-                                    </dd>
-                                </div>
-                            </dl>
-                        </div>
-                    {% endfor %}
+                    <div class="ds-table">
+                        <table>
+                            <caption>{{ election.grouper }}</caption>
+                            <tr>
+                                <th>Post</th>
+                                <th>Number of candidates</th>
+                            </tr>
+                            {% for post in election.list %}
+                                <tr>
+                                    <td>{{ post.post__label }}</td>
+                                    <td>{% blocktrans with num_candidates=post.num_candidates pluralize_candidates=post.num_candidates|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}{% endblocktrans %}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
                 {% endfor %}
             </div>
         </div>
