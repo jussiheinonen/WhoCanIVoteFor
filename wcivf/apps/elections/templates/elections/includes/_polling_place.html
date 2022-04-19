@@ -1,4 +1,3 @@
-{# TODO this is a mess! Clean it up somehow #}
 {% load postcode_tags %}
 {% load humanize %}
 {% load i18n %}
@@ -12,21 +11,76 @@
         </h2>
 
         {% if polling_station.polling_station_known %}
-            <p>
-                {% blocktrans trimmed with polling_station_address=polling_station.polling_station.properties.address %}
-                    Your polling station is <strong>{{ polling_station_address }}</strong>.It will be open from <strong>7am to 10pm</strong>.
-                {% endblocktrans %}
-                {% for election in elections_by_date %}{{ election.grouper|naturalday:"\o\n l j F Y" }}{% if not forloop.last %}{% if forloop.revcounter == 2 %} and {% else %}, {% endif %}{% endif %}{% endfor %}</strong>.
-            {% if not voter_id_required %}
-                {% trans "You don't need to take your poll card with you" %}{% if not postcode|ni_postcode %}, {% trans "or any identification" %}{% endif %}.
+            {% if advance_voting_station and advance_voting_station.open_in_future %}
+                <p>
+                    Your council is trialling a system that allows you to vote in person before polling day.
+                    You can vote in advance at this location, or vote at your polling station
+                    as normal on polling day.
+                </p>
+
+                <h3>Vote before polling day</h3>
+                <p>
+                    Your advance voting station is:
+                </p>
+                <address>
+                    {{ advance_voting_station.name }}<br>
+                    {{ advance_voting_station.address|linebreaksbr }}<br>
+                    {{ advance_voting_station.postcode }}
+                </address>
+                <div class="ds-table">
+                    <table>
+                        <caption>Advance voting station opening times</caption>
+                        <tr>
+                            <th>{% trans "Date" %}</th>
+                            {% comment %}Translators: Opening times, from and to{% endcomment %}
+                            <th>{% trans "Open" %}</th>
+                        </tr>
+                        {% for opening_time in advance_voting_station.opening_times %}
+                            <tr>
+                                <td>{% ifchanged opening_time.0 %}{{ opening_time.0|todate }}{% endifchanged %}</td>
+                                <td>{{ opening_time.1|totime }} — {{ opening_time.2|totime }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <hr>
+                <h3>Vote on polling day</h3>
             {% endif %}
+            {% blocktrans trimmed with polling_station_address=polling_station.polling_station.properties.address|linebreaksbr %}
+                <p>
+                    Your polling station is:
+                </p>
+                <address>{{ polling_station_address }}</address>
+            {% endblocktrans %}
+
+            <p>
+                {% blocktrans %}It will be open from <strong>7am to 10pm</strong>{% endblocktrans %}
+
+                {% for election in elections_by_date %}
+                    {{ election.grouper|naturalday:"\o\n l j F Y" }}
+                    {% if not forloop.last %}
+                        {% if forloop.revcounter == 2 %}
+                            {% trans "and" %}
+                        {% else %},
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
             </p>
+            {% if not voter_id_required %}
+                <p>{% trans "You don't need to take your poll card with you" %}{% if not postcode|ni_postcode %}, {% trans "or any identification" %}{% endif %}.</p>
+            {% endif %}
+            <p>
+                {% blocktrans %}If you have a postal vote, you can hand it in at this polling station on election day up to 10pm{% endblocktrans %}
+            </p>
+
+
         {% else %}
             {% if polling_station.custom_finder %}
                 {% blocktrans trimmed with custom_finder=polling_station.custom_finder %}
                     <p>You can find your polling station by
                         <a href="{{ custom_finder }}">
-                            following this link</a>.</p>
+                            following this link</a>.
+                    </p>
                 {% endblocktrans %}
             {% else %}
                 {% if ballots_today and not multiple_city_of_london_elections_today %}
@@ -84,48 +138,54 @@
             </p>
         {% endif %}
 
-        {% if not polling_station.custom_finder and polling_station.polling_station_known and polling_station.polling_station.geometry %}
-            <div id="area_map" style="height:400px;"></div>
 
-            <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
-            <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
-
-            <script type="text/javascript">
-                // Maps
-                window.create_area_map = function(polling_station_point) {
-                    var polling_station_location = polling_station_point;
-                    window.polling_station_location = polling_station_location;
-
-                    var map = L.map('area_map', {
-                        zoomControl: true
-                    });
-                    map.dragging.disable();
-                    // map.touchZoom.disable();
-                    // map.doubleClickZoom.disable();
-                    map.scrollWheelZoom.disable();
-
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.{ext}', {
-                        ext: 'png',
-                        attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
-                        subdomains: 'abc'
-                    }).addTo(map);
-
-                    window.map = map;
-
-                    L.marker(polling_station_location, {
-                        'clickable': true,
-                    }).addTo(map);
-
-                    map.setView(polling_station_location, 15);
-                };
-
-                var polling_station_point = [{
-                    {{ polling_station.polling_station.geometry.coordinates.1 }},
-                    {{ polling_station.polling_station.geometry.coordinates.0 }},
-                ];
-
-                    create_area_map(polling_station_point);
-                    </script>
-        {% endif %}
     </div>
+
+
+
+
+    {% if not polling_station.custom_finder and polling_station.polling_station_known and polling_station.polling_station.geometry %}
+        <div id="area_map" class="ds-card-image"></div>
+
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+        <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+
+        <script type="text/javascript">
+            // Maps
+            window.create_area_map = function(polling_station_point) {
+                var polling_station_location = polling_station_point;
+                window.polling_station_location = polling_station_location;
+
+                var map = L.map('area_map', {
+                    zoomControl: true
+                });
+                map.dragging.disable();
+                // map.touchZoom.disable();
+                // map.doubleClickZoom.disable();
+                map.scrollWheelZoom.disable();
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.{ext}', {
+                    ext: 'png',
+                    attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
+                    subdomains: 'abc'
+                }).addTo(map);
+
+                window.map = map;
+
+                L.marker(polling_station_location, {
+                    'clickable': true,
+                }).addTo(map);
+
+                map.setView(polling_station_location, 15);
+            };
+
+            var polling_station_point = [
+                {{ polling_station.polling_station.geometry.coordinates.1 }},
+                {{ polling_station.polling_station.geometry.coordinates.0 }},
+
+            ];
+
+            create_area_map(polling_station_point);
+        </script>
+    {% endif %}
 </div>

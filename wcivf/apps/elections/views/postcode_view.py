@@ -67,6 +67,11 @@ class PostcodeView(
         context["polling_station"] = self.get_polling_station_info(
             context["postcode"]
         )
+
+        context[
+            "advance_voting_station"
+        ] = self.get_advance_voting_station_info(context["polling_station"])
+
         context["ballots_today"] = self.get_todays_ballots()
         context[
             "multiple_city_of_london_elections_today"

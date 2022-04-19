@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 import requests
 from django.db.models import F, Prefetch
@@ -167,6 +167,23 @@ class PollingStationInfoMixin(object):
             if p.contested and not p.cancelled:
                 return True
         return False
+
+    def get_advance_voting_station_info(self, polling_station: dict):
+        if not polling_station.get("advance_voting_station"):
+            return None
+        advance_voting_station = polling_station["advance_voting_station"]
+
+        last_open_row = advance_voting_station["opening_times"][-1]
+        last_date, last_open, last_close = last_open_row
+        open_in_future = (
+            datetime.combine(
+                datetime.strptime(last_date, "%Y-%m-%d").date(),
+                datetime.strptime(last_close, "%H:%M:%S").time(),
+            )
+            > datetime.now()
+        )
+        advance_voting_station["open_in_future"] = open_in_future
+        return advance_voting_station
 
 
 class LogLookUpMixin(object):
