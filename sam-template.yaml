@@ -147,6 +147,13 @@ Resources:
             Name: import-leaflets
             Description: Import leaflets
             Input: '{"command": "import_leaflets", "args": ["--recently-uploaded", "--uploaded-since=2022-4-1"]}'
+        ImportWikipediaBios:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 hour)
+            Name: import-wikipedia-bios
+            Description: Import wikipedia bio extracts
+            Input: '{"command": "import_wikipedia_bios", "args": ["--current"]}'
         ILPGlobal:
           Type: Schedule
           Properties:

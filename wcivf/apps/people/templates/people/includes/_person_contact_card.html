@@ -82,6 +82,17 @@
                 </div>
             {% endif %}
 
+            {% if object.wikipedia_url %}
+                <div>
+                    <dt>Wikipedia</dt>
+                    <dd>
+                        <a href="{{ object.wikipedia_url }}" title="{{ person_name }}'s Wikipedia">
+                            {{ object.wikipedia_url }}
+                        </a>
+                    </dd>
+                </div>
+            {% endif %}
+
             {% if object.party_ppc_page_url %}
                 <div>
                     <dt>{% trans "The party's candidate page for this person" %}</dt>
