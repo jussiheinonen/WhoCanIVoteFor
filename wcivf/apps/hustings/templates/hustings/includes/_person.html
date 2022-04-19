@@ -2,7 +2,7 @@
 <section class="ds-card ds-stack-smaller">
     <div class="ds-card-body">
         <h3>{% trans "Election events" %}</h3>
-        <p>{% blocktrans with person=person.name %}You can meet candidates and question them at online events (often known as 'hustings'). Here are some events where {{ person }} may be appearing:{% endblocktrans %}</p>
+        <p>{% blocktrans with person=person.name %}You can meet candidates and question them at events (often known as 'hustings'). Here are some events where {{ person }} may be appearing:{% endblocktrans %}</p>
         {% include "hustings/includes/_list.html" with hustings=hustings %}
     </div>
 </section>
