@@ -2,4 +2,5 @@
 set -xeE
 
 source /var/www/wcivf/env/bin/activate
-python /var/www/wcivf/code/manage.py compilemessages
+cd /var/www/wcivf/code/
+python manage.py compilemessages
