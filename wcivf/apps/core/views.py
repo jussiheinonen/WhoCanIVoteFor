@@ -51,6 +51,12 @@ class PostcodeFormView(FormView):
         kwargs.update({"autofocus": True})
         return kwargs
 
+    def form_invalid(self, form):
+        data = self.request.GET.copy()
+        data.update({"invalid_postcode": 1, "postcode": form.data["postcode"]})
+        self.request.GET = data
+        return super().form_invalid(form)
+
     def form_valid(self, form):
         postcode = form.cleaned_data["postcode"]
         self.success_url = reverse(
