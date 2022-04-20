@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-17 08:10+0000\n"
+"POT-Creation-Date: 2022-04-19 20:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -222,40 +222,64 @@ msgstr ""
 msgid "Photo of %(person_name)s"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:11
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:10
 msgid "Where to vote"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:16
-#, python-format
-msgid ""
-"Your polling station is <strong>%(polling_station_address)s</strong>.It will "
-"be open from <strong>7am to 10pm</strong>."
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:34
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:12
+msgid "Date"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:21
+#. Translators: Opening times, from and to
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:36
+msgid "Open"
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:49
+#, python-format
+msgid ""
+"<p> Your polling station is: </p> <address>%(polling_station_address)s</"
+"address>"
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:57
+msgid "It will be open from <strong>7am to 10pm</strong>"
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:63
+msgid "and"
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:70
 msgid "You don't need to take your poll card with you"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:21
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:70
 msgid "or any identification"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:26
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:73
+msgid ""
+"If you have a postal vote, you can hand it in at this polling station on "
+"election day up to 10pm"
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:79
 #, python-format
 msgid ""
 "<p>You can find your polling station by <a href=\"%(custom_finder)s\"> "
-"following this link</a>.</p>"
+"following this link</a>. </p>"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:33
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:87
 #, python-format
 msgid ""
 "<strong>Polling stations are open from %(open_time)s till %(close_time)s "
 "today.</strong>"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:38
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:92
 #, python-format
 msgid ""
 "<p>Your polling station in %(postcode)s depends on your address. <a href="
@@ -263,44 +287,44 @@ msgid ""
 "polling station for your address &raquo;</a></p>"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:43
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:97
 msgid ""
 "You should get a \"poll card\" through the post telling you where to vote."
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:46
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:100
 #, python-format
 msgid ""
 "If you haven't got one, or aren't sure where to vote, you should call the "
 "Electoral Office on <a href=\"tel:%(council_phone)s\">%(council_phone)s</a>"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:51
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:105
 #, python-format
 msgid ""
 "If you haven't got one, or aren't sure where to vote, you should call "
 "%(council_name)s on <a href=\"tel:%(council_phone)s\">%(council_phone)s</a>"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:56
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:110
 msgid ""
 "If you haven't got one, or aren't sure where to vote, you should call your "
 "local council"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:65
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:119
 msgid "You will need photographic identification."
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:71
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:125
 msgid "Read more about how to vote in Northern Ireland"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:74
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:129
 msgid "Read more about how to vote"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:81
+#: wcivf/apps/elections/templates/elections/includes/_polling_place.html:137
 msgid "Get walking directions from"
 msgstr ""
 
@@ -1161,62 +1185,58 @@ msgstr ""
 msgid "Full statement"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:27
+#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:28
 #, python-format
 msgid ""
 "This statement was added by %(person_name)s, their team, or by a <a href="
-"\"https://candidates.democracyclub.org.uk/person/%(object.ynr_id)s"
-"\">Democracy Club volunteer</a>, based on information published by the "
+"\"https://candidates.democracyclub.org.uk/person/%(object.ynr_id)s\"> "
+"Democracy Club volunteer</a>, based on information published by the "
 "candidate elsewhere\"."
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:35
+#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:39
 #, python-format
 msgid "Recent leaflets from %(person_name)s"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:42
+#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:46
 #, python-format
 msgid "Thumbnail of leaflet from %(person_name)s"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:46
+#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:50
 #, python-format
 msgid ""
 "Uploaded %(date)s<br /> <a href=\"https://electionleaflets.org/leaflets/"
 "%(leaflet_id)s\" class=\"cta\">See leaflet</a>"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:55
+#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:60
 #, python-format
 msgid ""
 "<a class=\"ds-cta\" href=\"https://electionleaflets.org/person/%(person_id)s"
 "\"> More leaflets from %(person_name)s</a> <a class=\"ds-cta\" href="
-"\"https://electionleaflets.org/leaflets/add/\">Upload a leaflet</a>"
+"\"https://electionleaflets.org/leaflets/add/\"> Upload a leaflet </a>"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:65
+#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:74
 msgid "Record in office"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:66
+#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:75
 msgid "See this candidate's "
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:68
+#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:77
 msgid "record on TheyWorkForYou"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:69
+#: wcivf/apps/people/templates/people/includes/_person_policy_card.html:78
 msgid "their speeches, voting history and more"
 msgstr ""
 
 #: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:9
 msgid "Previous Elections"
-msgstr ""
-
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:12
-msgid "Date"
 msgstr ""
 
 #: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:13
