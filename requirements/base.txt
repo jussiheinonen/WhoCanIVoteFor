@@ -21,6 +21,7 @@ newspaper3k==0.2.8
 https://github.com/DemocracyClub/dc_signup_form/archive/refs/tags/2.1.1.tar.gz
 https://github.com/DemocracyClub/design-system/archive/refs/tags/0.2.1.tar.gz
 https://github.com/DemocracyClub/dc_django_utils/archive/refs/tags/0.1.8.tar.gz
+git+https://github.com/DemocracyClub/dc_logging.git@0.0.9
 
 djangorestframework-jsonp==1.0.2
 feedparser==6.0.8
