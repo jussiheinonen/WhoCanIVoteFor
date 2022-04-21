@@ -190,19 +190,27 @@ class LocalPartyImporter(ReadFromUrlMixin, ReadFromFileMixin):
                     self.write("Skipping as no ballots to use")
                     continue
 
+                # store the PK's in a list as something strange is
+                # happening later on - when trying to access
+                # objects from the 'ballots' queryset after the
+                # add_local_party method has been called, None is
+                # returned instead of the object.
+                # This resulted in the 'elections' queryset also
+                # being empty. Storing the PK's in a list gets round
+                # this but unclear why this is happening
+                ballot_pks = list(ballots.values_list("pk", flat=True))
+                elections = Election.objects.filter(
+                    postelection__in=ballot_pks
+                ).distinct()
                 for party in parties:
                     self.add_local_party(row, party, ballots, file_url)
-                    elections = ballots.values_list(
-                        "election__slug", flat=True
-                    ).distinct()
                     manifesto_web = row.get("Manifesto Website URL", "").strip()
                     manifesto_pdf = row.get("Manifesto PDF URL", "").strip()
                     if not any([manifesto_web, manifesto_pdf]):
                         self.write("No links to create Manifesto, skipping")
                         continue
 
-                    for slug in elections:
-                        election = Election.objects.get(slug=slug)
+                    for election in elections:
                         self.add_manifesto(row, party, election, file_url)
 
     def get_country(self, election_type):
