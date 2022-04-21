@@ -13,14 +13,16 @@
         {% if polling_station.polling_station_known %}
             {% if advance_voting_station and advance_voting_station.open_in_future %}
                 <p>
-                    Your council is trialling a system that allows you to vote in person before polling day.
-                    You can vote in advance at this location, or vote at your polling station
-                    as normal on polling day.
+                    {% blocktrans trimmed %}
+                        Your council is trialling a system that allows you to vote in person before polling day.
+                        You can vote in advance at this location, or vote at your polling station
+                        as normal on polling day.
+                    {% endblocktrans %}
                 </p>
 
-                <h3>Vote before polling day</h3>
+                <h3>{% trans "Vote before polling day" %}</h3>
                 <p>
-                    Your advance voting station is:
+                    {% blocktrans %}Your advance voting station is:{% endblocktrans %}
                 </p>
                 <address>
                     {{ advance_voting_station.name }}<br>
@@ -29,7 +31,7 @@
                 </address>
                 <div class="ds-table">
                     <table>
-                        <caption>Advance voting station opening times</caption>
+                        <caption>{% trans "Advance voting station opening times" %}</caption>
                         <tr>
                             <th>{% trans "Date" %}</th>
                             {% comment %}Translators: Opening times, from and to{% endcomment %}
@@ -44,7 +46,7 @@
                     </table>
                 </div>
                 <hr>
-                <h3>Vote on polling day</h3>
+                <h3>{% trans "Vote on polling day" %}</h3>
             {% endif %}
             {% blocktrans trimmed with polling_station_address=polling_station.polling_station.properties.address|linebreaksbr %}
                 <p>
@@ -67,7 +69,13 @@
                 {% endfor %}
             </p>
             {% if not voter_id_required %}
-                <p>{% trans "You don't need to take your poll card with you" %}{% if not postcode|ni_postcode %}, {% trans "or any identification" %}{% endif %}.</p>
+                <p>
+                    {% if not postcode|ni_postcode %}
+                        {% trans "You don't need to take your poll card or any identification with you." %}
+                    {% else %}
+                        {% trans "You don't need to take your poll card with you." %}
+                    {% endif %}
+                </p>
             {% endif %}
             <p>
                 {% blocktrans %}If you have a postal vote, you can hand it in at this polling station on election day up to 10pm{% endblocktrans %}
