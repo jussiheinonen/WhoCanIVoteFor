@@ -207,6 +207,11 @@ class Election(models.Model):
             "mayor.west-midlands.2021-05-06": "booklets/2021-05-06/mayoral/mayor.west-midlands.2021-05-06.pdf",
             "mayor.west-of-england.2021-05-06": "booklets/2021-05-06/mayoral/mayor.west-of-england.2021-05-06.pdf",
             "mayor.west-yorkshire.2021-05-06": "booklets/2021-05-06/mayoral/mayor.west-yorkshire.2021-05-06.pdf",
+            "mayor.croydon.2022-05-05": "booklets/2022-05-05/mayoral/mayor.croydon.2022-05-05.pdf",
+            "mayor.hackney.2022-05-05": "booklets/2022-05-05/mayoral/mayor.hackney.2022-05-05.pdf",
+            "mayor.lewisham.2022-05-05": "booklets/2022-05-05/mayoral/mayor.lewisham.2022-05-05.pdf",
+            "mayor.newham.2022-05-05": "booklets/2022-05-05/mayoral/mayor.newham.2022-05-05.pdf",
+            "mayor.sheffield-city-ca.2022-05-05": "booklets/2022-05-05/mayoral/mayor.sheffield-city-ca.2022-05-05.pdf",
         }
 
         return election_to_booklet.get(self.slug)
