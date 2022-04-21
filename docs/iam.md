@@ -24,6 +24,11 @@ Set its Policy document as follows:
             ],
             "Effect": "Allow",
             "Resource": "arn:aws:s3:::aws-codedeploy-eu-west-2/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::[MONITORING ACCOUNT ID]:role/put-record-from-[WCIVF ACCOUNT ID]"
         }
     ]
 }

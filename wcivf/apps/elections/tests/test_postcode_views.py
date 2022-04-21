@@ -76,6 +76,45 @@ class PostcodeViewTests(TestCase):
         self.assertEqual(response.context["postelections"].count(), 1)
         self.assertContains(response, "Tower Hamlets")
 
+    def test_dc_logging_postcode_valid(self):
+        with self.assertLogs(level="DEBUG") as captured:
+            self.client.get(
+                "/elections/DD11DD/",
+                {
+                    "foo": "bar",
+                    "utm_source": "test",
+                    "utm_campaign": "better_tracking",
+                    "utm_medium": "pytest",
+                },
+                HTTP_AUTHORIZATION="Token foo",
+            )
+
+        for record in captured.records:
+            if record.message.startswith("dc-postcode-searches"):
+                logging_message = record
+        assert logging_message
+        assert '"postcode": "DD1 1DD"' in logging_message.message
+        assert '"dc_product": "WCIVF"' in logging_message.message
+        assert '"utm_source": "test"' in logging_message.message
+        assert '"utm_campaign": "better_tracking"' in logging_message.message
+        assert '"utm_medium": "pytest"' in logging_message.message
+
+    def test_dc_logging_postcode_invalid(self):
+        with self.assertLogs(level="DEBUG") as captured:
+            self.client.get(
+                "/elections/INVALID/",
+                {
+                    "foo": "bar",
+                    "utm_source": "test",
+                    "utm_campaign": "better_tracking",
+                    "utm_medium": "pytest",
+                },
+                HTTP_AUTHORIZATION="Token foo",
+            )
+
+        for record in captured.records:
+            assert not record.message.startswith("dc-postcode-searches")
+
 
 @pytest.mark.freeze_time("2021-05-06")
 @pytest.mark.django_db

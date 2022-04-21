@@ -4,6 +4,8 @@ import sys
 
 from dc_utils.settings.pipeline import *  # noqa
 from dc_utils.settings.pipeline import get_pipeline_settings
+from dc_logging_client import DCWidePostcodeLoggingClient
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 here = lambda *x: os.path.join(os.path.abspath(os.path.dirname(__file__)), *x)
@@ -260,6 +262,14 @@ if os.environ.get("DC_ENVIRONMENT"):
         ],
         environment=os.environ.get("DC_ENVIRONMENT"),
     )
+
+# DC Logging Client
+FIREHOSE_ACCOUNT_ARN = os.environ.get("FIREHOSE_ACCOUNT_ARN", None)
+if FIREHOSE_ACCOUNT_ARN:
+    firehose_args = dict(assume_role_arn=FIREHOSE_ACCOUNT_ARN)
+else:
+    firehose_args = dict(fake=True)
+POSTCODE_LOGGER = DCWidePostcodeLoggingClient(**firehose_args)
 
 
 # .local.py overrides all the common settings.

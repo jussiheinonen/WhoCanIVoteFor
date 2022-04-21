@@ -56,7 +56,18 @@ class PostcodeView(
         self.log_postcode(self.postcode)
 
         context["postcode"] = self.postcode
-        context["postelections"] = self.get_ballots()
+
+        try:
+            context["postelections"] = self.get_ballots()
+            entry = settings.POSTCODE_LOGGER.entry_class(
+                postcode=self.postcode,
+                dc_product=settings.POSTCODE_LOGGER.dc_product.wcivf,
+                **self.request.session.get("utm_data"),
+            )
+            settings.POSTCODE_LOGGER.log(entry)
+        except InvalidPostcodeError as exception:
+            raise exception
+
         context["show_polling_card"] = self.show_polling_card(
             context["postelections"]
         )
