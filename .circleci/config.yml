@@ -30,6 +30,7 @@ jobs:
             python -m venv .venv
             . .venv/bin/activate
             pip install tox coveralls
+            sudo apt-get update && sudo apt-get install gettext
       - run:
           name: install dependencies
           command: |
