@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-21 08:23+0000\n"
+"POT-Creation-Date: 2022-04-21 16:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -181,6 +181,7 @@ msgid "Home"
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_elections_breadcrumbs.html:9
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:9
 msgid "Elections"
 msgstr ""
 
@@ -212,12 +213,12 @@ msgstr ""
 msgid "Elected"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_person_card.html:31
+#: wcivf/apps/elections/templates/elections/includes/_person_card.html:30
 #, python-format
 msgid "%(votes_cast)s votes"
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_person_card.html:39
+#: wcivf/apps/elections/templates/elections/includes/_person_card.html:38
 #, python-format
 msgid "Photo of %(person_name)s"
 msgstr ""
@@ -246,7 +247,6 @@ msgid "Advance voting station opening times"
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_polling_place.html:36
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:12
 msgid "Date"
 msgstr ""
 
@@ -401,6 +401,17 @@ msgstr ""
 #: wcivf/templates/home.html:23
 msgid "Find your candidates"
 msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_previous_party_affiliations.html:7
+#, python-format
+msgid ""
+"%(person_name)s has declared their affiliation with the following party in "
+"the past 12 months:"
+msgid_plural ""
+"%(person_name)s has declared their affiliation with the following parties in "
+"the past 12 months:"
+msgstr[0] ""
+msgstr[1] ""
 
 #: wcivf/apps/elections/templates/elections/includes/_registration_details.html:9
 msgid "Register to vote"
@@ -1102,7 +1113,7 @@ msgstr ""
 msgid "is %(a_or_an)s %(party_name)s candidate in the following elections:"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_intro_card.html:22
+#: wcivf/apps/people/templates/people/includes/_person_intro_card.html:23
 #, python-format
 msgid "%(election)s for"
 msgstr ""
@@ -1116,7 +1127,7 @@ msgstr ""
 msgid "(elected)"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_intro_card.html:46
+#: wcivf/apps/people/templates/people/includes/_person_intro_card.html:51
 #, python-format
 msgid "profile photo of %(person)s"
 msgstr ""
@@ -1250,47 +1261,31 @@ msgstr ""
 msgid "their speeches, voting history and more"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:9
-msgid "Previous Elections"
-msgstr ""
-
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:13
-msgid "Election"
-msgstr ""
-
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:14
-msgid "Party"
-msgstr ""
-
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:15
-msgid "Results"
-msgstr ""
-
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:19
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:22
 #, python-format
 msgid "%(message)s %(message)s %(message)s"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:25
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:28
 #, python-format
 msgid "%(post_label)s: %(election)s"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:28
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:31
 #, python-format
 msgid "%(num_votes)s votes (elected)"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:28
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:31
 msgid "Elected unopposed"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:30
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:33
 #, python-format
 msgid "%(num_votes)s votes (not elected)"
 msgstr ""
 
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:30
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:33
 msgid "Vote count not available"
 msgstr ""
 

@@ -1,0 +1,16 @@
+{% load i18n %}
+{% load static %}
+{% load humanize %}
+
+<p>
+    {% for candidacy in candidacies %}
+        {% blocktrans trimmed with person_name=person.name count counter=candidacy.previous_party_affiliations.count %}
+            {{ person_name }} has declared their affiliation with the following party in the past 12 months:
+        {% plural %}
+            {{ person_name}} has declared their affiliation with the following parties in the past 12 months:
+        {% endblocktrans %}
+        {% for previous_party in candidacy.previous_party_affiliations.all %}
+            {{ previous_party.party_name }}{% if forloop and not forloop.last %}, {% endif %}
+        {% endfor %}
+    {% endfor %}
+</p>

@@ -139,8 +139,8 @@ class PersonViewTests(TestCase):
             party_name=party.party_name,
         )
         response = self.client.get(self.person_url, follow=True)
-        expected = f"<h5>{self.person.name} is a Liberal Democrat candidate in the following elections:"
-        self.assertContains(response, expected, html=True)
+        expected = "is a Liberal Democrat candidate in the following elections:"
+        self.assertContains(response, expected)
 
     def test_multiple_independent_candidacies_intro(self):
         election_one = ElectionFactory()
@@ -159,8 +159,8 @@ class PersonViewTests(TestCase):
             party_name=party.party_name,
         )
         response = self.client.get(self.person_url, follow=True)
-        expected = f"<h5>{self.person.name} is an Independent candidate in the following elections:"
-        self.assertContains(response, expected, html=True)
+        expected = "is an Independent candidate in the following elections:"
+        self.assertContains(response, expected)
 
     def test_one_candidacy_intro(self):
         election = ElectionFactory()
@@ -179,11 +179,135 @@ class PersonViewTests(TestCase):
             f"{self.person.name} is a {person_post.party_name} candidate in {person_post.post.label} constituency in the {election.nice_election_name}.",
         )
 
-    def test_no_previous_elections(self):
-        PersonPostFactory(person=self.person, election=ElectionFactory())
+    def test_previous_party_affiliations_in_current_elections(self):
+        """This is a test for previous party affiliations in the
+        person intro"""
+
+        election = ElectionFactory(
+            name="Welsh Assembly Election",
+            current=True,
+            election_date="2022-05-01",
+            slug="local.welsh.assembly.2022-05-01",
+        )
+        party = PartyFactory(
+            party_name="Conservative and Unionist Party", party_id="ConUnion"
+        )
+        post = PostFactory(label="Welsh Assembly", territory="WLS")
+        pe = PostElectionFactory(
+            election=election,
+            post=post,
+            ballot_paper_id="local.welsh.assembly.2022-05-01",
+        )
+        person_post = PersonPostFactory(
+            person=self.person,
+            election=election,
+            party=party,
+            party_name=party.party_name,
+            post=post,
+            post_election=pe,
+        )
+
+        previous_party_1 = PartyFactory(
+            party_name="Conservative", party_id="foo_id"
+        )
+        previous_party_2 = PartyFactory(party_name="Labour", party_id="bar_id")
+        person_post.previous_party_affiliations.add(previous_party_1)
+        person_post.previous_party_affiliations.add(previous_party_2)
+        self.assertEqual(person_post.previous_party_affiliations.count(), 2)
+        self.assertEqual(self.person.current_or_future_candidacies.count(), 1)
         response = self.client.get(self.person_url, follow=True)
-        self.assertEqual(response.template_name, ["people/person_detail.html"])
-        self.assertNotContains(response, "Previous Elections")
+
+        self.assertTemplateUsed(
+            "elections/includes/_previous_party_affiliations.html"
+        )
+        self.assertTemplateUsed("people/includes/_person_intro_card.html")
+
+        self.assertContains(
+            response,
+            "has declared their affiliation with the following parties in the past 12 months",
+        )
+
+    def test_no_previous_party_affiliations(self):
+        election = ElectionFactory(
+            name="Welsh Assembly Election",
+            current=True,
+            election_date="2022-05-01",
+            slug="local.welsh.assembly.2022-05-01",
+        )
+        party = PartyFactory(
+            party_name="Conservative and Unionist Party", party_id="ConUnion"
+        )
+        post = PostFactory(label="Welsh Assembly", territory="WLS")
+        pe = PostElectionFactory(
+            election=election,
+            post=post,
+            ballot_paper_id="local.welsh.assembly.2022-05-01",
+        )
+        person_post = PersonPostFactory(
+            person=self.person,
+            election=election,
+            party=party,
+            party_name=party.party_name,
+            post=post,
+            post_election=pe,
+        )
+
+        self.assertEqual(person_post.previous_party_affiliations.count(), 0)
+        self.assertEqual(self.person.current_or_future_candidacies.count(), 1)
+        response = self.client.get(self.person_url, follow=True)
+
+        self.assertTemplateNotUsed(
+            "elections/includes/_previous_party_affiliations.html"
+        )
+        self.assertTemplateUsed("people/includes/_person_intro_card.html")
+
+        self.assertNotContains(
+            response,
+            "has declared their affiliation with the following parties in the past 12 months",
+        )
+
+    def test_previous_party_affiliations_in_past_elections_table(self):
+        """This is a test for current previous party affiliations in the
+        previous elections table"""
+
+        past_election = ElectionFactory(
+            name="Welsh Local Election",
+            current=False,
+            election_date="2021-05-01",
+            slug="local.welsh.assembly.2021-05-01",
+        )
+        party = PartyFactory(
+            party_name="Conservative and Unionist Party", party_id="ConUnion"
+        )
+        past_person_post = PersonPostFactory(
+            person=self.person,
+            post_election__election=past_election,
+            election=past_election,
+            party=party,
+            votes_cast=1000,
+        )
+        previous_party_1 = PartyFactory(
+            party_name="Conservative", party_id="foo_id"
+        )
+        previous_party_2 = PartyFactory(party_name="Labour", party_id="bar_id")
+        past_person_post.previous_party_affiliations.add(previous_party_1)
+        past_person_post.previous_party_affiliations.add(previous_party_2)
+
+        response = self.client.get(self.person_url, follow=True)
+
+        self.assertEqual(self.person.past_not_current_candidacies.count(), 1)
+        self.assertTemplateUsed(
+            "people/includes/_person_previous_elections_card.html"
+        )
+        self.assertTemplateUsed(
+            "elections/includes/_previous_party_affiliations.html"
+        )
+        self.assertContains(
+            response,
+            "Other party affiliations in the past 12 months",
+            html=True,
+        )
+        self.assertContains(response, "Conservative, Labour", html=True)
 
     def test_previous_elections(self):
         past_election = ElectionFactoryLazySlug(
@@ -198,7 +322,7 @@ class PersonViewTests(TestCase):
             votes_cast=1000,
         )
         response = self.client.get(self.person_url, follow=True)
-        self.assertContains(response, "Previous Elections")
+        self.assertContains(response, f"{self.person.name}'s Elections")
 
     def test_no_statement_to_voters(self):
         PersonPostWithPartyFactory(

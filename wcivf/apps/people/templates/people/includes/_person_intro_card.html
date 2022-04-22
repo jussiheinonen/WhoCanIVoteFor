@@ -19,25 +19,30 @@
 
             {% for candidacy in object.current_or_future_candidacies %}
                 <ul>
-                    <li>{% blocktrans with election=candidacy.election.name %}{{ election }} for{% endblocktrans %}
+                    <li>
+                        {% blocktrans with election=candidacy.election.name %}{{ election }} for{% endblocktrans %}
                         <a href="{{ candidacy.post_election.get_absolute_url }}">
                             {{ candidacy.post_election.friendly_name }}
                         </a>
+                        {% if candidacy.votes_cast %}
+                            {% blocktrans trimmed with num_votes=candidacy.votes_cast|intcomma %}
+                                {{ num_votes }} votes
+                            {% endblocktrans %}
+                        {% endif %}
+                        {% if candidacy.elected %}
+                            {% trans "(elected)" %}
+                        {% endif %}
                     </li>
-                    {% if candidacy.votes_cast %}
-                        {% blocktrans trimmed with num_votes=candidacy.votes_cast|intcomma %}
-                            {{ num_votes }} votes
-                        {% endblocktrans %}
-                    {% endif %}
-                    {% if candidacy.elected %}
-                        {% trans "(elected)" %}
-                    {% endif %}
                 </ul>
+
             {% endfor %}
         {% else %}
             <p>
                 {{ object.intro|safe }}
             </p>
+        {% endif %}
+        {% if object.previous_party_count %}
+            {% include "elections/includes/_previous_party_affiliations.html" with person=object candidacies=object.current_or_future_candidacies %}
         {% endif %}
     </div>
 
