@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-21 08:23+0000\n"
+"POT-Creation-Date: 2022-04-22 09:33+0000\n"
 "PO-Revision-Date: 2022-03-24 09:04+0000\n"
 "Last-Translator: Sym Roe <sym@talusdesign.co.uk>, 2022\n"
 "Language-Team: Welsh (https://www.transifex.com/democracy-club/teams/61326/"
@@ -209,6 +209,7 @@ msgid "Home"
 msgstr "Cartref"
 
 #: wcivf/apps/elections/templates/elections/includes/_elections_breadcrumbs.html:9
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:9
 msgid "Elections"
 msgstr "Etholiadau"
 
@@ -274,7 +275,6 @@ msgid "Advance voting station opening times"
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_polling_place.html:36
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:12
 msgid "Date"
 msgstr "Dyddiad"
 
@@ -1060,20 +1060,20 @@ msgstr ""
 msgid "%(manifesto_country)s manifesto"
 msgstr "Maniffesto %(manifesto_country)s"
 
-#: wcivf/apps/parties/templates/parties/single_manifesto.html:6
+#: wcivf/apps/parties/templates/parties/single_manifesto.html:8
 msgid "website"
 msgstr "gwefan"
 
-#: wcivf/apps/parties/templates/parties/single_manifesto.html:7
+#: wcivf/apps/parties/templates/parties/single_manifesto.html:9
 #, python-format
 msgid " in %(manifesto_language)s"
 msgstr ""
 
-#: wcivf/apps/parties/templates/parties/single_manifesto.html:14
+#: wcivf/apps/parties/templates/parties/single_manifesto.html:16
 msgid "PDF Version"
 msgstr "Fersiwn PDF"
 
-#: wcivf/apps/parties/templates/parties/single_manifesto.html:19
+#: wcivf/apps/parties/templates/parties/single_manifesto.html:21
 msgid "Easy Read version"
 msgstr "Fersiwn Hawdd ei Darllen"
 
@@ -1448,23 +1448,7 @@ msgstr "ar TheyWorkForYou"
 msgid "their speeches, voting history and more"
 msgstr "eu hareithiau, eu hanes pleidleisio a mwy"
 
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:9
-msgid "Previous Elections"
-msgstr "Etholiadau blaenorol"
-
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:13
-msgid "Election"
-msgstr "Etholiad"
-
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:14
-msgid "Party"
-msgstr "Plaid"
-
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:15
-msgid "Results"
-msgstr "Canlyniadau"
-
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:19
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:22
 #, python-format
 msgid "%(message)s %(message)s %(message)s"
 msgstr "%(message)s %(message)s %(message)s"
@@ -1856,14 +1840,15 @@ msgstr "Etholiadau i ddod"
 #: wcivf/templates/mailing_list.html:8
 msgid "Join our mailing list"
 msgstr "Ymunwch â'n rhestr bostio"
-msgstr ""
 
-#, fuzzy
-#~| msgid "All Elections"
 #~ msgid "Previous Elections"
-#~ msgstr "Pob Etholiad"
+#~ msgstr "Etholiadau blaenorol"
 
-#, fuzzy
-#~| msgid "All Elections"
 #~ msgid "Election"
-#~ msgstr "Pob Etholiad"
+#~ msgstr "Etholiad"
+
+#~ msgid "Party"
+#~ msgstr "Plaid"
+
+#~ msgid "Results"
+#~ msgstr "Canlyniadau"
