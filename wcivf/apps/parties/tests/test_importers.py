@@ -164,7 +164,7 @@ class TestLocalPartyImporter:
         party = mocker.MagicMock()
         post_election = mocker.MagicMock()
         ballots = mocker.MagicMock()
-        ballots.filter.return_value = [post_election]
+        ballots.filter.return_value.distinct.return_value = [post_election]
 
         file_url = importer.election.csv_files[0]
         importer.add_local_party(
