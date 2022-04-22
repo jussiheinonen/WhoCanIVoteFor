@@ -42,7 +42,7 @@ class PostcodeToPostsMixin(object):
             url = "{0}/api/elections?postcode={1}&current=1".format(
                 settings.EE_BASE, postcode
             )
-            req = requests.get(url)
+            req = requests.get(url, timeout=30.0)
 
             # Don't cache bad postcodes
             from ..models import InvalidPostcodeError
@@ -153,7 +153,7 @@ class PollingStationInfoMixin(object):
         if token:
             url = f"{url}?auth_token={token}"
         try:
-            req = requests.get(url)
+            req = requests.get(url, timeout=30.0)
         except:
             return info
         if req.status_code != 200:
