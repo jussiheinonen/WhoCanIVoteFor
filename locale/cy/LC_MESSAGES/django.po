@@ -1856,14 +1856,3 @@ msgstr "Etholiadau i ddod"
 #: wcivf/templates/mailing_list.html:8
 msgid "Join our mailing list"
 msgstr "Ymunwch â'n rhestr bostio"
-msgstr ""
-
-#, fuzzy
-#~| msgid "All Elections"
-#~ msgid "Previous Elections"
-#~ msgstr "Pob Etholiad"
-
-#, fuzzy
-#~| msgid "All Elections"
-#~ msgid "Election"
-#~ msgstr "Pob Etholiad"
