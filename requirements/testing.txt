@@ -13,5 +13,5 @@ pytest-freezegun
 pytest-mock
 pytest-subtests
 tomlkit
-freezegun==1.1.0
+freezegun==1.2.1
 django-debug-toolbar==3.2.4
