@@ -222,6 +222,11 @@ SITE_TITLE = "Who Can I Vote For?"
 SITE_LOGO = "images/logo.png"
 SITE_LOGO_WIDTH = "440px"
 
+AKISMET_API_KEY = os.environ.get("AKISMET_API_KEY")
+
+AKISMET_BLOG_URL = CANONICAL_URL
+
+
 import redis
 
 REDIS_POOL = redis.ConnectionPool(host="127.0.0.1", port=6379, db=5)
