@@ -60,7 +60,6 @@ INSTALLED_APPS = (
     "hustings",
     "peoplecvs",
     "leaflets",
-    "debug_toolbar",
     "django_extensions",
     "rest_framework",
     "robots",
@@ -83,8 +82,11 @@ MIDDLEWARE = (
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "core.middleware.UTMTrackerMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 )
+
+if DEBUG:
+    INSTALLED_APPS += ("debug_toolbar",)
+    MIDDLEWARE += ("debug_toolbar.middleware.DebugToolbarMiddleware",)
 # When defining a model, if no field in a model is defined with primary_key=True
 # an implicit primary key is added. The type of this implicit primary key can
 # now be controlled via the DEFAULT_AUTO_FIELD setting and AppConfig.default_auto_field
