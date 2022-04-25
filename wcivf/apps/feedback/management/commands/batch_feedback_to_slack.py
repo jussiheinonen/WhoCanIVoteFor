@@ -97,6 +97,8 @@ class Command(BaseCommand):
 
         recent_feedback = Feedback.objects.filter(created__gte=past_time)
 
+        recent_feedback = recent_feedback.exclude(flagged_as_spam=True)
+
         if not recent_feedback.exists():
             return
 
