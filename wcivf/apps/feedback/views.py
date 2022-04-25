@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse
 from django.views.generic import View, UpdateView
 from django.utils.http import is_safe_url
 from django.contrib import messages
@@ -47,13 +47,15 @@ class FeedbackFormView(UpdateView):
             extra_tags="template",
         )
 
-        if self.is_spam:
-            self.object.flagged_as_spam = True
-            self.object.save()
         if is_safe_url(self.object.source_url, allowed_hosts=None):
             return self.object.source_url
         else:
             return "/"
+
+    def form_valid(self, form):
+        if self.is_spam:
+            self.object.flagged_as_spam = True
+        return super().form_valid(form)
 
 
 class RecordJsonFeedback(View):
