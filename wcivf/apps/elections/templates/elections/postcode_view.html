@@ -71,7 +71,9 @@
             </div>
         {% endif %}
 
-        {% include "feedback/feedback_form.html" %}
+        {% if postelections %}
+            {% include "feedback/feedback_form.html" %}
+        {% endif %}
 
     </div>
 {% endblock content %}
