@@ -93,7 +93,7 @@ class Command(BaseCommand):
     def handle(self, **options):
         past_time = datetime.now() - timedelta(hours=int(options["hours"]))
 
-        msg_fmt = """Feedback time!\nIn the last {hour_string}:\n\t{found} people felt {random_happy}\n\t{not_found} people felt {random_sad}\n\t{more_likely} people were more likley to vote {random_happy}\n\t{less_likely} people were less likely to vote {random_sad}\n"""
+        msg_fmt = """Feedback time!\nIn the last {hour_string}:\n\t{found} people felt {random_happy}\n\t{not_found} people felt {random_sad}\n\t{more_likely} people were more likely to vote {random_happy}\n\t{less_likely} people were less likely to vote {random_sad}\n"""
 
         recent_feedback = Feedback.objects.filter(created__gte=past_time)
 
