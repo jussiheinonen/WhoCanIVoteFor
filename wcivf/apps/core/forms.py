@@ -10,4 +10,4 @@ class PostcodeLookupForm(forms.Form):
     def __init__(self, autofocus=False, *args, **kwargs):
         super(PostcodeLookupForm, self).__init__(*args, **kwargs)
         if autofocus:
-            self.fields["postcode"].widget.attrs["autofocus"] = u"autofocus"
+            self.fields["postcode"].widget.attrs["autofocus"] = "autofocus"
