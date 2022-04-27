@@ -5,7 +5,7 @@
 
 {% comment %}Case 1: Cancelled election and Metadata is set in EE {% endcomment %}
 {% if object.metadata.cancelled_election.title %}
-    <h4>{{ title }}</h4>
+    <h4>{{ object.metadata.cancelled_election.title }}</h4>
 {% else %}
     {% if not object.contested %}
         {% comment %} Case 2: Election cancelled, uncontested, number of candidates equal seats, no metadata{% endcomment %}
