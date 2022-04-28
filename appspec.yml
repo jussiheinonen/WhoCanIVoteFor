@@ -79,6 +79,9 @@ hooks:
     - location: deployscripts/write_envfile.sh
       timeout: 300
       runas: wcivf
+    - location: deployscripts/migrate_logger.sh
+      timeout: 300
+      runas: wcivf
     - location: deployscripts/collectstatic.sh
       timeout: 300
       runas: wcivf
