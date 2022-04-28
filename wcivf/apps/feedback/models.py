@@ -16,3 +16,4 @@ class Feedback(TimeStampedModel):
     comments = models.TextField(blank=True)
     source_url = models.CharField(blank=True, max_length=800)
     token = models.CharField(blank=True, max_length=100)
+    flagged_as_spam = models.BooleanField(default=False)

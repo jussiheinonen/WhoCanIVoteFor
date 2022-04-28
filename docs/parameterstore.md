@@ -15,3 +15,4 @@ AWS parameter store is used to store secrets and values that we then use to expo
 - `WDIV_API_KEY`
 - `FIREHOSE_ACCOUNT_ARN`
 - `EE_BASE`
+- `AKISMET_API_KEY`

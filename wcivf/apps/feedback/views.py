@@ -3,6 +3,8 @@ from django.views.generic import View, UpdateView
 from django.utils.http import is_safe_url
 from django.contrib import messages
 from django.template.loader import render_to_string
+from akismet import Akismet
+from django.conf import settings
 
 from .forms import FeedbackForm
 from .models import Feedback
@@ -11,6 +13,20 @@ from .models import Feedback
 class FeedbackFormView(UpdateView):
     form_class = FeedbackForm
     template_name = "feedback/feedback_form_view.html"
+
+    @property
+    def is_spam(self):
+        if not settings.AKISMET_API_KEY:
+            return False
+
+        akismet = Akismet(
+            settings.AKISMET_API_KEY, blog=settings.AKISMET_BLOG_URL
+        )
+        return akismet.check(
+            self.request.META["REMOTE_ADDR"],
+            self.request.META["HTTP_USER_AGENT"],
+            comment_content=self.request.POST.get("comments"),
+        )
 
     def get_object(self, queryset=None):
         token = self.request.POST.get("token")
@@ -35,6 +51,11 @@ class FeedbackFormView(UpdateView):
             return self.object.source_url
         else:
             return "/"
+
+    def form_valid(self, form):
+        if self.is_spam:
+            self.object.flagged_as_spam = True
+        return super().form_valid(form)
 
 
 class RecordJsonFeedback(View):
