@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% load humanize %}
+{% load i18n %}
+
+{% block content %}
+    {% include "elections/includes/_voting_system_breadcrumbs.html" %}
+
+    <div class="ds-page">
+        <div class="ds-stack">
+            <div class="ds-card ds-padded">
+                <div class="ds-card-body">
+                    <h2>Single Transferable Vote (STV)</h2>
+
+                    <p>In an STV election, voters rank candidates in order of
+                        preference using numbers rather than crosses. They may number
+                        as many candidates as they like on the ballot paper.
+                        STV constituencies or wards always contain more than one seat.
+                        It is designed to provide results that are more proportional than simple
+                        <a href="{% url 'fptp_voting_system_view' %}">First-past-the-post</a>.</p>
+
+                    <p>STV is used in Scottish and Northern Irish council elections, and for elections to the Northern Ireland Assembly. There is also a mechanism for Welsh councils to introduce it for Welsh council elections.</p>
+
+                    <h3>How STV works</h3>
+
+                    <p>Candidates need a predetermined number of votes to get elected, known as the ‘quota’.
+                    </p>
+
+                    <p>To begin with, the number of votes needed to win a seat (the quota) is calculated using the following formula:
+                    </p>
+
+                    <pre>(Valid Votes Cast) ➗ (seats available +1) + 1</pre>
+
+                    <p>For example, in a three-member ward, each candidate will need a quarter of the votes plus one to win a seat.</p>
+
+                    <p>If no candidate has achieved that quota in first  preference (1s) votes, then the candidate with the fewest first preference votes is eliminated and their votes reallocated to other candidates, according to their voters’ second preferences (2s). This process continues until all the seats are filled.
+                    </p>
+
+                    <p>If a candidate does achieve the quota, any surplus votes gained by that candidate are reallocated according to the voters’ next preferences. Because this is done only using the proportion of votes that are surplus, fractions of a vote are usually created.
+                    </p>
+
+                    <p>This process is repeated until all of the seats in a ward or constituency are filled. Counting votes cast in STV elections can take some time, although in many places the ballots are counted electronically to speed this up. Scotland uses e-counting methods in local elections.
+                    </p>
+
+                    <h3>Example Election</h3>
+
+                    <p>The following example shows the first preference tallies for a council ward in Glasgow at the 2017 local elections. You can see that the second SNP candidate was elected despite polling fewer first preference votes than their Labour competitor; they did better on second and third preference votes.
+                    </p>
+
+                    <h3>Modelling STV in our system</h3>
+
+                    <h4>Starting idea (manual entry)</h4>
+
+                    <p>Present the user with a form, user enters all 1st pref votes for all candidates. Our system calculates the quota, and then marks all who reach it as elected.
+                    </p>
+
+                    <p>If seats still spare, system keeps presenting form and making the calculations until all seats are filled.
+                    </p>
+
+                    <p>If, at any point, number of remaining candidates = number of remaining seats, then all are deemed elected (ie. without meeting the quota). Uncontested elections can still happen.
+                    </p>
+
+                    <h4>Problem</h4>
+
+                    <p>Fractions of votes are a thing.</p>
+
+                    <p>Results can go into ten or more stages - for one Scots local election could mean thousands of individual results entry forms.</p>
+
+                    <h4>Solution</h4>
+
+                    <p>In Scotland results are counted electronically and the results are published in PDF format, all by the same software. We can parse these?</p>
+
+                    <p>See eg: Edinburgh, Stirling</p>
+
+                    <h4>Problem</h4>
+
+                    <p>I expect candidates can have a different name on the SoPN to that which is in the results.
+                        Software provider can change between each election. In 2017 and until 4 May it is CGI IT, but for the 2022 locals it will be Fujitsu.
+                    </p>
+
+                    <h4>Solution</h4>
+
+                    <p>Ask for example results pages from a council before election?
+                        Partner with someone to do it? (eg. Teale).
+                        Give up trying to be clever and just throw the data entry task at the volunteers, who will probably cheerfully do it regardless.
+                    </p>
+
+                    <h4>Solution</h4>
+
+                    <p>A quick hack which allows us to mark candidates as elected/eliminated and at what stage this happened for each, then maybe record first preference vote numbers.
+                    </p>
+
+                    <h4>Problem</h4>
+
+                    <p>Not actually a solution. The Scots and Northern Irish might get angry.
+                    </p>
+
+                    <h4>Solution</h4>
+
+                    <p>Whatever we do we'll probably come to regret it.
+                    </p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

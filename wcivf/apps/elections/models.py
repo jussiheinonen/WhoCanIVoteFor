@@ -603,5 +603,7 @@ class VotingSystem(models.Model):
             return reverse("ams_voting_system_view")
         elif self.slug == "sv":
             return reverse("sv_voting_system_view")
+        elif self.slug == "STV":
+            return reverse("stv_voting_system_view")
         else:
             None

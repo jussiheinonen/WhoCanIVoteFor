@@ -74,4 +74,12 @@ urlpatterns = [
         ),
         name="sv_voting_system_view",
     ),
+    re_path(
+        r"^voting_system/STV/",
+        TranslatedTemplateView.as_view(
+            template_name="elections/stv.html",
+            extra_context={"voting_sytem": "Single Transferable Vote"},
+        ),
+        name="stv_voting_system_view",
+    ),
 ]
