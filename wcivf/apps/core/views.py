@@ -85,6 +85,7 @@ class HomePageView(PostcodeFormView):
             .exclude(election__election_date=may_election_day_this_year())
             .select_related("election", "post")
             .order_by("election__election_date")
+            .none()
         )
 
         polls_open = timezone.make_aware(
