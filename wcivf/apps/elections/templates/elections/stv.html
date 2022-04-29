@@ -41,65 +41,6 @@
 
                     <p>This process is repeated until all of the seats in a ward or constituency are filled. Counting votes cast in STV elections can take some time, although in many places the ballots are counted electronically to speed this up. Scotland uses e-counting methods in local elections.
                     </p>
-
-                    <h3>Example Election</h3>
-
-                    <p>The following example shows the first preference tallies for a council ward in Glasgow at the 2017 local elections. You can see that the second SNP candidate was elected despite polling fewer first preference votes than their Labour competitor; they did better on second and third preference votes.
-                    </p>
-
-                    <h3>Modelling STV in our system</h3>
-
-                    <h4>Starting idea (manual entry)</h4>
-
-                    <p>Present the user with a form, user enters all 1st pref votes for all candidates. Our system calculates the quota, and then marks all who reach it as elected.
-                    </p>
-
-                    <p>If seats still spare, system keeps presenting form and making the calculations until all seats are filled.
-                    </p>
-
-                    <p>If, at any point, number of remaining candidates = number of remaining seats, then all are deemed elected (ie. without meeting the quota). Uncontested elections can still happen.
-                    </p>
-
-                    <h4>Problem</h4>
-
-                    <p>Fractions of votes are a thing.</p>
-
-                    <p>Results can go into ten or more stages - for one Scots local election could mean thousands of individual results entry forms.</p>
-
-                    <h4>Solution</h4>
-
-                    <p>In Scotland results are counted electronically and the results are published in PDF format, all by the same software. We can parse these?</p>
-
-                    <p>See eg: Edinburgh, Stirling</p>
-
-                    <h4>Problem</h4>
-
-                    <p>I expect candidates can have a different name on the SoPN to that which is in the results.
-                        Software provider can change between each election. In 2017 and until 4 May it is CGI IT, but for the 2022 locals it will be Fujitsu.
-                    </p>
-
-                    <h4>Solution</h4>
-
-                    <p>Ask for example results pages from a council before election?
-                        Partner with someone to do it? (eg. Teale).
-                        Give up trying to be clever and just throw the data entry task at the volunteers, who will probably cheerfully do it regardless.
-                    </p>
-
-                    <h4>Solution</h4>
-
-                    <p>A quick hack which allows us to mark candidates as elected/eliminated and at what stage this happened for each, then maybe record first preference vote numbers.
-                    </p>
-
-                    <h4>Problem</h4>
-
-                    <p>Not actually a solution. The Scots and Northern Irish might get angry.
-                    </p>
-
-                    <h4>Solution</h4>
-
-                    <p>Whatever we do we'll probably come to regret it.
-                    </p>
-
                 </div>
             </div>
         </div>
