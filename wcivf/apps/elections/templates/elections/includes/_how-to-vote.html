@@ -1,61 +1,105 @@
 {% load humanize %}
-{% comment %}
+{% load i18n %}
 
+{% comment %}
 Voting system is currently one of:
 
 AMS: Additional Member System
 FPTP: First-past-the-post
 sv: Supplementary Vote
 STV: Single Transferable Vote
-PR-CL: Closed List
+PR-CL: Closed List 
+{% endcomment %}
 
-{%  endcomment %}
 <ul class="ds-details">
     <li style="list-style: none;">
         <details>
-            <summary>How you vote</summary>
+            <summary>{% trans 'How you vote' %}</summary>
             <p>
                 {% if voting_system.get_absolute_url %}
-                    This election uses <a href="{{ voting_system.get_absolute_url }}">{{ voting_system.name }}</a>.
+                    {% blocktrans trimmed with voting_system_url=voting_system.get_absolute_url voting_system_name=voting_system.name%}
+                        This election uses <a href="{{ voting_system_url }}">{{ voting_system_name }}</a>.
+                    {% endblocktrans %}
                 {% else %}
-                    This election uses {{ voting_system.name }}.
+                    {% blocktrans trimmed with voting_system_name=voting_system.name %}
+                        This election uses {{ voting_system_name }}.
+                    {% endblocktrans %}
                 {% endif %}
             </p>
 
             {% if voting_system.slug == "FPTP" %}
-                <p>Mark an X in the box for your preferred candidate{{ postelection.winner_count|pluralize }}.</p>
+                <p>
+                    {% blocktrans count counter=postelection.winner_count %}
+                        Mark an X in the box for your preferred candidate.
+                    {% plural %}
+                        Mark an X in the box for your preferred candidates.
+                    {% endblocktrans %}
+                </p>
                 {% if postelection.people|length > 1 %}
-                    <p>You can vote for up to {{ postelection.winner_count|apnumber }} candidate{{ postelection.winner_count|pluralize }} in this election.</p>
+                    <p>
+                        {% blocktrans trimmed with winner_count=postelection.winner_count|apnumber count counter=postelection.winner_count %}
+                            You can mark up to {{ winner_count}} candidate.
+                        {% plural %}
+                            You can mark up to {{ winner_count }} candidates.
+                        {% endblocktrans %}
+                    </p>
                 {% endif %}
             {% endif %}
 
             {% if voting_system.slug == "STV" %}
-                <p>Rank the candidates by your preference: 1, 2, 3…
-                    You don't have to rank all the candidates, but you must at least mark your first choice.</p>
+                <p>
+                    {% blocktrans %}
+                        Rank the candidates by your preference: 1, 2, 3…
+                        You don't have to rank all the candidates, but you must at least mark your first choice.
+                    {% endblocktrans %}
+                </p>
             {% endif %}
 
             {% if voting_system.slug == "sv" %}
-                <p>Mark an X in the first column for your first choice.
-                    Mark an X in the second column for your second choice.
-                    You do not have to mark a second choice.</p>
+                <p>
+                    {% blocktrans %}
+                        Mark an X in the first column for your first choice.
+                        Mark an X in the second column for your second choice.
+                        You do not have to mark a second choice.
+                    {% endblocktrans %}
+                </p>
             {% endif %}
 
             {% if voting_system.slug == "PR-CL" %}
-                <p>Mark an X in the box for one party or independent candidate.</p>
+                <p>
+                    {% blocktrans %}
+                        Mark an X in the box for one party or independent candidate.
+                    {% endblocktrans %}
+                </p>
             {% endif %}
 
             {% if is_regional %}
-                <p>Mark an X in the box next to your preferred party or independent candidate</p>
+                <p>
+                    {% blocktrans %}
+                        Mark an X in the box next to your preferred party or independent candidate
+                    {% endblocktrans %}
+                </p>
             {% endif %}
 
             {% if is_constituency %}
-                <p>Mark an X in the box for your preferred candidate.</p>
+                <p>
+                    {% blocktrans %}
+                        Mark an X in the box for your preferred candidate.
+                    {% endblocktrans %}
+                </p>
             {% endif %}
 
-            <p>Read the instructions at the top of your ballot paper carefully.</p>
+            <p>{% blocktrans %}
+                Read the instructions at the top of your ballot paper carefully.
+            {% endblocktrans %}
+            </p>
 
-            <p>For more information, visit <a href="https://www.electoralcommission.org.uk/i-am-a/voter/how-cast-your-vote">
-                The Electoral Commission's website</a> or ask an official at your polling station.</p>
+            <p>
+                {% blocktrans %}
+                    For more information, visit <a href="https://www.electoralcommission.org.uk/i-am-a/voter/how-cast-your-vote">
+                        The Electoral Commission's website</a> or ask an official at your polling station.
+                {% endblocktrans %}
+            </p>
         </details>
     </li>
 </ul>

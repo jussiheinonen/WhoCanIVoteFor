@@ -68,6 +68,7 @@ class TestHtml:
             reverse("sv_voting_system_view"),
             reverse("fptp_voting_system_view"),
             reverse("ams_voting_system_view"),
+            reverse("stv_voting_system_view"),
         ]
 
     @pytest.mark.django_db

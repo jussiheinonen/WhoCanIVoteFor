@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-22 09:33+0000\n"
+"POT-Creation-Date: 2022-04-27 19:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -183,6 +183,96 @@ msgstr ""
 #: wcivf/apps/elections/templates/elections/includes/_elections_breadcrumbs.html:9
 #: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:9
 msgid "Elections"
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:17
+msgid "How you vote"
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:20
+#, python-format
+msgid ""
+"This election uses <a href=\"%(voting_system_url)s\">%(voting_system.name)s</"
+"a>."
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:24
+#, python-format
+msgid "This election uses %(voting_system.name)s."
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:32
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:86
+msgid ""
+"\n"
+"                        Mark an X in the box for your preferred candidate.\n"
+"                    "
+msgid_plural ""
+"\n"
+"                        Mark an X in the box for your preferred candidates.\n"
+"                    "
+msgstr[0] ""
+msgstr[1] ""
+
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:40
+#, python-format
+msgid "You can mark up to %(winner_count)s candidate."
+msgid_plural "You can mark up to %(winner_count)s candidates."
+msgstr[0] ""
+msgstr[1] ""
+
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:51
+msgid ""
+"\n"
+"                        Rank the candidates by your preference: 1, 2, 3…\n"
+"                        You don't have to rank all the candidates, but you "
+"must at least mark your first choice.\n"
+"                    "
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:60
+msgid ""
+"\n"
+"                        Mark an X in the first column for your first "
+"choice.\n"
+"                        Mark an X in the second column for your second "
+"choice.\n"
+"                        You do not have to mark a second choice.\n"
+"                    "
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:70
+msgid ""
+"\n"
+"                        Mark an X in the box for one party or independent "
+"candidate.\n"
+"                    "
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:78
+msgid ""
+"\n"
+"                        Mark an X in the box next to your preferred party or "
+"independent candidate\n"
+"                    "
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:92
+msgid ""
+"\n"
+"                Read the instructions at the top of your ballot paper "
+"carefully.\n"
+"            "
+msgstr ""
+
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:98
+msgid ""
+"\n"
+"                    For more information, visit <a href=\"https://www."
+"electoralcommission.org.uk/i-am-a/voter/how-cast-your-vote\">\n"
+"                        The Electoral Commission's website</a> or ask an "
+"official at your polling station.\n"
+"                "
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_people_list_with_lists.html:15
