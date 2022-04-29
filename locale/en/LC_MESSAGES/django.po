@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-27 19:44+0100\n"
+"POT-Creation-Date: 2022-04-29 10:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,13 +192,13 @@ msgstr ""
 #: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:20
 #, python-format
 msgid ""
-"This election uses <a href=\"%(voting_system_url)s\">%(voting_system.name)s</"
+"This election uses <a href=\"%(voting_system_url)s\">%(voting_system_name)s</"
 "a>."
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:24
 #, python-format
-msgid "This election uses %(voting_system.name)s."
+msgid "This election uses %(voting_system_name)s."
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:32
@@ -620,7 +620,9 @@ msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:86
 #, python-format
-msgid "You can choose from <strong>%(num_ballots)s</strong>."
+msgid ""
+"There are <strong>%(winner_count)s seat%(plural)s</strong> up for election, "
+"and you can choose from <strong>%(num_ballots)s</strong>."
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:96
