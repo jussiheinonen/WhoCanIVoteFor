@@ -20,7 +20,7 @@ It might be good to look at [this issue](https://github.com/mysociety/yournextre
 
 The reason for building this site:
 
-1. We have some other tools that are designed for gathering data, for example [Democracy Club Candidates](https://candidates.democracyclub.org.uk/) and [UK Polling Statons](https://wheredoivote.co.uk/).  There is value in keeping these sites on their own, as the candidates one in particular has a very different audiance to this site.
+1. We have some other tools that are designed for gathering data, for example [Democracy Club Candidates](https://candidates.democracyclub.org.uk/) and [UK Polling Statons](https://wheredoivote.co.uk/).  There is value in keeping these sites on their own, as the candidates one in particular has a very different audience to this site.
 2. We want to allow 3rd parties to write sites that we can include in this one via data dumps.  3rd parties shouldn't have to use our codebase in order to make interesting things.  We saw this a low during the UK General Election.
 3. This site is very read heavy, so we can think about optimizing for that, rather than both read and write heavy operations.  In 2015 this site was [a Jekyll install](https://github.com/DemocracyClub/YourNextMP-Read).
 4. We want to be able to spin up new ideas quickly in this codebase, and not pollute the [YourNextRepresentative](https://github.com/DemocracyClub/YourNextRepresentative) code too much (it has an international focus)
