@@ -55,8 +55,12 @@ class Command(BaseCommand):
         self.ballot_importer = YNRBallotImporter(stdout=self.stdout)
 
         try:
-            last_updated = Person.objects.latest().last_updated
-            self.past_time_str = last_updated - timedelta(hours=1)
+            person = Person.objects.latest()
+            self.stdout.write(
+                f"Using timestamp from {person.name} (PK:{person.pk} TS:{person.last_updated})"
+            )
+            last_updated = person.last_updated - timedelta(hours=1)
+            self.past_time_str = str(last_updated)
         except Person.DoesNotExist:
             # In case this is the first run
             self.past_time_str = "1800-01-01"
@@ -144,9 +148,13 @@ class Command(BaseCommand):
     @time_function_length
     @transaction.atomic
     def add_people(self, results):
+        self.stdout.write(f"Found {results['count']} people to import")
         for person in results["results"]:
             with show_data_on_error("Person {}".format(person["id"]), person):
                 person_obj = Person.objects.update_or_create_from_ynr(person)
+                self.stdout.write(
+                    f"Updated {person_obj.name} ({person_obj.pk})"
+                )
 
                 if self.options["recently_updated"]:
                     self.delete_old_candidacies(
