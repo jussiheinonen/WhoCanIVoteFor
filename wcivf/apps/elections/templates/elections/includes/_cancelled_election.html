@@ -15,7 +15,7 @@
             <p>
                 {% blocktrans trimmed with is_or_are=object.winner_count|pluralize:"is,are" winner_count=object.winner_count|apnumber post=object.post.full_label num_people=object.people.count|apnumber pluralise_candidates=object.people|pluralize pluralise_seat=object.winner_count|pluralize %}
                     This election was uncontested because the number of candidates who stood was equal to the number of available seats.
-                    There {{ is_or_are }} {{ winner_count }} seat{{ pluralise_seat }} in {{ post_label }}, and only {{ num_people }} candidate{{ pluralise_candidates }}.
+                    There {{ is_or_are }} {{ winner_count }} seat{{ pluralise_seat }} in {{ post }}, and only {{ num_people }} candidate{{ pluralise_candidates }}.
                 {% endblocktrans %}
             </p>
             <p>
