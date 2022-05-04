@@ -205,7 +205,10 @@ class YNRBallotImporter:
     @time_function_length
     def get_last_updated(self):
         try:
-            return PostElection.objects.last_updated_in_ynr().ynr_modified
+            last_updated = (
+                PostElection.objects.last_updated_in_ynr().ynr_modified
+            )
+            return last_updated - timezone.timedelta(hours=1)
         except PostElection.DoesNotExist:
             # default before changes were added to YNR
             return timezone.datetime(2021, 10, 27, tzinfo=timezone.utc)
