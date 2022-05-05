@@ -537,7 +537,7 @@ msgstr "Aelodau ychwanegol"
 #: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:32
 #, python-format
 msgid ""
-"This election <strong>is being help today</strong>. Polls are open from "
+"This election <strong>is being held today</strong>. Polls are open from "
 "%(open_time)s till %(close_time)s"
 msgstr ""
 "Cynhelir yr etholiad hwn <strong>heddiw</strong>. Mae gorsafoedd pleidleisio "
