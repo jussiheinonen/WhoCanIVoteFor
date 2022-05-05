@@ -30,7 +30,7 @@
                 <p>
                     {% if postelection.election.is_election_day %}
                         {% blocktrans trimmed with open_time=postelection.election.polls_open|time:"ga" close_time=postelection.election.polls_close|time:"ga" %}
-                            This election <strong>is being help today</strong>. Polls are open from {{ open_time }} till {{ close_time }}
+                            This election <strong>is being held today</strong>. Polls are open from {{ open_time }} till {{ close_time }}
                         {% endblocktrans %}
 
                     {% else %}
