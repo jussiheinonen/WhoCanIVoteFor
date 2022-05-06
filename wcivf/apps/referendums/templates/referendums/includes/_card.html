@@ -29,7 +29,7 @@
 
         {% blocktrans trimmed with referendum_question=referendum.question referendum_answer_one=referendum.answer_one referendum_answer_two=referendum.answer_two %}
             <h4>{{ referendum_question}}</h4>
-            <blockquote>{{ referendum.answer_one }}</blockquote> or <blockquote>{{ referendum_answer_two }}</blockquote>
+            <blockquote>{{ referendum_answer_one }}</blockquote> or <blockquote>{{ referendum_answer_two }}</blockquote>
         {% endblocktrans %}
 
         {% if referendum.council_url %}
