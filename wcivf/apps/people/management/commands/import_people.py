@@ -2,7 +2,6 @@ import os
 import json
 import tempfile
 import shutil
-from datetime import timedelta
 from urllib.parse import urlencode
 
 from dateutil.parser import parse
@@ -59,7 +58,7 @@ class Command(BaseCommand):
             self.stdout.write(
                 f"Using timestamp from {person.name} (PK:{person.pk} TS:{person.last_updated})"
             )
-            last_updated = person.last_updated - timedelta(hours=1)
+            last_updated = person.last_updated
             self.past_time_str = str(last_updated)
         except Person.DoesNotExist:
             # In case this is the first run
