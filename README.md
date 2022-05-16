@@ -105,4 +105,4 @@ render `foo.html`
 
 Deployments are triggered by Circle CI. Take a look at `.circleci/config.yml` to see details of the deployment workflow.
 
-To increase the number of EC2 instances for an environment (e.g. during busy times around elections) increase the `min-size`, `max-size` and `desired-capacity` variables found in the `code_deploy` jobs in the `config.yml` file.
+To increase the number of EC2 instances for an environment (e.g. during busy times around elections) increase the `min-size`, `max-size` and `desired-capacity` variables found in the `code_deploy` jobs in the `config.yml` file. For further details, see notes about scaling [scaling](/docs/troubleshooting.md#scaling).

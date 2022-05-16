@@ -15,6 +15,8 @@ Now click on the 'Logical' parameter group you just created, then click 'Modify"
 - shared_preload_libraries: pglogical
 - max_wal_size: 1028
 - max_slot_wal_keep_size: 5000
+- max_replication_slots: 100
+- max_wal_senders: 105
 - Click 'Continue', then 'Apply changes'
 
 Now when you craete your RDS instance, apply this parameter group to your RDS instance under the Database Options section.
@@ -53,7 +55,7 @@ Further reading about setting up logical replication:
 
 ### Debugging
 
-The following queries are useful for checking replication slots on a master instance:
+The following queries are useful for checking replication slots on a master instance. You will first need to [connect to the RDS instance](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ConnectToPostgreSQLInstance.html#USER_ConnectToPostgreSQLInstance.psql) and relevant WCIVF database. Required secrets can be found in the DC bitwarden account.
 
 View all replication slots:
 - `select * from pg_replication_slots;`
