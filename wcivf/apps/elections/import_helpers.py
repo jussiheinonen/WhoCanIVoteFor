@@ -337,7 +337,7 @@ class YNRBallotImporter:
             defaults = {
                 "election": election,
                 "post": post,
-                "winner_count": ballot_dict["winner_count"],
+                "winner_count": ballot_dict["winner_count"] or 1,
                 "cancelled": ballot_dict["cancelled"],
                 "locked": ballot_dict["candidates_locked"],
             }
