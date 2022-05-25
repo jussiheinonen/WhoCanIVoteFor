@@ -346,7 +346,7 @@ class PostElection(TimeStampedModel):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     election = models.ForeignKey(Election, on_delete=models.CASCADE)
     contested = models.BooleanField(default=True)
-    winner_count = models.IntegerField(blank=True, null=True)
+    winner_count = models.IntegerField(blank=True, default=1)
     locked = models.BooleanField(default=False)
     cancelled = models.BooleanField(default=False)
     replaced_by = models.ForeignKey(
