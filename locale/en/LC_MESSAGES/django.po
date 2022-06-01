@@ -232,47 +232,31 @@ msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:60
 msgid ""
-"\n"
-"                        Mark an X in the first column for your first "
-"choice.\n"
-"                        Mark an X in the second column for your second "
-"choice.\n"
-"                        You do not have to mark a second choice.\n"
-"                    "
+"Mark an X in the first column for your first choice."
+"Mark an X in the second column for your second choice."
+"You do not have to mark a second choice."
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:70
 msgid ""
-"\n"
-"                        Mark an X in the box for one party or independent "
-"candidate.\n"
-"                    "
+"Mark an X in the box for one party or independent candidate."                    "
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:78
 msgid ""
-"\n"
-"                        Mark an X in the box next to your preferred party or "
-"independent candidate\n"
-"                    "
+"Mark an X in the box next to your preferred party or independent candidate."
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:92
 msgid ""
-"\n"
-"                Read the instructions at the top of your ballot paper "
-"carefully.\n"
-"            "
+"Read the instructions at the top of your ballot paper carefully."
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:98
 msgid ""
-"\n"
-"                    For more information, visit <a href=\"https://www."
-"electoralcommission.org.uk/i-am-a/voter/how-cast-your-vote\">\n"
-"                        The Electoral Commission's website</a> or ask an "
-"official at your polling station.\n"
-"                "
+"For more information, visit <a href=\"https://www.electoralcommission.org.uk/i-am-a/voter/how-cast-your-vote\">\n"
+"The Electoral Commission's website</a> or ask an official at your polling station.\n"
+
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_people_list_with_lists.html:15
