@@ -9,12 +9,12 @@
                     <h3 class="ds-padded">{{ object.name }}'s {% trans "Elections" %}</h3>
                 </caption>
                 <tr>
-                    <th>Date</th>
-                    <th>Election</th>
-                    <th>Party</th>
-                    <th>Results</th>
+                    <th>{% trans "Date" %}</th>
+                    <th>{% trans "Election" %}</th>
+                    <th>{% trans "Party" %}</th>
+                    <th>{% trans "Results" %}</th>
                     {% if object.previous_party_count %}
-                        <th>Other party affiliations in the past 12 months</th>
+                        <th>{% trans "Other party affiliations in the past 12 months" %}</th>
                     {% endif %}
                 </tr>
                 <tr>
