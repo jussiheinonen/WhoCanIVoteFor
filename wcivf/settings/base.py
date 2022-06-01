@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
     "django.contrib.sites",
+    "django_filters",
     "dc_signup_form",
     "dc_signup_form.signup_server",
     "dc_utils",

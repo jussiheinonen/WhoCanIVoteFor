@@ -1,24 +1,32 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load humanize %}
+{% load pipeline %}
+
 {% block page_title %}{% trans "UK Elections" %}{% endblock page_title %}
 {% block og_title %}{% trans "UK Elections" %}{% endblock og_title %}
 {% block og_description %}{% trans "All Elections in the UK" %}{% endblock og_description %}
 
+
 {% block content %}
 
     {% include 'elections/includes/_elections_breadcrumbs.html' %}
-
     <div class="ds-stack-smaller">
         <div class="ds-card">
             <div class="ds-card-body">
                 <h1>{% trans "All Elections" %}</h1>
-                <h2>{% trans "Current Elections" %}</h2>
                 <p>{% trans "This is a list of upcoming elections, and all elections Democracy Club has covered since 2010. The local election database was founded in 2016." %}</p>
-                {% include "elections/includes/_election_list.html" with elections=current_or_future_elections %}
-
-
-                <h2>{% trans "Past Elections" %}</h2>
-                {% include "elections/includes/_election_list.html" with elections=past_elections %}
+                <aside class="ds-filter" aria-labelledby="filter-label">
+                    <div class="ds-filter-cluster" id="election-filters">
+                        <ul style="list-style: none;" aria-labelledby="filter-label">
+                            <li id="filter-label" class="ds-filter-label" aria-hidden="true">Filter:</li>
+                            {% for field in filter.form %}
+                                {{ field }}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </aside>
+                {% include "elections/includes/_election_list.html" with elections=queryset %}
             </div>
         </div>
 
@@ -28,3 +36,5 @@
     </div>
 
 {% endblock content %}
+
+

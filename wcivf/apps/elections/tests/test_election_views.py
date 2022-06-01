@@ -37,7 +37,7 @@ class ElectionViewTests(TestCase):
         )
 
     def test_election_list_view(self):
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(1):
             url = reverse("elections_view")
             response = self.client.get(url, follow=True)
             self.assertEqual(response.status_code, 200)
@@ -96,6 +96,33 @@ class ElectionViewTests(TestCase):
                 self.assertContains(
                     response, election.pluralized_division_name.title()
                 )
+
+    def test_election_type_filters(self):
+        """
+        Test that the election type filters
+        return the correct query and url
+        """
+        local_election = ElectionWithPostFactory(
+            slug="local.southfields.2022-06-23",
+            election_date="2022-06-23",
+            name="Southfields local election",
+            election_type="local",
+        )
+        parl_election = ElectionWithPostFactory(
+            slug="parl.2022-06-03/uk-parliament-elections/",
+            election_date="2022-06-03",
+            name="Parl 2022",
+            election_type="parl",
+        )
+        url = reverse("elections_view")
+        url = f"{url}?election_type={local_election.election_type}"
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "elections/elections_view.html")
+        self.assertContains(response, local_election.nice_election_name)
+        self.assertContains(response, local_election.get_absolute_url())
+        self.assertContains(response, local_election.election_date)
+        self.assertNotContains(response, parl_election.nice_election_name)
 
 
 class ElectionPostViewTests(TestCase):
