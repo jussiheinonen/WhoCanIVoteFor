@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load markdown_deux_tags %}
+{% load humanize %}
+{% load i18n %}
+
+{% block content %}
+    {% include "elections/includes/_voting_system_breadcrumbs.html" %}
+
+    <div class="ds-page">
+        <div class="ds-stack">
+            <div class="ds-card ds-padded">
+                <div class="ds-card-body">
+                    <h2>Pleidlais Sengl Drosglwyddadwy (PSD)</h2>
+
+                    <p>Mewn etholiad PSD, mae pleidleiswyr yn graddio ymgeiswyr yn nhrefn
+                        eu dewis gan ddefnyddio rhifau yn hytrach na chroesau. Efallai y byddant yn rhifo
+                        cymaint o ymgeiswyr ag y mynnant ar y papur pleidleisio.
+                        Mae etholaethau neu wardiau PSD bob amser yn cynnwys mwy nag un sedd.
+                        Fe'u cynlluniwyd i ddarparu canlyniadau sy'n fwy cyfrannol na
+                        <a href="{% url 'fptp_voting_system_view' %}">System y Cyntaf i’r Felin</a>.</p>
+
+                    <p>Defnyddir PSD yn etholiadau cyngor yr Alban a Gogledd Iwerddon, ac ar gyfer etholiadau i Gynulliad Gogledd Iwerddon. Mae mecanwaith hefyd i gynghorau Cymru ei gyflwyno ar gyfer etholiadau cynghorau Cymru.</p>
+
+
+                    <h3>Sut mae PSD yn gweithio</h3>
+
+                    <p>Mae angen nifer o bleidleisiau a bennwyd ymlaen llaw ar ymgeiswyr i gael eu hethol, a elwir yn 'gwota'.
+                    </p>
+
+                    <p>I ddechrau, cyfrifir nifer y pleidleisiau sydd eu hangen i ennill sedd (y cwota) gan ddefnyddio'r fformiwla ganlynol:
+                    </p>
+
+                    <pre>(Pleidleisiau Dilys a Fwriwyd) ➗ (seddi ar gael +1) + 1</pre>
+
+                    <p>Er enghraifft, mewn ward tri aelod, bydd angen chwarter y pleidleisiau ar bob ymgeisydd ynghyd ag un i ennill sedd.</p>
+
+                    <p>Os nad oes unrhyw ymgeisydd wedi cyflawni'r cwota hwnnw yn y pleidleisiau dewis cyntaf (1s), yna caiff yr ymgeisydd sydd â'r nifer lleiaf o bleidleisiau dewis cyntaf ei ddileu a chaiff ei bleidleisiau eu hailddyrannu i ymgeiswyr eraill, yn ôl ail ddewisiadau eu pleidleiswyr (2s). Mae'r broses hon yn parhau nes bod yr holl seddi wedi'u llenwi.</p>
+
+                    <p>Os yw ymgeisydd yn cyflawni'r cwota, caiff unrhyw bleidleisiau dros ben a enillwyd gan yr ymgeisydd hwnnw eu hailddyrannu yn unol â dewisiadau nesaf y pleidleiswyr. Oherwydd y gwneir hyn gan ddefnyddio dim ond cyfran y pleidleisiau sy’n warged, mae ffracsiynau o bleidlais yn cael eu creu fel arfer.</p>
+
+                    <p>Caiff y broses hon ei hailadrodd nes bod yr holl seddi mewn ward neu etholaeth wedi'u llenwi. Gall cyfrif pleidleisiau a fwriwyd mewn etholiadau PSD gymryd peth amser, er bod y pleidleisiau'n cael eu cyfrif yn electronig mewn sawl lle i gyflymu hyn. Mae'r Alban yn defnyddio dulliau e-gyfrif mewn etholiadau lleol.</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
