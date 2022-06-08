@@ -16,7 +16,7 @@ def election_types_choices():
         ("local", "Local"),
         ("mayor", "Mayoral"),
         ("pcc", "Police and Crime Commissioner"),
-        ("nia", "Northern Irish Assembly"),
+        ("nia", "Northern Ireland Assembly"),
         ("ref", "Referendum"),
         ("sp", "Scottish Parliament"),
         ("senedd", "Senedd Cymru"),
