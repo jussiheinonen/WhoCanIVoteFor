@@ -326,10 +326,10 @@ msgid ""
 "official at your polling station.\n"
 "                "
 msgstr ""
-"Am fwy o wybodaeth, ewch i <href=\"https://www."
-"electoralcommission.org.uk/i-am-a/voter/how-cast-your-vote\">\n"
-"Wefan y Comisiwn Etholiadol</a> neu gofynnwch i "
-"swyddog yn eich gorsaf bleidleisio."
+"Am fwy o wybodaeth, ewch i <href=\"https://www.electoralcommission.org.uk/i-"
+"am-a/voter/how-cast-your-vote\">\n"
+"Wefan y Comisiwn Etholiadol</a> neu gofynnwch i swyddog yn eich gorsaf "
+"bleidleisio."
 
 #: wcivf/apps/elections/templates/elections/includes/_people_list_with_lists.html:15
 msgid "Elected:"
@@ -749,7 +749,7 @@ msgstr[1] ""
 "Mae yna <strong>%(winner_count) seddi</strong> ar gael yn yr etholiad, a "
 "gallwch ddewis o <strong>%(num_ballots)</strong> ymgeiswyr."
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:96
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:98
 #, python-format
 msgid ""
 "The official candidate list has not yet been published. However, we expect "
@@ -762,7 +762,7 @@ msgstr ""
 "helpu i wella'r dudalen hon: <a href=\"%(ynr_link)s\"> ychwanegwch wybodaeth "
 "am ymgeiswyr i'n cronfa ddata</a>."
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:122
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:124
 #, python-format
 msgid ""
 "The <a href=\"%(sopn_url)s\">official candidate list</a> has been published."
@@ -770,32 +770,32 @@ msgstr ""
 "Mae'r <a href=\"%(sopn_url)s\">rhestr swyddogol o ymgeiswyr</a> wedi'i "
 "chyhoeddi."
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:127
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:129
 msgid "The official candidate list should have been published on"
 msgstr "Dylai'r rhestr swyddogol o ymgeiswyr fod wedi'i chyhoeddi ar "
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:129
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:131
 msgid "The official candidate list should be published on"
 msgstr "Dylai'r rhestr swyddogol o ymgeiswyr gael ei chyhoeddi ar"
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:138
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:140
 msgid "Read the official candidate booklet for this election."
 msgstr "Darllenwch y llyfryn ymgeiswyr swyddogol ar gyfer yr etholiad hwn."
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:142
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:144
 #, python-format
 msgid " %(description)s "
 msgstr " %(description)s "
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:149
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:151
 msgid "Can you vote in this election?"
 msgstr "A allwch chi bleidleisio yn yr etholiad hwn?"
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:150
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:152
 msgid "Age"
 msgstr "Oedran"
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:152
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:154
 #, python-format
 msgid ""
 "You need to be over %(voter_age)s on the %(voter_age_date)s of "
@@ -804,16 +804,16 @@ msgstr ""
 "Mae angen i chi fod dros %(voter_age)s ar %(voter_age_date)s "
 "%(election_date)s i bleidleisio yn yr etholiad hwn."
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:157
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:159
 msgid "Citizenship"
 msgstr "Dinasyddiaeth"
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:176
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:178
 #: wcivf/apps/people/templates/people/includes/_person_about_card.html:9
 msgid "Wikipedia"
 msgstr "Wikipedia"
 
-#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:178
+#: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:180
 #: wcivf/apps/people/templates/people/includes/_person_about_card.html:11
 msgid "Read more on Wikipedia"
 msgstr "Darllenwch fwy ar Wikipedia"
