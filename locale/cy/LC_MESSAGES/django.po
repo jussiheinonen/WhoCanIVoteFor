@@ -1386,6 +1386,7 @@ msgid "%(election)s for"
 msgstr "%(election)s ar gyfer"
 
 #: wcivf/apps/people/templates/people/includes/_person_intro_card.html:28
+#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:33
 #, python-format
 msgid "%(num_votes)s votes"
 msgstr "%(num_votes)s pleidlais"
@@ -1586,21 +1587,21 @@ msgid "%(post_label)s: %(election)s"
 msgstr "%(post_label)s: %(election)s"
 
 #: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:31
-#, python-format
-msgid "%(num_votes)s votes (elected)"
-msgstr "%(num_votes)s pleidlais (etholwyd)"
+#, fuzzy, python-format
+#| msgid "%(num_votes)s votes"
+msgid "%(num_votes)s votes "
+msgstr "%(num_votes)s pleidlais"
 
 #: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:31
-msgid "Elected unopposed"
-msgstr "Etholwyd yn ddiwrthwynebiad"
+#, fuzzy
+#| msgid "Vote count not available"
+msgid "(elected) Vote count not available"
+msgstr "Nid yw'r cyfrif pleidleisiau ar gael"
 
 #: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:33
-#, python-format
-msgid "%(num_votes)s votes (not elected)"
-msgstr "%(num_votes)s pleidlais (heb ei ethol)"
-
-#: wcivf/apps/people/templates/people/includes/_person_previous_elections_card.html:33
-msgid "Vote count not available"
+#, fuzzy
+#| msgid "Vote count not available"
+msgid "(not elected) Vote count not available"
 msgstr "Nid yw'r cyfrif pleidleisiau ar gael"
 
 #: wcivf/apps/people/templates/people/includes/intros/_constituency.html:5
