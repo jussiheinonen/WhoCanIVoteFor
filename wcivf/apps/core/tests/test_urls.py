@@ -18,3 +18,10 @@ class TestTranslatedURL(TestCase):
             response,
             "<h2>Ydych chi’n sefyll etholiad yn y DU? Diweddarwch eich proffil ymgeisydd!</h2>",
         )
+
+    def test_translated_stv(self):
+        response = self.client.get(reverse("stv_voting_system_view"))
+        self.assertContains(
+            response,
+            "<h2>Pleidlais Sengl Drosglwyddadwy (PSD)</h2>",
+        )
