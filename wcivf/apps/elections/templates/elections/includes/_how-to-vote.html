@@ -17,11 +17,11 @@ PR-CL: Closed List
             <summary>{% trans 'How you vote' %}</summary>
             <p>
                 {% if voting_system.get_absolute_url %}
-                    {% blocktrans trimmed with voting_system_url=voting_system.get_absolute_url voting_system_name=voting_system.name%}
+                    {% blocktrans trimmed with voting_system_url=voting_system.get_absolute_url voting_system_name=voting_system.get_name %}
                         This election uses <a href="{{ voting_system_url }}">{{ voting_system_name }}</a>.
                     {% endblocktrans %}
                 {% else %}
-                    {% blocktrans trimmed with voting_system_name=voting_system.name %}
+                    {% blocktrans trimmed with voting_system_name=voting_system.get_name %}
                         This election uses {{ voting_system_name }}.
                     {% endblocktrans %}
                 {% endif %}
@@ -29,11 +29,15 @@ PR-CL: Closed List
 
             {% if voting_system.slug == "FPTP" %}
                 <p>
-                    {% blocktrans count counter=postelection.winner_count %}
-                        Mark an X in the box for your preferred candidate.
-                    {% plural %}
-                        Mark an X in the box for your preferred candidates.
-                    {% endblocktrans %}
+                    {% if postelection.winner_count > 1 %}
+                        {% blocktrans %}
+                            Mark an X in the box for your preferred candidate.
+                        {% endblocktrans %}
+                    {% else %}
+                        {% blocktrans %}
+                            Mark an X in the box for your preferred candidates.
+                        {% endblocktrans %}
+                    {% endif %}
                 </p>
                 {% if postelection.people|length > 1 %}
                     <p>

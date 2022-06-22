@@ -83,8 +83,10 @@
                                             {% endblocktrans %}
                                         {% endif %}
                                         {% if postelection.winner_count and postelection.get_voting_system.slug == 'STV' %}
-                                            {% blocktrans trimmed with num_ballots=postelection.party_ballot_count winner_count=postelection.winner_count plural=postelection.winner_count|pluralize %}
-                                                There are <strong>{{ winner_count }} seat{{ plural}}</strong> up for election, and you can choose from <strong>{{ num_ballots }}</strong>.
+                                            {% blocktrans trimmed with num_ballots=postelection.party_ballot_count winner_count=postelection.winner_count|apnumber count counter=postelection.winner_count %}
+                                                There is <strong>{{ winner_count }} seat</strong> up for election, and you can choose from <strong>{{ num_ballots }}</strong>.
+                                            {% plural %}
+                                                There are <strong>{{ winner_count }} seats</strong> up for election, and you can choose from <strong>{{ num_ballots }}</strong>.
                                             {% endblocktrans %}
                                         {% endif %}
                                     {% endif %}

@@ -162,4 +162,8 @@ Once you have pushed your latest changes to your branch:
 `git fetch origin` to get access to the development branch
 `git checkout development` 
 `git merge [YOUR BRANCH NAME]`
-`git push origin develop`
+`git push origin development`
+
+# Update Welsh Translations
+
+After adding new translation tags to a template, run `django-admin compilemessages` then ``django-admin makemessages -l cy --ignore='env*`` to generate matching translation strings to be translated.
