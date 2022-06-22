@@ -22,6 +22,22 @@ msgstr ""
 msgid "Enter your postcode"
 msgstr ""
 
+#: wcivf/apps/elections/models.py:615
+msgid "First-past-the-post"
+msgstr ""
+
+#: wcivf/apps/elections/models.py:617
+msgid "Additional Member System"
+msgstr ""
+
+#: wcivf/apps/elections/models.py:619
+msgid "Supplementary Vote"
+msgstr ""
+
+#: wcivf/apps/elections/models.py:621
+msgid "Single Transferable Vote"
+msgstr ""
+
 #: wcivf/apps/elections/templates/elections/election_view.html:8
 #, python-format
 msgid "The %(election)s %(was_or_will_be)s held on %(date)s."

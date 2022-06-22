@@ -1,6 +1,7 @@
 import datetime
 import re
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 import pytz
 from django.conf import settings
@@ -605,5 +606,18 @@ class VotingSystem(models.Model):
             return reverse("sv_voting_system_view")
         elif self.slug == "STV":
             return reverse("stv_voting_system_view")
+        else:
+            None
+
+    @property
+    def get_name(self):
+        if self.slug == "FPTP":
+            return _("First-past-the-post")
+        elif self.slug == "AMS":
+            return _("Additional Member System")
+        elif self.slug == "sv":
+            return _("Supplementary Vote")
+        elif self.slug == "STV":
+            return _("Single Transferable Vote")
         else:
             None

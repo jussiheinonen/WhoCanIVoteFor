@@ -17,11 +17,11 @@ PR-CL: Closed List
             <summary>{% trans 'How you vote' %}</summary>
             <p>
                 {% if voting_system.get_absolute_url %}
-                    {% blocktrans trimmed with voting_system_url=voting_system.get_absolute_url voting_system_name=voting_system.name%}
+                    {% blocktrans trimmed with voting_system_url=voting_system.get_absolute_url voting_system_name=voting_system.get_name %}
                         This election uses <a href="{{ voting_system_url }}">{{ voting_system_name }}</a>.
                     {% endblocktrans %}
                 {% else %}
-                    {% blocktrans trimmed with voting_system_name=voting_system.name %}
+                    {% blocktrans trimmed with voting_system_name=voting_system.get_name %}
                         This election uses {{ voting_system_name }}.
                     {% endblocktrans %}
                 {% endif %}

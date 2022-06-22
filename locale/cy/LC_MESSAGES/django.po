@@ -29,6 +29,24 @@ msgstr ""
 msgid "Enter your postcode"
 msgstr "Rhowch eich cod post"
 
+#: wcivf/apps/elections/models.py:615
+msgid "First-past-the-post"
+msgstr "Y Cyntaf i’r Felin"
+
+#: wcivf/apps/elections/models.py:617
+#, fuzzy
+#| msgid "The Additional Member System"
+msgid "Additional Member System"
+msgstr "Y System Aelodau Ychwanegol"
+
+#: wcivf/apps/elections/models.py:619
+msgid "Supplementary Vote"
+msgstr "Pleidlais Atodol"
+
+#: wcivf/apps/elections/models.py:621
+msgid "Single Transferable Vote"
+msgstr "Pleidlais Sengl Drosglwyddadwy"
+
 #: wcivf/apps/elections/templates/elections/election_view.html:8
 #, python-format
 msgid "The %(election)s %(was_or_will_be)s held on %(date)s."
@@ -220,6 +238,8 @@ msgid ""
 "This election uses <a href=\"%(voting_system_url)s\">%(voting_system_name)s</"
 "a>."
 msgstr ""
+"Mae’r etholiad hwn yn defnyddio <a href=\"%(voting_system_url)s\">"
+"%(voting_system_name)s</a>"
 
 #: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:24
 #, python-format
