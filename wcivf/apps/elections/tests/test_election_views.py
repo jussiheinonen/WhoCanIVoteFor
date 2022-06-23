@@ -307,6 +307,93 @@ class ElectionPostViewTests(TestCase):
         self.assertContains(response, "This election was cancelled.")
         self.assertNotContains(response, "No votes will be cast")
 
+    def test_previous_cancelled_elections(self):
+        """Previous elections table with cancelled election with unopposed candidate"""
+        self.person = PersonFactory()
+        self.person_post = PersonPostFactory(
+            post_election=self.post_election,
+            election=self.election,
+            post=self.post,
+            person=self.person,
+            elected=False,
+        )
+        self.post_election.cancelled = True
+        self.post_election.save()
+        response = self.client.get(self.person.get_absolute_url(), follow=True)
+        self.assertContains(response, "{}'s Elections".format(self.person.name))
+        self.assertContains(response, "Elected unopposed")
+
+    def test_previous_elections_elected_with_count(self):
+        """Previous elections table with elected candidate and vote count"""
+        self.person = PersonFactory()
+        self.person_post = PersonPostFactory(
+            post_election=self.post_election,
+            election=self.election,
+            post=self.post,
+            person=self.person,
+            elected=True,
+            votes_cast=10,
+        )
+        self.post_election.cancelled = False
+        self.post_election.save()
+        response = self.client.get(self.person.get_absolute_url(), follow=True)
+        self.assertContains(response, "{}'s Elections".format(self.person.name))
+        self.assertContains(
+            response, "{} votes (elected)".format(self.person_post.votes_cast)
+        )
+
+    def test_previous_elections_not_elected_with_count(self):
+        self.person = PersonFactory()
+        self.person_post = PersonPostFactory(
+            post_election=self.post_election,
+            election=self.election,
+            post=self.post,
+            person=self.person,
+            elected=False,
+            votes_cast=10,
+        )
+        self.post_election.cancelled = False
+        self.post_election.save()
+        response = self.client.get(self.person.get_absolute_url(), follow=True)
+        self.assertContains(
+            response,
+            "{} votes (not elected)".format(self.person_post.votes_cast),
+        )
+
+    def test_previous_elections_elected_no_count(self):
+        """Previous elections table with elected candidate and no vote count"""
+        self.person = PersonFactory()
+        self.person_post = PersonPostFactory(
+            post_election=self.post_election,
+            election=self.election,
+            post=self.post,
+            person=self.person,
+            elected=True,
+            votes_cast=None,
+        )
+        self.post_election.cancelled = False
+        self.post_election.save()
+        response = self.client.get(self.person.get_absolute_url(), follow=True)
+        self.assertContains(response, "{}'s Elections".format(self.person.name))
+        self.assertContains(response, "Elected (vote count not available")
+
+    def test_previous_elections_not_elected_no_count(self):
+        """Previous elections table with no wins and no vote count"""
+        self.person = PersonFactory()
+        self.person_post = PersonPostFactory(
+            post_election=self.post_election,
+            election=self.election,
+            post=self.post,
+            person=self.person,
+            elected=False,
+            votes_cast=None,
+        )
+        self.post_election.cancelled = False
+        self.post_election.save()
+        response = self.client.get(self.person.get_absolute_url(), follow=True)
+        self.assertContains(response, "{}'s Elections".format(self.person.name))
+        self.assertContains(response, "Not Elected (vote count not available)")
+
 
 @pytest.mark.django_db
 class TestPostViewName:
