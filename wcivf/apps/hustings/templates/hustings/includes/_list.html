@@ -4,7 +4,7 @@
     <p>
         {% if husting.in_past %}{% trans "(Past event)" %}{% endif %}
         <strong>
-            {% blocktrans with husting_start_title=husting.starts|naturalday:"l j F Y"|title husting_start=husting.starts|date:"H:i"%}{{ husting_start_title }} {{ husting_start }}{% endblocktrans %}
+            {% blocktrans trimmed with husting_start_title=husting.starts|naturalday:"l j F Y"|title husting_start=husting.starts|date:"H:i"%}{{ husting_start_title }} {{ husting_start }}{% endblocktrans %}
             {% if husting.ends %}&ndash;{{ husting.ends | date:"H:i"}}{% endif %}:
         </strong>
         {% if husting.url %}

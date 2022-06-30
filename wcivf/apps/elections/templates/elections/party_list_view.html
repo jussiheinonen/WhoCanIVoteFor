@@ -28,7 +28,7 @@
                                         <dt>Facebook</dt>
                                         <dd>
                                             {% if local_party.facebook_page %}
-                                                <a href="{{ local_party.facebook_page }}" title="{% blocktrans with party_name=local_party.name %}{{ party_name }}'s Facebook profile{% endblocktrans %}">
+                                                <a href="{{ local_party.facebook_page }}" title="{% blocktrans trimmed with party_name=local_party.name %}{{ party_name }}'s Facebook profile{% endblocktrans %}">
                                                     {{ local_party.facebook_page }}
                                                 </a>
                                             {% endif %}
@@ -38,7 +38,7 @@
                                     {% if local_party.homepage %}
                                         <dt>{% trans "Home page" %}</dt>
                                         <dd>
-                                            <a href="{{ local_party.homepage }}" title="{% blocktrans with party_name=local_party.name %}{{ party_name }}'s home page{% endblocktrans %}">
+                                            <a href="{{ local_party.homepage }}" title="{% blocktrans trimmed with party_name=local_party.name %}{{ party_name }}'s home page{% endblocktrans %}">
                                                 {{ local_party.homepage }}
                                             </a>
                                         </dd>
@@ -62,7 +62,7 @@
                     <h3>{% trans "Party manifesto" %}</h3>
                     <p>
 
-                        {% blocktrans with party_name=party.party_name manifesto=manifesto|safe %}Find out more about the {{ party_name }} in their {{ manifesto }}.{% endblocktrans %}
+                        {% blocktrans trimmed with party_name=party.party_name manifesto=manifesto|safe %}Find out more about the {{ party_name }} in their {{ manifesto }}.{% endblocktrans %}
                     </p>
                 </div>
             </div>

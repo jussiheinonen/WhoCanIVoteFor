@@ -11,5 +11,5 @@
         {% endfor %}
     {% endautoescape %}
 {% else %}
-    {% blocktrans with election_name=object.election.name %} {{ election_name }}: No candidates known yet.{% endblocktrans %}
+    {% blocktrans trimmed with election_name=object.election.name %} {{ election_name }}: No candidates known yet.{% endblocktrans %}
 {% endif %}

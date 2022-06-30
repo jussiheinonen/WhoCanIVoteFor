@@ -5,9 +5,9 @@
             <h4 class="ds-h3">{{ party}}</h4>
             <p>
                 {% if person.local_party.is_local %}
-                    {% blocktrans with person=person.name party_label=person.local_party.label %}{{ person }}'s local party is {{ party_label }}.{% endblocktrans %}
+                    {% blocktrans trimmed with person=person.name party_label=person.local_party.label %}{{ person }}'s local party is {{ party_label }}.{% endblocktrans %}
                 {% else %}
-                    {% blocktrans with person=person.name %}{{ person }} is a {{ party }} candidate.{% endblocktrans %}
+                    {% blocktrans trimmed with person=person.name %}{{ person }} is a {{ party }} candidate.{% endblocktrans %}
                 {% endif %}
             </p>
             <dl class="ds-descriptions">
@@ -31,7 +31,7 @@
                     <div>
                         <dt>{% trans "Party Homepage" %}</dt>
                         <a href="{{ person.local_party.homepage }}">
-                            {% blocktrans %}{{ party }}'s website{% endblocktrans %}
+                            {% blocktrans trimmed %}{{ party }}'s website{% endblocktrans %}
                         </a>
                     </div>
                 {% endif %}
@@ -47,7 +47,7 @@
                     <div>
                         <dt>{% trans "Contact page" %}</dt>
                         <a href="{{ person.local_party.contact_page_url }}">
-                            {% blocktrans %}{{ party }}'s contact page{% endblocktrans %}
+                            {% blocktrans trimmed %}{{ party }}'s contact page{% endblocktrans %}
                         </a>
                     </div>
                 {% endif %}
@@ -55,7 +55,7 @@
                     <div>
                         <dt>{% trans "Youtube page" %}</dt>
                         <a href="{{ person.local_party.youtube_profile_url }}">
-                            {% blocktrans %}{{ party }}'s Youtube profile{% endblocktrans %}
+                            {% blocktrans trimmed %}{{ party }}'s Youtube profile{% endblocktrans %}
                         </a>
                     </div>
                 {% endif %}

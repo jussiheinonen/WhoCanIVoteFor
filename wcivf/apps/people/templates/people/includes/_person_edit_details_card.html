@@ -24,7 +24,7 @@
         </a>
         {% if object.should_show_email_cta %}
             <p>
-                {% blocktrans with person=object.name %}You can also email {{ person }} directly to ask them to add information to this page.{% endblocktrans %}
+                {% blocktrans trimmed with person=object.name %}You can also email {{ person }} directly to ask them to add information to this page.{% endblocktrans %}
                 <a href="{% url 'email_person_view' pk=object.pk ignored_slug=person.name|slugify %}"
                     class="ds-cta ds-cta-blue">{% trans "Ask the candidate for more information &raquo;" %}</a>
 

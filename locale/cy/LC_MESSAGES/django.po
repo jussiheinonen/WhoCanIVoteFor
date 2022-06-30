@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-22 14:02+0100\n"
+"POT-Creation-Date: 2022-06-30 11:31+0100\n"
 "PO-Revision-Date: 2022-03-24 09:04+0000\n"
 "Last-Translator: Sym Roe <sym@talusdesign.co.uk>, 2022\n"
 "Language-Team: Welsh (https://www.transifex.com/democracy-club/teams/61326/"
@@ -87,8 +87,9 @@ msgid "Add some candidates at our candidate crowd-sourcing site"
 msgstr "Ychwanegwch rai ymgeiswyr at ein gwefan torfoli ymgeiswyr"
 
 #: wcivf/apps/elections/templates/elections/election_view.html:51
-#, python-format
-msgid " %(title)s"
+#, fuzzy, python-format
+#| msgid " %(title)s"
+msgid "%(title)s"
 msgstr " %(title)s"
 
 #: wcivf/apps/elections/templates/elections/election_view.html:55
@@ -247,109 +248,63 @@ msgid "This election uses %(voting_system_name)s."
 msgstr ""
 
 #: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:33
-msgid ""
-"\n"
-"                            Mark an X in the box for your preferred "
-"candidate.\n"
-"                        "
-msgstr ""
-"\n"
-"                            Nodwch X yn y blwch ar gyfer eich ymgeisydd "
-"dewisol. \n"
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:85
+#, fuzzy
+#| msgid "Mark an X in the box for your preferred candidate.\n"
+msgid "Mark an X in the box for your preferred candidate."
+msgstr "Nodwch X yn y blwch ar gyfer eich ymgeisydd dewisol.\n"
 
-#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:37
-msgid ""
-"\n"
-"                            Mark an X in the box for your preferred "
-"candidates.\n"
-"                        "
-msgstr ""
-"\n"
-"                            Nodwch X yn y blwch ar gyfer eich ymgeiswyr "
-"dewisol. \n"
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:35
+msgid "Mark an X in the box for your preferred candidates."
+msgstr "Nodwch X yn y blwch ar gyfer eich ymgeisydd dewisol."
 
-#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:44
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:40
 #, python-format
 msgid "You can mark up to %(winner_count)s candidate."
 msgid_plural "You can mark up to %(winner_count)s candidates."
 msgstr[0] "Gallwch nodi hyd at %(winner_count)s ymgeisydd."
-msgstr[1] "Gallwch nodi hyd at %(winner_count) o ymgeiswyr."
+msgstr[1] "Gallwch nodi hyd at %(winner_count)s o ymgeiswyr."
 
-#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:55
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:51
 msgid ""
-"\n"
-"                        Rank the candidates by your preference: 1, 2, 3…\n"
-"                        You don't have to rank all the candidates, but you "
-"must at least mark your first choice.\n"
-"                    "
+"Rank the candidates by your preference: 1, 2, 3… You don't have to rank all "
+"the candidates, but you must at least mark your first choice."
 msgstr ""
-"\n"
-"                        Graddiwch yr ymgeiswyr yn ôl eich dewis: 1, 2, 3…\n"
-"                        Does dim rhaid i chi raddio'r holl ymgeiswyr, ond "
-"rhaid i chi o leiaf nodi eich dewis cyntaf.\n"
-" .                  "
+"Graddiwch yr ymgeiswyr yn ôl eich dewis: 1, 2, 3… Does dim rhaid i chi "
+"raddio'r holl ymgeiswyr, ond rhaid i chi o leiaf nodi eich dewis cyntaf."
 
-#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:64
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:60
 msgid ""
-"\n"
-"                        Mark an X in the first column for your first "
-"choice.\n"
-"                        Mark an X in the second column for your second "
-"choice.\n"
-"                        You do not have to mark a second choice.\n"
-"                    "
+"Mark an X in the first column for your first choice. Mark an X in the second "
+"column for your second choice. You do not have to mark a second choice."
 msgstr ""
 
-#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:74
-msgid ""
-"\n"
-"                        Mark an X in the box for one party or independent "
-"candidate.\n"
-"                    "
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:70
+msgid "Mark an X in the box for one party or independent candidate."
 msgstr ""
+"Bydd gennych un bleidlais, a gallwch bleidleisio dros un blaid neu ymgeisydd "
+"annibynnol."
 
-#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:82
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:78
 msgid ""
-"\n"
-"                        Mark an X in the box next to your preferred party or "
-"independent candidate\n"
-"                    "
+"Mark an X in the box next to your preferred party or independent candidate"
 msgstr ""
+"Bydd gennych un bleidlais, a gallwch bleidleisio dros un blaid neu ymgeisydd "
+"annibynnol."
 
-#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:90
-msgid ""
-"\n"
-"                        Mark an X in the box for your preferred candidate.\n"
-"                    "
-msgstr ""
-"\n"
-"                        Nodwch X yn y blwch ar gyfer eich ymgeisydd "
-"dewisol.\n"
-"                    "
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:88
+msgid "Read the instructions at the top of your ballot paper carefully."
+msgstr "Darllenwch y cyfarwyddiadau ar frig eich papur pleidleisio yn ofalus."
 
-#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:96
-msgid ""
-"\n"
-"                Read the instructions at the top of your ballot paper "
-"carefully.\n"
-"            "
-msgstr ""
-"\n"
-"Darllenwch y cyfarwyddiadau ar frig eich papur pleidleisio yn ofalus.\n"
-
-#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:102
-msgid ""
-"\n"
-"                    For more information, visit <a href=\"https://www."
-"electoralcommission.org.uk/i-am-a/voter/how-cast-your-vote\">\n"
-"                        The Electoral Commission's website</a> or ask an "
-"official at your polling station.\n"
-"                "
-msgstr ""
-"Am fwy o wybodaeth, ewch i <href=\"https://www.electoralcommission.org.uk/i-"
-"am-a/voter/how-cast-your-vote\">\n"
-"Wefan y Comisiwn Etholiadol</a> neu gofynnwch i swyddog yn eich gorsaf "
-"bleidleisio."
+#: wcivf/apps/elections/templates/elections/includes/_how-to-vote.html:89
+msgid "For more information, visit" 
+"<a href=\"https://www.electoralcommission.org.uk/i-am-a/voter/how-cast-your-vote\">"
+"The Electoral Commission's website</a> or "
+"ask an official at your polling station."
+msgstr "Am fwy o wybodaeth, ewch i"
+"<a href=\"https://www.electoralcommission.org.uk/i-am-a/voter/how-cast-your-vote\">"
+"Wefan y Comisiwn Etholiadol</a> neu "
+"gofynnwch i swyddog yn eich gorsaf bleidleisio."
 
 #: wcivf/apps/elections/templates/elections/includes/_people_list_with_lists.html:15
 msgid "Elected:"
@@ -561,9 +516,10 @@ msgstr ""
 "%(election_date)s:"
 
 #: wcivf/apps/elections/templates/elections/includes/_post_meta_description.html:14
+#: wcivf/apps/elections/templates/elections/includes/_post_meta_title.html:8
 #, python-format
-msgid " %(election_name)s: No candidates known yet."
-msgstr " %(election_name)s: Nid yw'r ymgeiswyr yn hysbys eto."
+msgid "%(election_name)s: No candidates known yet."
+msgstr "%(election_name)s: Nid yw'r ymgeiswyr yn hysbys eto."
 
 #: wcivf/apps/elections/templates/elections/includes/_post_meta_title.html:3
 #, python-format
@@ -574,11 +530,6 @@ msgstr "%(election_name)s: Canslwyd yr etholiad hwn"
 #, python-format
 msgid "%(election_name)s: The %(num_candidates)s candidates in %(post_label)s"
 msgstr "%(election_name)s: Y %(num_candidates)s ymgeisydd yn%(post_label)s"
-
-#: wcivf/apps/elections/templates/elections/includes/_post_meta_title.html:8
-#, python-format
-msgid "%(election_name)s: No candidates known yet."
-msgstr "%(election_name)s: Nid yw'r ymgeiswyr yn hysbys eto."
 
 #: wcivf/apps/elections/templates/elections/includes/_postcode_breadcrumbs.html:11
 msgid "Candidates in"
@@ -683,8 +634,9 @@ msgstr ""
 "ar agor o %(open_time)s tan %(close_time)s"
 
 #: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:37
-#, python-format
-msgid " This election %(was_or_will_be)s held"
+#, fuzzy, python-format
+#| msgid " This election %(was_or_will_be)s held"
+msgid "This election %(was_or_will_be)s held"
 msgstr "Cynhelir yr etholiad hwn %(was_or_will_be)s"
 
 #: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:48
@@ -1512,8 +1464,9 @@ msgstr ""
 "ym maniffesto'r %(party_name)s."
 
 #: wcivf/apps/people/templates/people/includes/_person_manifesto_card.html:30
-#, python-format
-msgid "'%(party_name)s' emblem "
+#, fuzzy, python-format
+#| msgid "'%(party_name)s' emblem "
+msgid "'%(party_name)s' emblem"
 msgstr "'Symbol y %(party_name)s' "
 
 #: wcivf/apps/people/templates/people/includes/_person_meta_description.html:2
@@ -1677,14 +1630,18 @@ msgstr ""
 "\"%(election_url)s\" title=\"%(election)s\">%(election_name)s</a>."
 
 #: wcivf/apps/people/templates/people/includes/intros/_independent.html:6
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "            %(person_name)s is an independent candidate in <a href="
+#| "\"%(post_url)s\">%(post_label)s</a>\n"
+#| "            in the <a href=\"%(election_url)s\" title=\"%(election_name)s"
+#| "\">%(election_name)s</a>.\n"
+#| "        "
 msgid ""
-"\n"
-"            %(person_name)s is an independent candidate in <a href="
-"\"%(post_url)s\">%(post_label)s</a>\n"
-"            in the <a href=\"%(election_url)s\" title=\"%(election_name)s\">"
-"%(election_name)s</a>.\n"
-"        "
+"%(person_name)s is an independent candidate in <a href=\"%(post_url)s\">"
+"%(post_label)s</a> in the <a href=\"%(election_url)s\" title="
+"\"%(election_name)s\">%(election_name)s</a>."
 msgstr ""
 "\n"
 "          Mae %(person_name)s ymgeisydd annibynnol yn <a href=\"%(post_url)s"

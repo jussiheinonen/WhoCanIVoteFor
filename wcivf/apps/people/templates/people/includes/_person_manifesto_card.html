@@ -27,7 +27,7 @@
             </div>
             {% if party.emblem_url %}
                 <div class="ds-party-image">
-                    <img src="{{ party.emblem_url }}" alt="{% blocktrans %}'{{ party_name}}' emblem {% endblocktrans %}">
+                    <img src="{{ party.emblem_url }}" alt="{% blocktrans trimmed %}'{{ party_name}}' emblem {% endblocktrans %}">
                 </div>
             {% endif %}
         </section>

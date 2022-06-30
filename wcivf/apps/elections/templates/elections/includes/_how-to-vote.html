@@ -30,13 +30,9 @@ PR-CL: Closed List
             {% if voting_system.slug == "FPTP" %}
                 <p>
                     {% if postelection.winner_count > 1 %}
-                        {% blocktrans %}
-                            Mark an X in the box for your preferred candidate.
-                        {% endblocktrans %}
+                        {% blocktrans trimmed %}Mark an X in the box for your preferred candidate.{% endblocktrans %}
                     {% else %}
-                        {% blocktrans %}
-                            Mark an X in the box for your preferred candidates.
-                        {% endblocktrans %}
+                        {% blocktrans trimmed %}Mark an X in the box for your preferred candidates.{% endblocktrans %}
                     {% endif %}
                 </p>
                 {% if postelection.people|length > 1 %}
@@ -52,7 +48,7 @@ PR-CL: Closed List
 
             {% if voting_system.slug == "STV" %}
                 <p>
-                    {% blocktrans %}
+                    {% blocktrans trimmed %}
                         Rank the candidates by your preference: 1, 2, 3…
                         You don't have to rank all the candidates, but you must at least mark your first choice.
                     {% endblocktrans %}
@@ -61,7 +57,7 @@ PR-CL: Closed List
 
             {% if voting_system.slug == "sv" %}
                 <p>
-                    {% blocktrans %}
+                    {% blocktrans trimmed %}
                         Mark an X in the first column for your first choice.
                         Mark an X in the second column for your second choice.
                         You do not have to mark a second choice.
@@ -71,7 +67,7 @@ PR-CL: Closed List
 
             {% if voting_system.slug == "PR-CL" %}
                 <p>
-                    {% blocktrans %}
+                    {% blocktrans trimmed %}
                         Mark an X in the box for one party or independent candidate.
                     {% endblocktrans %}
                 </p>
@@ -79,31 +75,18 @@ PR-CL: Closed List
 
             {% if is_regional %}
                 <p>
-                    {% blocktrans %}
+                    {% blocktrans trimmed %}
                         Mark an X in the box next to your preferred party or independent candidate
                     {% endblocktrans %}
                 </p>
             {% endif %}
 
             {% if is_constituency %}
-                <p>
-                    {% blocktrans %}
-                        Mark an X in the box for your preferred candidate.
-                    {% endblocktrans %}
-                </p>
+                <p>{% blocktrans trimmed %}Mark an X in the box for your preferred candidate.{% endblocktrans %}</p>
             {% endif %}
 
-            <p>{% blocktrans %}
-                Read the instructions at the top of your ballot paper carefully.
-            {% endblocktrans %}
-            </p>
-
-            <p>
-                {% blocktrans %}
-                    For more information, visit <a href="https://www.electoralcommission.org.uk/i-am-a/voter/how-cast-your-vote">
-                        The Electoral Commission's website</a> or ask an official at your polling station.
-                {% endblocktrans %}
-            </p>
+            <p>{% blocktrans trimmed %}Read the instructions at the top of your ballot paper carefully.{% endblocktrans %}</p>
+            <p>{% blocktrans trimmed %}For more information, visit <a href="https://www.electoralcommission.org.uk/i-am-a/voter/how-cast-your-vote">The Electoral Commission's website</a> or ask an official at your polling station.{% endblocktrans %}</p>
         </details>
     </li>
 </ul>

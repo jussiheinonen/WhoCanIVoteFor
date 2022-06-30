@@ -19,7 +19,7 @@
             <li>
                 <a href="{% url 'parties_view' %}">{% trans "Parties" %}</a>
             </li>
-            <li>{% blocktrans with party_name=object.party_name %}Current: {{ party_name }}{% endblocktrans %}</li>
+            <li>{% blocktrans trimmed with party_name=object.party_name %}Current: {{ party_name }}{% endblocktrans %}</li>
         </ol>
     </nav>
     <div class="ds-card">
@@ -47,7 +47,7 @@
                 {% else %}
                     <div>
                         <h2>{{ party.party_name }}</h2>
-                        <p>{% blocktrans with num_candidates=object.personpost_set.all.count|intcomma pluralize_candidates=object.personpost_set.all.count|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}</p>{% endblocktrans %}</p>
+                        <p>{% blocktrans trimmed with num_candidates=object.personpost_set.all.count|intcomma pluralize_candidates=object.personpost_set.all.count|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}</p>{% endblocktrans %}</p>
                         {% if object.description %}
                             {{ object.description|markdown }}
                         {% endif %}
@@ -71,7 +71,7 @@
                             {% for post in election.list %}
                                 <tr>
                                     <td>{{ post.post__label }}</td>
-                                    <td>{% blocktrans with num_candidates=post.num_candidates pluralize_candidates=post.num_candidates|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}{% endblocktrans %}</td>
+                                    <td>{% blocktrans trimmed with num_candidates=post.num_candidates pluralize_candidates=post.num_candidates|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}{% endblocktrans %}</td>
                                 </tr>
                             {% endfor %}
                         </table>

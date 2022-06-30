@@ -50,7 +50,7 @@
                 <div class="ds-card-body">
                     <h4>
                         <span aria-hidden="true">⏰</span>
-                        {% blocktrans %}Add future elections in {{ postcode }} to your calendar{% endblocktrans %}
+                        {% blocktrans trimmed %}Add future elections in {{ postcode }} to your calendar{% endblocktrans %}
                     </h4>
                     <p>
                         <a href="webcal://whocanivotefor.co.uk{% url 'postcode_ical_view' postcode %}">{% trans "Subscribe to the iCal feed" %}</a>
