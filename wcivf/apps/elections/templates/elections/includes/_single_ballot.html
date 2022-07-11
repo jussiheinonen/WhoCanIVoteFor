@@ -34,7 +34,7 @@
                         {% endblocktrans %}
 
                     {% else %}
-                        {% blocktrans with was_or_will_be=postelection.election.in_past|yesno:"was,will be" %} This election {{ was_or_will_be }} held{% endblocktrans %}
+                        {% blocktrans trimmed with was_or_will_be=postelection.election.in_past|yesno:"was,will be" %} This election {{ was_or_will_be }} held{% endblocktrans %}
                         <strong> {{ postelection.election.election_date|naturalday:"\o\n l j F Y" }}</strong>.
                     {% endif %}
                 </p>

@@ -3,7 +3,7 @@
 
 {% block intro_line %}
     {% if verb == "is" %}
-        {% blocktrans %}
+        {% blocktrans trimmed %}
             {{ person_name }} is an independent candidate in <a href="{{ post_url }}">{{ post_label }}</a>
             in the <a href="{{ election_url }}" title="{{ election_name }}">{{ election_name }}</a>.
         {% endblocktrans %}

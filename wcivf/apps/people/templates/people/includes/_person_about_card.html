@@ -3,7 +3,7 @@
     <div class="ds-card">
         <div class="ds-card-body">
             <h2 class="ds-candidate-name ds-h3">
-                {% blocktrans with name=object.name %}About {{ name }}{% endblocktrans %}
+                {% blocktrans trimmed with name=object.name %}About {{ name }}{% endblocktrans %}
             </h2>
             {% if object.wikipedia_bio %}
                 <h4>{% trans "Wikipedia" %}</h4>

@@ -1,2 +1,2 @@
 {% load i18n %}
-{% autoescape off %}{% blocktrans with intro=object.text_intro %}{{ intro }}Get the latest information on this candidate at {{ SITE_TITLE }}{% endblocktrans %}{% endautoescape %}
+{% autoescape off %}{% blocktrans trimmed with intro=object.text_intro %}{{ intro }}Get the latest information on this candidate at {{ SITE_TITLE }}{% endblocktrans %}{% endautoescape %}

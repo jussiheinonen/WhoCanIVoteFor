@@ -46,7 +46,7 @@
     </div>
 </form>
 
-<p>{% blocktrans with person_name=object.name %}Here's the email text we've generated for you to send to <span class="candidatename">{{ person_name }}{% endblocktrans %}</span>.</p>
+<p>{% blocktrans trimmed with person_name=object.name %}Here's the email text we've generated for you to send to <span class="candidatename">{{ person_name }}{% endblocktrans %}</span>.</p>
 
 <p id="headers">
     To: <span id="candidateemail" class="candidateemail">{{ object.email }}</span><br>

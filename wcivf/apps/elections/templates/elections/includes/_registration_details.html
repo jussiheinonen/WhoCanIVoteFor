@@ -6,7 +6,7 @@
     <div class="ds-card-body">
         <h2 id='where'>
             <span aria-hidden="true">📝</span>
-            {% blocktrans %}Register to vote{% endblocktrans %}
+            {% blocktrans trimmed %}Register to vote{% endblocktrans %}
         </h2>
 
         <p>
@@ -39,9 +39,9 @@
                     {% endif %}
                 {% else %}
                     {% if postelection.post.territory == "SCT" %}
-                        {% blocktrans %}To register by post, contact your Valuation Joint Board.{% endblocktrans %}
+                        {% blocktrans trimmed %}To register by post, contact your Valuation Joint Board.{% endblocktrans %}
                     {% else %}
-                        {% blocktrans %}To register by post, contact your local council.{% endblocktrans %}
+                        {% blocktrans trimmed%}To register by post, contact your local council.{% endblocktrans %}
                     {% endif %}
                 {% endif %}
 

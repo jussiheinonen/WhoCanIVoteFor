@@ -47,7 +47,7 @@
                         {% endif %}
                     {% endif %}
 
-                    <h3>{% blocktrans with title=object.pluralized_division_name|title %} {{ title }}{% endblocktrans %}</h3>
+                    <h3>{% blocktrans trimmed with title=object.pluralized_division_name|title %} {{ title }}{% endblocktrans %}</h3>
                     <ul>
                         {% for postelection in object.postelection_set.all %}
                             <li>

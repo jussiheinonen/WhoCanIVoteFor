@@ -20,7 +20,7 @@
             {% for candidacy in object.current_or_future_candidacies %}
                 <ul>
                     <li>
-                        {% blocktrans with election=candidacy.election.name %}{{ election }} for{% endblocktrans %}
+                        {% blocktrans trimmed with election=candidacy.election.name %}{{ election }} for{% endblocktrans %}
                         <a href="{{ candidacy.post_election.get_absolute_url }}">
                             {{ candidacy.post_election.friendly_name }}
                         </a>
@@ -48,7 +48,7 @@
 
     {% if object.photo_url %}
         <div class="ds-candidate-image">
-            <img src="{{ object.photo_url }}" alt="{% blocktrans with person=object.name %}profile photo of {{ person }}{% endblocktrans %}">
+            <img src="{{ object.photo_url }}" alt="{% blocktrans trimmed with person=object.name %}profile photo of {{ person }}{% endblocktrans %}">
         </div>
     {% endif %}
 </section>

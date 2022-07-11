@@ -178,9 +178,9 @@
                                 {% endif %}
                             </p>
                             {% now "Y" as current_year %}
-                            <p>{% blocktrans %}Copyright &copy; {{ current_year }}{% endblocktrans %}</p>
+                            <p>{% blocktrans trimmed %}Copyright &copy; {{ current_year }}{% endblocktrans %}</p>
                             <p>{% trans "Democracy Club Community Interest Company" %}</p>
-                            <p>{% blocktrans %}Company No: <a href="https://beta.companieshouse.gov.uk/company/09461226">09461226</a>{% endblocktrans %}</p>
+                            <p>{% blocktrans trimmed %}Company No: <a href="https://beta.companieshouse.gov.uk/company/09461226">09461226</a>{% endblocktrans %}</p>
                             <p class="ds-text-centered">
                                 {% blocktrans trimmed %}
                                     Democracy Club is a UK-based Community Interest Company that builds

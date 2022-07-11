@@ -21,7 +21,7 @@
 
                 <div class="ds-candidate-image">
                     {% if pp.person.photo_url %}
-                        <img src="{{ pp.person.photo_url }}" alt="{% blocktrans %}Photo of {{ pp.person.name }}{% endblocktrans %}">
+                        <img src="{{ pp.person.photo_url }}" alt="{% blocktrans trimmed %}Photo of {{ pp.person.name }}{% endblocktrans %}">
                     {% elif pp.person.gender|lower == 'male' %}
                         <img src="{% static 'people/images/blank-man.png' %}" style="background-color: #ddd;">
                     {% else %}
