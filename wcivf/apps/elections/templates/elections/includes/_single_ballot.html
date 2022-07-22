@@ -82,12 +82,16 @@
                                                 in the {{ postelection}}.
                                             {% endblocktrans %}
                                         {% endif %}
-                                        {% if postelection.winner_count and postelection.get_voting_system.slug == 'STV' %}
-                                            {% blocktrans trimmed with num_ballots=postelection.party_ballot_count winner_count=postelection.winner_count|apnumber count counter=postelection.winner_count %}
-                                                There is <strong>{{ winner_count }} seat</strong> up for election, and you can choose from <strong>{{ num_ballots }}</strong>.
-                                            {% plural %}
-                                                There are <strong>{{ winner_count }} seats</strong> up for election, and you can choose from <strong>{{ num_ballots }}</strong>.
-                                            {% endblocktrans %}
+                                        {% if postelection.get_voting_system.slug == 'STV' %}
+                                            {% if postelection.winner_count == 1 %}
+                                                {% blocktrans trimmed with num_ballots=postelection.party_ballot_count %}
+                                                    There is one seat up for election, and you can choose from {{ num_ballots }}.
+                                                {% endblocktrans %}
+                                            {% else %}
+                                                {% blocktrans trimmed with winner_count=postelection.winner_count|apnumber num_ballots=postelection.party_ballot_count %}
+                                                    There are {{ winner_count }} seats up for election, and you can choose from {{ num_ballots }}.
+                                                {% endblocktrans %}
+                                            {% endif %}
                                         {% endif %}
                                     {% endif %}
 
