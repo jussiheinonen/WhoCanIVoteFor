@@ -646,11 +646,9 @@ msgid_plural ""
 "There are <strong>%(winner_count)s seats</strong> up for election, and you "
 "can choose from <strong>%(num_ballots)s</strong>."
 msgstr[0] ""
-"Mae yna <strong>%(winner_count)s sedd</strong> ar gael yn yr etholiad, a "
-"gallwch ddewis o <strong>%(num_ballots)s ymgeisydd.</strong>"
+""
 msgstr[1] ""
-"Mae yna <strong>%(winner_count)s seddi</strong> ar gael yn yr etholiad, a "
-"gallwch ddewis o <strong>%(num_ballots)s ymgeiswyr.</strong>"
+""
 
 #: wcivf/apps/elections/templates/elections/includes/_single_ballot.html:98
 #, python-format
