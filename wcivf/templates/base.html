@@ -1,97 +1,87 @@
+{% extends "dc_base.html" %}
 {% load pipeline %}
 {% load static %}
 {% load i18n %}
-<!doctype html>
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>
-            {% block base_title %}
-                {% block page_title %}{% endblock page_title %} | {{ SITE_TITLE }} by Democracy Club
-            {% endblock base_title %}
-        </title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script type="application/ld+json">
-            {
-                "@context": "http://schema.org",
-                "@type": "WebSite",
-                "url": "http://whocanivotefor.co.uk/",
-                "potentialAction": {
-                    "@type": "SearchAction",
-                    "target": "https://whocanivotefor.co.uk/?postcode={query}",
-                    "query-input": "required name=query"
-                }
-            }
-        </script>
-        {% block page_meta %}{% endblock page_meta %}
-        {% block site_meta %}
-            <link rel="canonical" href="{{ CANONICAL_URL }}{{ request.path }}" />
-            <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="{{ SITE_TITLE }}" />
-            <meta name="description" content="{% block page_description %}Find out about elections, candidates and polling stations with Democracy Club's {{ SITE_TITLE }}{% endblock page_description %}" />
-            <meta property="og:site_name" content="{{ SITE_TITLE }} by Democracy Club" />
-            <meta property="og:url" content="{{ CANONICAL_URL }}{{ request.path }}" />
-            <meta property="fb:app_id" content="262795130596272" />
-            <meta name="twitter:card" content="summary">
-            <meta name="twitter:image" content="{{ CANONICAL_URL }}{% static 'images/logo_icon.png' %}" />
-            <meta name="twitter:site" content="@democlub">
-            <meta property="og:image" content="{% block og_image %}{{ CANONICAL_URL }}{% static 'images/logo_icon.png' %}{% endblock og_image %}" />
-            <meta property="og:image:width" content="{{ site_logo_width }}">
-            <meta property="og:title" content="{% block og_title %}{{ SITE_TITLE }} by Democracy Club{% endblock og_title %}" />
-            <meta property="og:description" content="{% block og_description %}Find out about elections, candidates and polling stations with Democracy Club's {{ SITE_TITLE }}{% endblock og_description %}" />
-        {% endblock site_meta %}
-        {% block site_icons %}
-            <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/logo_icon.png' %}">
-            <link rel="icon" type="image/png" href="{% static 'images/logo_icon.png' %}" sizes="32x32">
-            <link rel="icon" type="image/png" href="{% static 'images/logo_icon.png' %}" sizes="16x16">
-            <link rel="mask-icon" href="{% static 'images/logo_icon.png' %}" color="#ec008c">
-            <link rel="shortcut icon" href="{% static 'images/logo_icon.png' %}">
-        {% endblock site_icons %}
 
-        {% block extra_site_css %}{% if USE_COMPRESSED_CSS %}
-            <style type="text/css">
-                {% include "_compressed_css.html" %}
-            </style>
-            <script id="loadcss">
-                (function(u, s) {
-                    ! function(e) {
-                        "use strict";
-                        var n = function(n, t, o) {
-                            var l, r = e.document,
-                            i = r.createElement("link");
-                            if (t) l = t;
-                            else {
-                                var a = (r.body || r.getElementsByTagName("head")[0]).childNodes;
-                                l = a[a.length - 1]
-                            }
-                            var d = r.styleSheets;
-                            i.rel = "stylesheet", i.href = n, i.media = "only x", l.parentNode.insertBefore(i, t ? l : l.nextSibling);
-                            var f = function(e) {
-                                for (var n = i.href, t = d.length; t--;)
-                                if (d[t].href === n) return e();
-                                setTimeout(function() {
-                                    f(e)
-                                })
-                            };
-                            return i.onloadcssdefined = f, f(function() {
-                                i.media = o || "all"
-                            }), i
+{% block base_title %}
+    {% block page_title %}{% endblock page_title %}{{ SITE_TITLE }} by Democracy Club
+{% endblock base_title %}
+{% block page_meta %}{% endblock page_meta %}
+{% block site_meta %}
+    <link rel="canonical" href="{{ CANONICAL_URL }}{{ request.path }}" />
+    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="{{ SITE_TITLE }}" />
+    {% block site_icons %}
+        <link rel="shortcut icon" href="{{ CANONICAL_URL }}{% static 'images/logo_icon.svg' %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ CANONICAL_URL }}{% static 'icons/apple-touch-icon.png' %}">
+        <link rel="icon" type="image/png" href="{{ CANONICAL_URL }}{% static 'icons/favicon-32x32.png' %}" sizes="32x32">
+        <link rel="icon" type="image/png" href="{{ CANONICAL_URL }}{% static 'icons/favicon-16x16.png' %}" sizes="16x16">
+        <link rel="mask-icon" href="{{ CANONICAL_URL }}{% static 'icons/safari-pinned-tab.svg' %}" color="#ec008c">
+    {% endblock site_icons %}
+
+    {% block base_og_tags %}
+        <meta name="description" property="og:description" content="{% block og_description %}Find out about elections, candidates and polling stations with Democracy Club's {{ SITE_TITLE }}{% endblock og_description %}" />
+        <meta name="image" property="og:image" content="{% block og_image_content %}{{ CANONICAL_URL }}{% static 'images/og_image_logo.png' %}{% endblock og_image_content %}" />
+        <meta name="title" property="og:title" content="{% block og_title_content %}{{ SITE_TITLE }}{% endblock og_title_content %}" />
+        <meta name="type" property="og:type" content="{% block og_type_content %}website{% endblock og_type_content %}">
+        <meta name="url" property="og:url" content="{% block og_url_content %}{{ CANONICAL_URL }}{{ request.path }}{% endblock og_url_content %}">
+    {% endblock base_og_tags %}
+    {% block twitter_tags %}
+        <meta name="twitter:card" content="{% block twitter_card_type %}summary{% endblock twitter_card_type %}">
+        <meta name="twitter:site" content="@democlub">
+        <meta name="twitter:image" content="{% block twitter_image %}{{ CANONICAL_URL }}{% static 'images/logo.png' %}{% endblock twitter_image %}" />
+        <meta name="twitter:image:alt" content="{% block twitter_image_alt %}{{SITE_TITLE}} logo{% endblock twitter_image_alt %}">
+        <meta name="twitter:title" content="{% block twitter_title_content %}Who Can I Vote For? by Democracy Club{% endblock twitter_title_content %}">
+        <meta name="twitter:url" content="{{ CANONICAL_URL }}{{ request.path }}">
+        <meta name="twitter:description" content="{% block twitter_description_content %}We build digital tools to support everyone’s participation in UK democracy.{% endblock twitter_description_content %}"/>
+    {% endblock twitter_tags %}
+{% endblock site_meta %}
+
+{% block extra_site_css %}
+    {% if USE_COMPRESSED_CSS %}
+        <style type="text/css">
+            {% include "_compressed_css.html" %}
+        </style>
+        <script id="loadcss">
+            (function(u, s) {
+                ! function(e) {
+                    "use strict";
+                    var n = function(n, t, o) {
+                        var l, r = e.document,
+                        i = r.createElement("link");
+                        if (t) l = t;
+                        else {
+                            var a = (r.body || r.getElementsByTagName("head")[0]).childNodes;
+                            l = a[a.length - 1]
+                        }
+                        var d = r.styleSheets;
+                        i.rel = "stylesheet", i.href = n, i.media = "only x", l.parentNode.insertBefore(i, t ? l : l.nextSibling);
+                        var f = function(e) {
+                            for (var n = i.href, t = d.length; t--;)
+                            if (d[t].href === n) return e();
+                            setTimeout(function() {
+                                f(e)
+                            })
                         };
-                        "undefined" != typeof module ? module.exports = n : e.loadCSS = n
-                    }("undefined" != typeof global ? global : this);
-                    for (var i in u) {
-                        loadCSS(u[i], s);
-                    }
-                }(['{% static '
-                    css / styles.css '%}'
-                ], document.getElementById("loadcss")));
-            </script>
-        {% else %}
-            {% stylesheet 'styles' %}
-        {% endif %}
-        {% endblock extra_site_css %}
-    </head>
+                        return i.onloadcssdefined = f, f(function() {
+                            i.media = o || "all"
+                        }), i
+                    };
+                    "undefined" != typeof module ? module.exports = n : e.loadCSS = n
+                }("undefined" != typeof global ? global : this);
+                for (var i in u) {
+                    loadCSS(u[i], s);
+                }
+            }(['{% static '
+                css / styles.css '%}'
+            ], document.getElementById("loadcss")));
+        </script>
+    {% else %}
+        {% stylesheet 'styles' %}
+    {% endif %}
+{% endblock extra_site_css %}
 
+{% block body_base %}
     <body class="ds-width-full">
         <div class="ds-page">
             <p><a class="ds-skip-link" href="#main">skip to content</a></p>
@@ -116,30 +106,36 @@
                     </aside>
                 </form>
             {% endif %}
-            {% block site_menu %}
-                <header class="ds-header">
-                    <a class="ds-logo" href="/">
-                        <img src="{% static 'images/logo_icon.svg' %}" alt="" />
-                        <span>
-                            Who Can I Vote For?<br>
-                            {% get_current_language as LANGUAGE_CODE %}
-                            {% if LANGUAGE_CODE != "en" %}
-                                <em lang="cy">{% language "cy" %}{% trans "Who Can I Vote For?" %}{% endlanguage %}</em>
-                            {% endif %}</span>
-                    </a>
-                </header>
-            {% endblock site_menu %}
+            {% block header %}
+                {% block site_menu %}
+                    <header class="ds-header">
+                        <a class="ds-logo" href="/">
+                            <img src="{% static 'images/logo_icon.svg' %}" alt="" />
+                            <span>
+                                Who Can I Vote For?<br>
+                                {% get_current_language as LANGUAGE_CODE %}
+                                {% if LANGUAGE_CODE != "en" %}
+                                    <em lang="cy">{% language "cy" %}{% trans "Who Can I Vote For?" %}{% endlanguage %}</em>
+                                {% endif %}</span>
+                        </a>
+                    </header>
+                {% endblock site_menu %}
+            {% endblock header %}
             <main id="main" tabindex="-1" class="ds-stack">
-                {% if messages %}
-                    <aside class="ds-status messages" aria-label="Status">
-                        <ul class="ds-stack">
-                            {% for message in messages %}
-                                <li {% if message.tags %}class=" {{ message.tags }} ds-status-message " {% endif %}> {{ message }} </li>
-                            {% endfor %}
-                        </ul>
-                    </aside>
-                {% endif %}
+                {% block messages %}
+                    {% if messages %}
+                        <aside class="ds-status messages" aria-label="Status">
+                            <ul class="ds-stack">
+                                {% for message in messages %}
+                                    <li {% if message.tags %}class=" {{ message.tags }} ds-status-message " {% endif %}> {{ message }} </li>
+                                {% endfor %}
+                            </ul>
+                        </aside>
+                    {% endif %}
+                {% endblock messages %}
                 {% block content %}
+                    {% block page_content %}
+                    {% endblock page_content %}
                 {% endblock content %}
             </main>
             {% block site_footer %}
@@ -166,7 +162,7 @@
                         </div>
                         <div class="ds-copyright">
                             <a class="ds-logo" href="/">
-                                <img src="{% static "images/logo_icon.svg" %}" alt="" />
+                                <img src="{% static 'images/logo_icon.svg' %}" alt="" />
                                 <span class="ds-text-left">
                                     {% trans "democracy" %}<br>{% trans "club" %}
                                 </span>
@@ -193,31 +189,45 @@
             {% endblock site_footer %}
         </div>
     </body>
+{% endblock body_base %}
 
-    <script>
-        /**
-     * Function that tracks a click on an outbound link in Analytics.
-     * This function takes a valid URL string as an argument, and uses that URL string
-     * as the event label. Setting the transport method to 'beacon' lets the hit be sent
-     * using 'navigator.sendBeacon' in browser that support it.
-     */
-        var trackOutboundLink = function(cat, url) {
-            ga('send', 'event', 'outbound', 'click', url, {
-                'transport': 'beacon',
-                eventCategory: cat,
-                eventAction: 'click',
-                'hitCallback': function() {
-                    window.open(url, '_blank');
+{% block extra_site_js %}
+    {% block extra_javascript %}
+
+        <script type="application/ld+json">
+            {
+                "@context": "http://schema.org",
+                "@type": "WebSite",
+                "url": "http://whocanivotefor.co.uk/",
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": "https://whocanivotefor.co.uk/?postcode={query}",
+                    "query-input": "required name=query"
                 }
-            });
-        }
-    </script>
+            }
+        </script>
 
-</html>
-{% block extra_javascript %}
-    {% javascript 'scripts' %}
-{% endblock extra_javascript %}
-
+        {% javascript 'scripts' %}
+        <script>
+            /**
+        * Function that tracks a click on an outbound link in Analytics.
+        * This function takes a valid URL string as an argument, and uses that URL string
+        * as the event label. Setting the transport method to 'beacon' lets the hit be sent
+        * using 'navigator.sendBeacon' in browser that support it.
+        */
+            var trackOutboundLink = function(cat, url) {
+                ga('send', 'event', 'outbound', 'click', url, {
+                    'transport': 'beacon',
+                    eventCategory: cat,
+                    eventAction: 'click',
+                    'hitCallback': function() {
+                        window.open(url, '_blank');
+                    }
+                });
+            }
+        </script>
+    {% endblock extra_javascript %}
+{% endblock extra_site_js %}
 
 {% block ga_tracking_code %}
     {% if request.META.HTTP_HOST != "localhost:8000" %}

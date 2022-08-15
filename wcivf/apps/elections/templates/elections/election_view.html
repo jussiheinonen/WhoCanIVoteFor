@@ -3,9 +3,11 @@
 {% load i18n %}
 
 {% block page_title %}{{ object.name }}{% endblock page_title %}
-{% block og_title %}{{ object.name }}{% endblock og_title %}
+{% block og_title_content  %}{{ object.name }}{% endblock og_title_content  %}
 {% block og_description %}
     {% blocktrans trimmed with was_or_will_be=object.in_past|yesno:"was, will be" election=object.name date=object.election_date %}The {{ election }} {{ was_or_will_be }} held on {{ date }}.{% endblocktrans %}{% endblock og_description %}
+{% block twitter_title_content %}{{ object.name }}{% endblock twitter_title_content %}>
+{% block twitter_description_content %}{% blocktrans trimmed with was_or_will_be=object.in_past|yesno:"was, will be" election=object.name date=object.election_date %}The {{ election }} {{ was_or_will_be }} held on {{ date }}.{% endblocktrans %}{% endblock twitter_description_content %}/>
 
 {% block content %}
 

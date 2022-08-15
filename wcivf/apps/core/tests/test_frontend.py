@@ -79,3 +79,11 @@ class TestHtml:
                 _, errors = validate_html(client, url)
                 print(url, errors)
                 assert errors == ""
+
+
+class TestBaseTemplate(TestCase):
+    def test_base_template(self):
+        with self.assertTemplateUsed("dc_base.html"):
+            req = self.client.get("/")
+            assert req.status_code == 200
+            assert "dc_base_naked.html" in (t.name for t in req.templates)

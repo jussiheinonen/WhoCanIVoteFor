@@ -5,7 +5,7 @@
 {% load i18n %}
 
 {% block og_image %}{% if object.emblem_url %}{{ CANONICAL_URL }}{{ object.emblem_url }}{% endif %}{% endblock og_image %}
-{% block og_title %}{{ object.party_name }}{% endblock og_title %}
+{% block og_title_content %}{{ object.party_name }}{% endblock og_title_content %}
 {% block page_title %}{{ object.party_name }}{% endblock page_title %}
 {% block og_description %}{{ object.personpost_set.all.count }} candidates{% endblock og_description %}
 
