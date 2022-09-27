@@ -951,14 +951,11 @@ msgstr ""
 "y we."
 
 #: wcivf/apps/elections/templates/elections/postcode_view.html:66
+
 msgid ""
-"Enter <a href=\"https://calendar.google.com/calendar/u/0/embed?"
-"src=tm55j9m2lict2h021b3479gpntshunvd@import.calendar.google.com&ctz=Europe/"
-"London\">this URL</a> and save"
+"Enter this URL and save"
 msgstr ""
-"Rhowch <a href=\"https://calendar.google.com/calendar/u/0/embed?"
-"src=tm55j9m2lict2h021b3479gpntshunvd@import.calendar.google.com&ctz=Europe/"
-"London\">yr URL hwn</a> a'i arbed "
+"Rhowch yr URL hwn a'i arbed"
 
 #: wcivf/apps/feedback/models.py:6 wcivf/apps/feedback/models.py:7
 msgid "Yes"
