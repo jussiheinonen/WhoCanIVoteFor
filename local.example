@@ -29,3 +29,9 @@ SECRET_KEY = "not_for_production"
 DEBUG = True
 
 EMAIL_SIGNUP_BACKEND = "local_db"
+
+# These example paths should only be necessary for M1 Mac users
+
+# GDAL_LIBRARY_PATH = "/opt/homebrew/Cellar/gdal/3.5.1_3/lib/libgdal.dylib"
+
+# GEOS_LIBRARY_PATH= '/opt/homebrew/Cellar/geos/3.11.0/lib/libgeos_c.1.17.0.dylib'

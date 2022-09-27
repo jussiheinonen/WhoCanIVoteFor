@@ -52,10 +52,32 @@ You can now install the project dependencies in to your activated virtualenv:
 
     pip install -r requirements/local.txt
 
+You'll also need to make sure that you're set up with tidy. 
+First install cmake:
+```
+# Mac
+brew install cmake
+
+# Linux
+sudo apt-get install cmake
+```
+Once cmake is in place, follow the build steps in the tidy repository [here](https://github.com/htacg/tidy-html5).
+
 Check that your env has correctly installed and project is working by running the tests:
 
     pytest
 
+Gotcha: If you're using an M1 Mac, you may run into errors concerning GDAL and GEOS when you try to run the tests for the first time. 
+If this affects you, you'll need to set the path for both of these libs in a local config. 
+
+You can find your paths by running:
+`geos-config --libs` and `gdal-config --libs`. 
+
+In your local config, set the following:
+```
+GDAL_LIBRARY_PATH = "{YOUR PATH}/libgdal.dylib"
+GEOS_LIBRARY_PATH= '{YOUR PATH}/libgeos_c.1.17.0.dylib'
+```
 
 ## Code formatting
 
