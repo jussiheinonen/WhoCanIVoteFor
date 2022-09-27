@@ -76,3 +76,6 @@ wcivf/media/
 *.DS_Store
 wcivf/static/
 .env
+
+# PyCharm
+.idea/
