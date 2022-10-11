@@ -1,7 +1,7 @@
 import json
 
 from django.conf import settings
-from django.utils.timezone import now
+from django.utils import timezone
 from django.db import models
 
 from django_extensions.db.models import TimeStampedModel
@@ -29,7 +29,7 @@ def log_postcode(log_dict, blocking=False):
     red = redis.Redis(connection_pool=settings.REDIS_POOL)
     key = "{}:log_postcode_queue".format(settings.REDIS_KEY_PREFIX)
 
-    log_dict["created"] = now().timestamp()
+    log_dict["created"] = timezone.now().timestamp()
 
     value = json.dumps(log_dict)
     red.zadd(key, {value: log_dict["created"]})
@@ -38,7 +38,7 @@ def log_postcode(log_dict, blocking=False):
 def write_logged_postcodes():
     red = redis.Redis(connection_pool=settings.REDIS_POOL)
     key = "{}:log_postcode_queue".format(settings.REDIS_KEY_PREFIX)
-    score_max = now().timestamp()
+    score_max = timezone.now().timestamp()
 
     # Get all the items from Redis
     logged_items = red.zrangebyscore(key, 0, score_max, withscores=True)

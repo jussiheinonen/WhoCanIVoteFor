@@ -5,7 +5,7 @@ from django.db import models
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.text import slugify
-from django.utils.timezone import now
+from django.utils import timezone
 from django.utils.functional import cached_property
 from elections.models import Election, Post
 from parties.models import Party
@@ -68,7 +68,7 @@ class Person(models.Model):
     death_date = models.CharField(null=True, max_length=255)
     photo_url = models.URLField(blank=True, null=True)
     favourite_biscuit = models.CharField(null=True, max_length=800)
-    last_updated = models.DateTimeField(default=now)
+    last_updated = models.DateTimeField(default=timezone.now)
 
     # contact points
     twitter_username = models.CharField(blank=True, null=True, max_length=100)

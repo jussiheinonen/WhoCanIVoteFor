@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
 
+
 from elections.helpers import JsonPaginator, EEHelper
 from elections.models import PostElection, Election, Post, VotingSystem
 from parties.models import Party
