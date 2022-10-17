@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% load markdown_deux_tags %}
+{% load markdown_filter %}
 {% block og_title_content %}About {{ SITE_TITLE }}{% endblock og_title_content %}
 {% block page_title %}About {{ SITE_TITLE }}{% endblock page_title %}
 {% block content %}
     {# fmt:off #}
-{% markdown %}
+{% filter markdown %}
 #   Ynglŷn â WhoCaniVoteFor 
 
 Offeryn syml yw WhoCanIVoteFor sy'n caniatáu i bleidleiswyr y DU ddefnyddio’u cod post i weld rhestrau o ymgeiswyr mewn etholiadau sydd ar y gorwel.
@@ -49,5 +49,5 @@ Os ydych chi am helpu, cysylltwch â ni neu ewch ati i gyflwyno ‘pull request�
 ## Ymwadiad 
 
 Mae'r data ar y wefan hon yn dod o ffynonellau torfol ac efallai na fyddant yn gyflawn (neu gallant gynnwys gwallau). Os dewch chi o hyd i wall, naill ai ewch ati i ddiweddaru’r dudalen eich hun, neu anfonwch e-bost atom i nodi’r broblem.
-{% endmarkdown %}
+{% endfilter %}
 {% endblock content %}

@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% load markdown_deux_tags %}
+{% load markdown_filter %}
 {% load i18n %}
 {% block content %}
 
     {# fmt:off #}
-{% markdown %}
+{% filter markdown %}
 ## Running in a UK election? Update your candidate profile!
 
 [WhoCanIVoteFor.co.uk](https://whocanivotefor.co.uk/) aims to have an up to date profile for every candidate standing in a UK election. These profiles have become a useful tool in helping millions of voters across the country decide who to vote for.
@@ -29,7 +29,7 @@ Please be aware that we retain all information published on the Statement of Per
 
 ### Contact us
 As always, Democracy Club is on call to help with any issues. Send us a message or give us some feedback! [Get in touch.](https://democracyclub.org.uk/contact/)
-{% endmarkdown %}
-            {# fmt:on #}
+{% endfilter %}
+    {# fmt:on #}
 
 {% endblock %}

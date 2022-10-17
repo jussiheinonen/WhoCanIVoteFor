@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% load markdown_deux_tags %}
+{% load markdown_filter %}
 {% load i18n %}
 {% block content %}
     {# fmt:off #}
-{% markdown %}
+{% filter markdown %}
 
 ## Ydych chi’n sefyll etholiad yn y DU? Diweddarwch eich proffil ymgeisydd!
 
@@ -30,6 +30,6 @@ Byddwch yn ymwybodol ein bod yn cadw'r holl wybodaeth a gyhoeddir ar y Datganiad
 ### Cysylltwch â ni 
 
 Mae Democracy Club ar gael bob amser i helpu gydag unrhyw faterion. Anfonwch neges atom neu rhowch adborth i ni! [Cysylltwch â ni.](https://democracyclub.org.uk/contact/)
-{% endmarkdown %}            
+{% endfilter %}            
     {# fmt:on #}
 {% endblock %}

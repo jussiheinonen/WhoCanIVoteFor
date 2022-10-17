@@ -52,7 +52,6 @@ INSTALLED_APPS = (
     "mailing_list",
     "pipeline",
     "elections",
-    "markdown_deux",
     "core",
     "people",
     "parties",
