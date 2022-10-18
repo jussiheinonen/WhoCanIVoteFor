@@ -12,11 +12,11 @@ jobs:
         environment:
           CIRCLECI: true
           PGHOST: 127.0.0.1
-      - image: circleci/postgres:10-alpine-ram
+      - image: cimg/postgres:11.17
         environment:
           POSTGRES_USER: wcivf
           POSTGRES_DB: wcivf
-      - image: circleci/redis:3.2.12-alpine
+      - image: cimg/redis:7.0.5
     working_directory: ~/repo
     steps:
       - checkout
