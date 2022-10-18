@@ -62,7 +62,6 @@ INSTALLED_APPS = (
     "leaflets",
     "django_extensions",
     "rest_framework",
-    "robots",
     "api",
     "results",
     "pledges",
