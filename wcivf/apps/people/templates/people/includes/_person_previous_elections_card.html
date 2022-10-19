@@ -19,19 +19,32 @@
                 </tr>
                 <tr>
                     {% for person_post in object.personpost_set.all %}
-                        {% blocktrans trimmed with message=person_post.post_election.short_cancelled_message_html %}
-                            {{ message }}
-                            {{ message }}
-                            {{ message }}
-                        {% endblocktrans %}
                         <td>{{ person_post.election.election_date|date:"Y" }}</td>
                         <td>{% blocktrans with post_label=person_post.post.label election=person_post.election %}{{ post_label}}: {{ election }}{% endblocktrans %}</td>
                         <td>{{ person_post.party_name }}</td>
-                        {% if person_post.elected %}
-                            <td>{% if person_post.votes_cast %}{% blocktrans with num_votes=person_post.votes_cast|intcomma %}{{ num_votes}} votes (elected){% endblocktrans %}{% else %}{% trans "Elected unopposed" %}{% endif %}</td>
-                        {% else %}
-                            <td>{% if person_post.votes_cast %}{% blocktrans with num_votes=person_post.votes_cast|intcomma %}{{ num_votes }} votes (not elected){% endblocktrans %}{% else %}{% trans "Vote count not available" %}{% endif %}</td>
-                        {% endif %}
+                        <td>
+                            {% if person_post.elected %}
+                                {% if person_post.votes_cast %}
+                                    {% blocktrans with num_votes=person_post.votes_cast|intcomma %}
+                                        {{ num_votes}} votes (elected)
+                                    {% endblocktrans %}
+                                {% else %}
+                                    {% trans "Elected (vote count not available)" %}
+                                {% endif %}
+                            {% elif person_post.post_election.cancelled and not person_post.elected %}
+                                {% if person_post.post_election.cancelled %}
+                                    {% trans "Elected unopposed" %}
+                                {% endif %}
+                            {% else %}
+                                {% if person_post.votes_cast %}
+                                    {% blocktrans with num_votes=person_post.votes_cast|intcomma %}
+                                        {{ num_votes }} votes (not elected)
+                                    {% endblocktrans %}
+                                {% else %}
+                                    {% trans "Not Elected (vote count not available)" %}
+                                {% endif %}
+                            {% endif %}
+                        </td>
                         {% if object.previous_party_count %}
                             <td>
                                 {% for previous_party_affiliation in person_post.previous_party_affiliations.all %}
