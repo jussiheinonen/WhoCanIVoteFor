@@ -34,8 +34,15 @@
                         {% endblocktrans %}
 
                     {% else %}
-                        {% blocktrans trimmed with was_or_will_be=postelection.election.in_past|yesno:"was,will be" %} This election {{ was_or_will_be }} held{% endblocktrans %}
-                        <strong> {{ postelection.election.election_date|naturalday:"\o\n l j F Y" }}</strong>.
+                        {% if postelection.election.in_past %}
+                            {% blocktrans trimmed with election_date=postelection.election.election_date|naturalday:"\o\n l j F Y" %}
+                                This election was held <strong>{{ election_date }}</strong>.
+                            {% endblocktrans %}
+                        {% else %}
+                            {% blocktrans trimmed with election_date=postelection.election.election_date|naturalday:"\o\n l j F Y" %}
+                                This election will be held <strong> {{ election_date }}</strong>.
+                            {% endblocktrans %}
+                        {% endif %}
                     {% endif %}
                 </p>
 
