@@ -634,6 +634,8 @@ class TestPersonIntro(TestCase):
         )
 
     def test_intro_in_view(self):
+        """This test checks for the presence of text
+        in the meta tags"""
         candidacies = [
             (
                 self.current_candidate,

@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib.sitemaps.views import sitemap, index
 from django.views.decorators.cache import cache_page
+from django.views.generic import TemplateView
 
 from elections.sitemaps import ElectionSitemap, PostElectionSitemap
 from people.sitemaps import PersonSitemap
@@ -37,7 +38,12 @@ urlpatterns = (
             {"sitemaps": sitemaps},
             name="django.contrib.sitemaps.views.sitemap",
         ),
-        path("robots.txt", include("robots.urls")),
+        re_path(
+            r"^robots\.txt$",
+            TemplateView.as_view(
+                template_name="robots.txt", content_type="text/plain"
+            ),
+        ),
         path("mailing_list/", include("mailing_list.urls", "dc_signup_form")),
     ]
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

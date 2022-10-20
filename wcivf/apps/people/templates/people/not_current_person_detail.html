@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% load markdown_deux_tags %}
+{% load markdown_filter %}
 {% load humanize %}
 {% load i18n %}
 
 {% block page_title %}{% include "people/includes/_person_meta_title.html" %}{% endblock page_title %}
 {% block page_description %}{% include "people/includes/_person_meta_description.html" %}{% endblock page_description %}
 {% block og_title_content %}{% include "people/includes/_person_meta_title.html" %}{% endblock og_title_content %}
-{% block og_description %}{% include "people/includes/_person_meta_description.html" %}{% endblock og_description %}
+{% block og_description_content %}{% include "people/includes/_person_meta_description.html" %}{% endblock og_description_content %}
 {% block og_image %}{% if object.photo_url %}{{ object.photo_url }}{% endif %}{% endblock og_image %}
 
 {% block page_meta %}

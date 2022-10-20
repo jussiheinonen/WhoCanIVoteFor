@@ -52,7 +52,6 @@ INSTALLED_APPS = (
     "mailing_list",
     "pipeline",
     "elections",
-    "markdown_deux",
     "core",
     "people",
     "parties",
@@ -63,7 +62,6 @@ INSTALLED_APPS = (
     "leaflets",
     "django_extensions",
     "rest_framework",
-    "robots",
     "api",
     "results",
     "pledges",
@@ -168,7 +166,6 @@ TIME_ZONE = "UTC"
 
 USE_I18N = True
 
-USE_L10N = True
 
 USE_TZ = True
 

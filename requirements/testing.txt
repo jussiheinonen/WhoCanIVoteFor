@@ -1,6 +1,6 @@
 -r base.txt
 
-black==22.3.0
+black==22.10.0
 tox
 pytest
 pytest-django
@@ -8,10 +8,10 @@ pytest-pep8
 pytest-flakes
 pytest-cov
 factory_boy
-vcrpy==4.1.1
+vcrpy==4.2.1
 pytest-freezegun
 pytest-mock
 pytest-subtests
 tomlkit
 freezegun==1.2.1
-django-debug-toolbar==3.2.4
+django-debug-toolbar==3.7.0

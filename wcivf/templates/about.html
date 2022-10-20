@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load markdown_deux_tags %}
+{% load markdown_filter %}
 
 {% block og_title_content %}About {{ SITE_TITLE }}{% endblock og_title_content %}
 {% block page_title %}About {{ SITE_TITLE }}{% endblock page_title %}
@@ -8,7 +8,7 @@
 
 
     {# fmt:off #}
-{% markdown %}
+{% filter markdown %}
 
 # About WhoCanIVoteFor
 
@@ -72,7 +72,7 @@ The data on this website is crowd-sourced and may not be
 complete (or may contain inaccuracies). If you find an error, please either
 update the page yourself, or email us to report the problem.
 
-{% endmarkdown %}
+{% endfilter %}
 
         
 {% endblock content %}

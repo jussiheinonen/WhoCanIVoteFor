@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.views.generic import View, UpdateView
-from django.utils.http import is_safe_url
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.contrib import messages
 from django.template.loader import render_to_string
 from akismet import Akismet
@@ -47,7 +47,9 @@ class FeedbackFormView(UpdateView):
             extra_tags="template",
         )
 
-        if is_safe_url(self.object.source_url, allowed_hosts=None):
+        if url_has_allowed_host_and_scheme(
+            self.object.source_url, allowed_hosts=None
+        ):
             return self.object.source_url
         else:
             return "/"

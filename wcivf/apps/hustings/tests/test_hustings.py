@@ -1,5 +1,6 @@
 from django.test import TestCase
-from django.utils.timezone import datetime, utc
+from django.utils.timezone import datetime
+from datetime import timezone
 from freezegun import freeze_time
 
 import vcr
@@ -29,8 +30,8 @@ class TestHustings(TestCase):
             post_election=self.ballot,
             title="Local Election Hustings",
             url="https://example.com/hustings",
-            starts=datetime(2017, 3, 23, 19, 00, tzinfo=utc),
-            ends=datetime(2017, 3, 23, 21, 00, tzinfo=utc),
+            starts=datetime(2017, 3, 23, 19, 00, tzinfo=timezone.utc),
+            ends=datetime(2017, 3, 23, 21, 00, tzinfo=timezone.utc),
             location="St George's Church",
         )
 
@@ -58,7 +59,7 @@ class TestHustings(TestCase):
 
     @freeze_time("2021-4-1")
     def test_displayable_in_past_with_postevent_url_is_returned(self):
-        self.hust.starts = datetime(2021, 3, 31, tzinfo=utc)
+        self.hust.starts = datetime(2021, 3, 31, tzinfo=timezone.utc)
         self.hust.postevent_url = "http://example.com/"
         self.hust.save()
         result = Husting.objects.displayable()
@@ -67,7 +68,7 @@ class TestHustings(TestCase):
 
     @freeze_time("2021-4-1")
     def test_displayable_in_future_always_returned(self):
-        self.hust.starts = datetime(2021, 4, 2, tzinfo=utc)
+        self.hust.starts = datetime(2021, 4, 2, tzinfo=timezone.utc)
         self.hust.save()
         result = Husting.objects.displayable()
         assert self.hust in result
@@ -75,7 +76,7 @@ class TestHustings(TestCase):
 
     @freeze_time("2021-4-1")
     def test_displayable_on_day_always_returned(self):
-        self.hust.starts = datetime(2021, 4, 1, tzinfo=utc)
+        self.hust.starts = datetime(2021, 4, 1, tzinfo=timezone.utc)
         self.hust.save()
         result = Husting.objects.displayable()
         assert self.hust in result
@@ -87,12 +88,12 @@ class TestHustings(TestCase):
 
         today = Husting.objects.get(pk=self.hust.pk)
         today.pk = None
-        today.starts = datetime(2021, 4, 1, tzinfo=utc)
+        today.starts = datetime(2021, 4, 1, tzinfo=timezone.utc)
         today.save()
 
         future = Husting.objects.get(pk=self.hust.pk)
         future.pk = None
-        future.starts = datetime(2021, 4, 2, tzinfo=utc)
+        future.starts = datetime(2021, 4, 2, tzinfo=timezone.utc)
         future.save()
 
         result = Husting.objects.future()

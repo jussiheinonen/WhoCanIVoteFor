@@ -4,7 +4,7 @@ from functools import update_wrapper
 from django.db import transaction
 from django.conf import settings
 from django.utils.functional import cached_property
-from django.utils.timezone import datetime, timedelta
+from django.utils import timezone
 from django.utils.http import urlencode
 from uk_election_timetables.election_ids import from_election_id
 from uk_election_timetables.calendars import Country
@@ -32,7 +32,8 @@ class EEHelper:
         """
         params = {
             "deleted": 1,
-            "poll_open_date__gte": datetime.now().date() - timedelta(days=50),
+            "poll_open_date__gte": timezone.datetime.now().date()
+            - timezone.timedelta(days=50),
         }
         querystring = urlencode(params)
         url = f"{self.base_elections_url}?{querystring}"

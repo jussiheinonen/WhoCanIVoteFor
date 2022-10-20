@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models import Count
 from django.utils.dateparse import parse_datetime
-from django.utils.timezone import now
+from django.utils import timezone
 
 VALUE_TYPES_TO_IMPORT = [
     "twitter_username",
@@ -46,7 +46,7 @@ class PersonPostQuerySet(models.QuerySet):
         Return objects where election is marked as current or election is in the future
         """
         return self.filter(
-            models.Q(election__election_date__gte=now())
+            models.Q(election__election_date__gte=timezone.now())
             | models.Q(election__current=True)
         )
 
@@ -57,7 +57,7 @@ class PersonPostQuerySet(models.QuerySet):
         return self.filter(
             election__current=False,
             post_election__cancelled=False,
-            election__election_date__lt=now(),
+            election__election_date__lt=timezone.now(),
         )
 
     def current(self):
