@@ -7,4 +7,4 @@ updates:
   open-pull-requests-limit: 10
   ignore:
     - dependency-name: django
-      versions: [">=3.0", "<3.2"]
+      versions: [">=3.0", "<4.2"]
