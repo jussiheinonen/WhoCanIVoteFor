@@ -5,14 +5,13 @@
     <div class="ds-card">
         <div class="ds-card-body">
             <h2>{% trans "European Parliament election results" %}</h2>
+            <p>
+                {% trans "The results of the UK European Parliament elections are published on the European Parliament's election results website." %}
+            </p>
+            <a href="https://election-results.eu/" class="ds-card-link ds-cta">{% trans "View results" %}</a>
+        </div>
+    </div>
 {% else %}
     <h3>{% trans "European Parliament election results" %}</h3>
-{% endif %}
-<p>
-    {% trans "The results of the UK European Parliament elections are published on the European Parliament's election results website." %}
-</p>
-<a href="https://election-results.eu/" class="ds-card-link">{% trans "View results" %}</a>
-{% if not card == 0 %}
-    </div>
-    </div>
+    <p><a href="https://election-results.eu/" class="ds-card-link">{% trans "View results" %}</a></p>
 {% endif %}
