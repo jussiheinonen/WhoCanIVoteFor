@@ -59,6 +59,11 @@ jobs:
             . .venv/bin/activate
             black -l 80 --check .
       - run:
+          name: CurlyLint
+          command: |
+            . .venv/bin/activate
+            curlylint wcivf/**/*.html
+      - run:
           name: Compile Messages
           command: |
             . .venv/bin/activate
