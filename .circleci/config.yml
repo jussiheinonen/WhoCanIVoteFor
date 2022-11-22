@@ -25,25 +25,17 @@ jobs:
           keys:
           - v5-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
       - run:
-          name: install Tox
-          command: |
-            python -m venv .venv
-            . .venv/bin/activate
-            pip install tox coveralls
-      - run:
           name: install dependencies
           command: |
             python -m venv .venv
             . .venv/bin/activate
-            pip install --upgrade pip
+            pip install --upgrade pip coveralls
             sudo apt-get update
             sudo apt install gettext
-            pip install -r requirements.txt
-            tox --notest --workdir /home/circleci/repo/.tox/
+            pip install -r requirements/testing.txt
       - save_cache:
           paths:
             - ./.venv
-            - /home/circleci/repo/.tox/
           key: v5-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/testing.txt" }}
 
       - run:
@@ -52,19 +44,45 @@ jobs:
 
       # run tests!
       - run:
-          name: run tests
+          name: Django version
           command: |
-            python -m venv .venv
             . .venv/bin/activate
-            tox --workdir /home/circleci/repo/.tox/
+            python manage.py --version
       - run:
-          name: Update Coveralls
+          name: Django Check
           command: |
             . .venv/bin/activate
-            coveralls
+            python manage.py check
+      - run:
+          name: Black
+          command: |
+            . .venv/bin/activate
+            black -l 80 --check .
+      - run:
+          name: CurlyLint
+          command: |
+            . .venv/bin/activate
+            curlylint wcivf/**/*.html
+      - run:
+          name: Compile Messages
+          command: |
+            . .venv/bin/activate
+            bash -ec 'cd wcivf && python ../manage.py compilemessages -l cy'
+      - run:
+          name: run pytest
+          command: |
+            . .venv/bin/activate
+            pytest -sx --flakes --cov-report= --cov=wcivf --junitxml=test-results/junit.xml
+      - run: |
+          if [ -n "$COVERALLS_REPO_TOKEN" ]; then
+          . .venv/bin/activate
+          coveralls
+          else
+          echo "skipping coverage for forked PR"
+          fi
       - store_artifacts:
-          path: test-reports
-          destination: test-reports
+          path: test-results
+          destination: test-results
 
   sam_build:
     docker:

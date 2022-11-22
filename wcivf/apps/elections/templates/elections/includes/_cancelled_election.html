@@ -53,13 +53,14 @@
                         winner{{ plural }}.
 
                         A new election to fill the unclaimed seat{{ plural }}
-                        will be held within 35 working days of the original election date.</p>
+                        will be held within 35 working days of the original election date.
                     {% endblocktrans %}
-                    {% if object.display_as_party_list %}
-                        {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
-                    {% else %}
-                        {% include "elections/includes/_people_list.html" with people=object.people %}
-                    {% endif %}
+                </p>
+                {% if object.display_as_party_list %}
+                    {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
+                {% else %}
+                    {% include "elections/includes/_people_list.html" with people=object.people %}
+                {% endif %}
             {% endif %}
         {% endif %}
         {% comment %} Case 5: Contested but cancelled for other reasons {% endcomment %}

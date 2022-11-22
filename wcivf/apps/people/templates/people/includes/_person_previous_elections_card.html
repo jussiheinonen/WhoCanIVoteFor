@@ -17,8 +17,9 @@
                         <th>{% trans "Other party affiliations in the past 12 months" %}</th>
                     {% endif %}
                 </tr>
-                <tr>
-                    {% for person_post in object.personpost_set.all %}
+
+                {% for person_post in object.personpost_set.all %}
+                    <tr>
                         <td>{{ person_post.election.election_date|date:"Y" }}</td>
                         <td>{% blocktrans with post_label=person_post.post.label election=person_post.election %}{{ post_label}}: {{ election }}{% endblocktrans %}</td>
                         <td>{{ person_post.party_name }}</td>
@@ -52,10 +53,9 @@
                                 {% endfor %}
                             </td>
                         {% endif %}
-                        </tr>
-                    {% endfor %}
-
-                </table>
-            </div>
-        </section>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </section>
 {% endif %}

@@ -33,7 +33,7 @@
                             </div>
                             <div class="ds-not-sidebar">
                                 <h2>{{ party.party_name }}</h2>
-                                <p>{% blocktrans with num_candidates=object.personpost_set.all.count|intcomma pluralize_candidates=object.personpost_set.all.count|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}</p>{% endblocktrans %}</p>
+                                <p>{% blocktrans with num_candidates=object.personpost_set.all.count|intcomma pluralize_candidates=object.personpost_set.all.count|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}{% endblocktrans %}</p>
                                 {% if object.description %}
                                     {{ object.description|markdown }}
                                 {% endif %}
@@ -47,7 +47,7 @@
                 {% else %}
                     <div>
                         <h2>{{ party.party_name }}</h2>
-                        <p>{% blocktrans trimmed with num_candidates=object.personpost_set.all.count|intcomma pluralize_candidates=object.personpost_set.all.count|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}</p>{% endblocktrans %}</p>
+                        <p>{% blocktrans trimmed with num_candidates=object.personpost_set.all.count|intcomma pluralize_candidates=object.personpost_set.all.count|pluralize %}{{ num_candidates }} candidate{{ pluralize_candidates }}{% endblocktrans %}</p>
                         {% if object.description %}
                             {{ object.description|markdown }}
                         {% endif %}

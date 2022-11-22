@@ -32,11 +32,13 @@
                     {% if election.person_set.count %}
                         <p>
                             {% if object.locked %}
-                                There are <strong>{{election.person_set.count}} candidates
+                                There are <strong>{{election.person_set.count}}</strong> candidates
                             {% else %}
                                 We know about <strong>{{election.person_set.count}} candidates</strong>
                             {% endif %}
-                            {% blocktrans trimmed with stood_or_standing=object.in_past|yesno:"that stood,standing" post_count=object.post_set.count %}{{ stood_or_standing }} for this election, in <strong>{{ post_count }}</strong> posts.{% endblocktrans %}
+                            {% blocktrans trimmed with stood_or_standing=object.in_past|yesno:"that stood,standing" post_count=object.post_set.count %}
+                                {{ stood_or_standing }} for this election, in <strong>{{ post_count }}</strong> posts.
+                            {% endblocktrans %}
                         </p>
 
                         {% if not object.in_past and not object.locked %}

@@ -1,7 +1,7 @@
 -r base.txt
 
 black==22.10.0
-tox
+
 pytest
 pytest-django
 pytest-pep8
@@ -15,3 +15,4 @@ pytest-subtests
 tomlkit
 freezegun==1.2.1
 django-debug-toolbar==3.7.0
+curlylint==0.13.1
