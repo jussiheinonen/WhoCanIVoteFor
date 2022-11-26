@@ -308,7 +308,9 @@ class ElectionPostViewTests(TestCase):
         self.assertNotContains(response, "No votes will be cast")
 
     def test_previous_cancelled_elections(self):
-        """Previous elections table with cancelled election with unopposed candidate"""
+        """
+        Previous elections table with cancelled election with unopposed candidate
+        """
         self.person = PersonFactory()
         self.person_post = PersonPostFactory(
             post_election=self.post_election,
@@ -321,7 +323,7 @@ class ElectionPostViewTests(TestCase):
         self.post_election.save()
         response = self.client.get(self.person.get_absolute_url(), follow=True)
         self.assertContains(response, "{}'s Elections".format(self.person.name))
-        self.assertContains(response, "Elected unopposed")
+        self.assertContains(response, "(election cancelled")
 
     def test_previous_elections_elected_with_count(self):
         """Previous elections table with elected candidate and vote count"""
@@ -392,7 +394,7 @@ class ElectionPostViewTests(TestCase):
         self.post_election.save()
         response = self.client.get(self.person.get_absolute_url(), follow=True)
         self.assertContains(response, "{}'s Elections".format(self.person.name))
-        self.assertContains(response, "Not Elected (vote count not available)")
+        self.assertContains(response, "Not elected (vote count not available)")
 
 
 @pytest.mark.django_db

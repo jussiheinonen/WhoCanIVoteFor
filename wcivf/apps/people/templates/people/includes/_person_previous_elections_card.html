@@ -24,27 +24,7 @@
                         <td>{% blocktrans with post_label=person_post.post.label election=person_post.election %}{{ post_label}}: {{ election }}{% endblocktrans %}</td>
                         <td>{{ person_post.party_name }}</td>
                         <td>
-                            {% if person_post.elected %}
-                                {% if person_post.votes_cast %}
-                                    {% blocktrans with num_votes=person_post.votes_cast|intcomma %}
-                                        {{ num_votes}} votes (elected)
-                                    {% endblocktrans %}
-                                {% else %}
-                                    {% trans "Elected (vote count not available)" %}
-                                {% endif %}
-                            {% elif person_post.post_election.cancelled and not person_post.elected %}
-                                {% if person_post.post_election.cancelled %}
-                                    {% trans "Elected unopposed" %}
-                                {% endif %}
-                            {% else %}
-                                {% if person_post.votes_cast %}
-                                    {% blocktrans with num_votes=person_post.votes_cast|intcomma %}
-                                        {{ num_votes }} votes (not elected)
-                                    {% endblocktrans %}
-                                {% else %}
-                                    {% trans "Not Elected (vote count not available)" %}
-                                {% endif %}
-                            {% endif %}
+                            {{ person_post.get_results_text }}
                         </td>
                         {% if object.previous_party_count %}
                             <td>
