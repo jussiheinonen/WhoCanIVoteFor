@@ -120,31 +120,31 @@
                         {% endif %}
                     {% endif %}
                 </p>
+            {% endif %}
 
-                {% if postelection.people %}
-                    {% if postelection.display_as_party_list %}
-                        {% include "elections/includes/_people_list_with_lists.html" with people=postelection.people %}
+            {% if postelection.people %}
+                {% if postelection.display_as_party_list %}
+                    {% include "elections/includes/_people_list_with_lists.html" with people=postelection.people %}
+                {% else %}
+                    {% include "elections/includes/_people_list.html" with people=postelection.people %}
+                {% endif %}
+            {% endif %}
+
+            {% if postelection.should_display_sopn_info %}
+                <p>
+                    {% if postelection.locked %}
+                        {% blocktrans trimmed with sopn_url=postelection.ynr_sopn_link %}
+                            The <a href="{{ sopn_url }}">official candidate list</a> has been published.
+                        {% endblocktrans%}
                     {% else %}
-                        {% include "elections/includes/_people_list.html" with people=postelection.people %}
-                    {% endif %}
-                {% endif %}
-
-                {% if postelection.should_display_sopn_info %}
-                    <p>
-                        {% if postelection.locked %}
-                            {% blocktrans trimmed with sopn_url=postelection.ynr_sopn_link %}
-                                The <a href="{{ sopn_url }}">official candidate list</a> has been published.
-                            {% endblocktrans%}
+                        {% if postelection.past_expected_sopn_day %}
+                            {% trans "The official candidate list should have been published on" %}
                         {% else %}
-                            {% if postelection.past_expected_sopn_day %}
-                                {% trans "The official candidate list should have been published on" %}
-                            {% else %}
-                                {% trans "The official candidate list should be published on" %}
-                            {% endif %}
-                            {{ postelection.expected_sopn_date|date:"j F Y" }}.
+                            {% trans "The official candidate list should be published on" %}
                         {% endif %}
-                    </p>
-                {% endif %}
+                        {{ postelection.expected_sopn_date|date:"j F Y" }}.
+                    {% endif %}
+                </p>
 
                 {% if postelection.election.election_booklet %}
                     <h4>
@@ -155,24 +155,26 @@
                     {% blocktrans with description=postelection.election.description|markdown %} {{ description }} {% endblocktrans %}
                 {% endif %}
 
-                {% if postelection.election.voter_age %}
-                    <ul class="ds-details">
-                        <li>
-                            <details>
-                                <summary>{% trans "Can you vote in this election?" %}</summary>
-                                <h5>{% trans "Age" %}</h5>
-                                <p>
-                                    {% blocktrans trimmed with voter_age=postelection.election.voter_age voter_age_date=postelection.election.election_date|date:"jS" election_date=postelection.election.election_date|date:"F Y" %}
-                                        You need to be over {{ voter_age }} on the {{ voter_age_date }} of {{ election_date }} in order to vote in this election.
-                                    {% endblocktrans %}}
-                                </p>
-                                {% if postelection.election.voter_citizenship %}
-                                    <h5>{% trans "Citizenship" %}</h5>
-                                    {{ postelection.election.voter_citizenship|markdown }}
-                                {% endif %}
-                            </details>
-                        </li>
-                    </ul>
+                {%  if not postelection.cancelled %}
+                    {% if postelection.election.voter_age %}
+                        <ul class="ds-details">
+                            <li>
+                                <details>
+                                    <summary>{% trans "Can you vote in this election?" %}</summary>
+                                    <h5>{% trans "Age" %}</h5>
+                                    <p>
+                                        {% blocktrans trimmed with voter_age=postelection.election.voter_age voter_age_date=postelection.election.election_date|date:"jS" election_date=postelection.election.election_date|date:"F Y" %}
+                                            You need to be over {{ voter_age }} on the {{ voter_age_date }} of {{ election_date }} in order to vote in this election.
+                                        {% endblocktrans %}}
+                                    </p>
+                                    {% if postelection.election.voter_citizenship %}
+                                        <h5>{% trans "Citizenship" %}</h5>
+                                        {{ postelection.election.voter_citizenship|markdown }}
+                                    {% endif %}
+                                </details>
+                            </li>
+                        </ul>
+                    {% endif %}
                 {% endif %}
             {% endif %}
 
