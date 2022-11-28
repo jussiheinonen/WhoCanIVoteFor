@@ -53,6 +53,7 @@ jobs:
           command: |
             . .venv/bin/activate
             python manage.py check
+            python manage.py makemigrations --check
       - run:
           name: Black
           command: |
