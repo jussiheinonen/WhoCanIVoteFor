@@ -3,8 +3,35 @@
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
 version: 2.1
+
+executors:
+  py38:
+    docker:
+      - image: cimg/python:3.8
+        environment:
+          CIRCLECI: true
+          PGHOST: 127.0.0.1
+      - image: circleci/postgres:11.2-alpine-postgis-ram
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: test
+  py310:
+    docker:
+      - image: cimg/python:3.10
+        environment:
+          CIRCLECI: true
+          PGHOST: 127.0.0.1
+      - image: circleci/postgres:11.2-alpine-postgis-ram
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: test
+
+
 jobs:
   build_and_test:
+    parameters:
+      python_version:
+        type: executor
     docker:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
@@ -223,7 +250,10 @@ jobs:
 workflows:
   main:
     jobs:
-      - build_and_test
+      - build_and_test:
+          matrix:
+            parameters:
+              python_version: [ py38, py310 ]
       - sam_build:
           requires:
           - build_and_test
