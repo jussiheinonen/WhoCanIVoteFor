@@ -20,15 +20,8 @@
                 the winner{{ pluralise_candidates }}.
             {% endblocktrans %}
         </p>
-
-        {% if object.display_as_party_list %}
-            {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
-        {% else %}
-            {% include "elections/includes/_people_list.html" with people=object.people %}
-        {% endif %}
         {% comment %} Case 2: Election cancelled, uncontested and there are fewer candidates than seats, no metadata {% endcomment %}
     {% elif object.winner_count > object.people.count %}
-
         <h4>{% trans "Uncontested and Rescheduled Election" %}</h4>
 
         <p>
@@ -52,11 +45,6 @@
                     will be held within 35 working days of the original election date.
                 {% endblocktrans %}
             </p>
-            {% if object.display_as_party_list %}
-                {% include "elections/includes/_people_list_with_lists.html" with people=object.people %}
-            {% else %}
-                {% include "elections/includes/_people_list.html" with people=object.people %}
-            {% endif %}
         {% endif %}
     {% endif %}
     {% comment %} Case 4: Contested but cancelled for other reasons {% endcomment %}
@@ -77,12 +65,9 @@
         </a>
     {% endif %}
 
-
-
     {% if object.metadata.cancelled_election.url %}
         <a href="{{ object.metadata.cancelled_election.url }}">{% trans "Read more" %}</a>
     {% endif %}
-
 </p>
 {% comment %} Metadata should not repeat the pre-formatted messages below,
 but rather provide extra information that is not already present in the logic
