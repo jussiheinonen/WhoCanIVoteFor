@@ -3,13 +3,6 @@
 {% load static %}
 {% load i18n %}
 
-{% comment %} Metadata should not repeat the pre-formatted messages below,
-but rather provide extra information that is not already present in the logic
-{% endcomment %}
-{% if object.metadata.cancelled_election.title %}
-    <h4>{{ object.metadata.cancelled_election.title }}</h4>
-{% endif %}
-
 {% if not object.contested %}
     {% comment %} Case 1: Election cancelled, uncontested, number of candidates equal seats, no metadata{% endcomment %}
     {% if object.winner_count == object.people.count %}
@@ -91,7 +84,9 @@ but rather provide extra information that is not already present in the logic
     {% endif %}
 
 </p>
-
+{% comment %} Metadata should not repeat the pre-formatted messages below,
+but rather provide extra information that is not already present in the logic
+{% endcomment %}
 <p>
     {% if object.metadata.cancelled_election.detail %}
         {{ object.metadata.cancelled_election.detail }}
