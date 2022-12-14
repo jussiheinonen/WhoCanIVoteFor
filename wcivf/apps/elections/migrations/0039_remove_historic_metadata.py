@@ -1,9 +1,8 @@
 from django.db import migrations
 
-from elections.models import PostElection
-
 
 def remove_historical_metadata(apps, schema_editor):
+    PostElection = apps.get_model("elections", "PostElection")
     for post_election in PostElection.objects.filter(metadata__isnull=False):
         metadata = post_election.metadata
         if metadata.get("cancelled", False):
