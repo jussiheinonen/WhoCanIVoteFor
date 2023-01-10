@@ -1,4 +1,5 @@
 from datetime import date
+from random import randint
 
 from elections.models import Election, Post, PostElection
 from people.dummy_models import DummyCandidacy, DummyPerson
@@ -15,6 +16,7 @@ class DummyPostElection(PostElection):
         slug="local.faketown.2022-05-05",
     )
     post = Post(label="Made-Up-Ward")
+    pk = randint(1, 100000)
 
     class Meta:
         proxy = True
