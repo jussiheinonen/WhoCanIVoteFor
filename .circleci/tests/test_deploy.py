@@ -92,7 +92,7 @@ def test_makemigrations_check_succeeds(
     response = lambda_client.invoke(
         FunctionName=lambda_function_arn,
         InvocationType="RequestResponse",
-        Payload='{"command": "makemigrations", "args": ["--check", "--dry-run"]}',
+        Payload='{"command": "makemigrations", "args": ["--check --no-input", "--dry-run"]}',
     )
     payload = json.loads(response["Payload"].read())
     assert payload.get("errorMessage") is None
