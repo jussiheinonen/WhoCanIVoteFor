@@ -57,6 +57,7 @@ jobs:
             python -m venv .venv
             . .venv/bin/activate
             pip install --upgrade pip coveralls
+            sudo rm -rf /var/lib/apt/lists/*
             sudo apt-get update
             sudo apt install gettext
             pip install -r requirements/testing.txt
@@ -340,3 +341,5 @@ workflows:
           - sam_deploy_production
           context: [ deployment-production-wcivf ]
           filters: { branches: { only: [ main, master ] } }
+
+# VS Code Extension Version: 1.5.1
